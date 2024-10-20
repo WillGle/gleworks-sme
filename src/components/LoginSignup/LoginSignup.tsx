@@ -4,19 +4,30 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // Import CSS for the phone input library
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import CSS for react-datepicker
+// --- Backend--- 
+import Axios from 'axios'
 
 const LoginSignup: React.FC = () => {
-  // State to manage the current action (either 'Sign Up' or 'Login')
+  // --- Backend--- 
+  //--API env--
+  const apiUrl = import.meta.env.VITE_API_URL;
+  //--API env--
   const [action, setAction] = useState<string>("Sign Up");
   // State to manage the phone number input value
-  const [phone, setPhone] = useState<string>("");
-  // State to manage the selected date of birth
+  const [firstName, setFirstName] = useState<string>(""); // Store first name state
+  const [lastName, setLastName] = useState<string>(""); // Store last name state
+  // State to manage the current action (either 'Sign Up' or 'Login')
   const [dob, setDob] = useState<Date | null>(null);
   // State to manage the email input value
+  const [phone, setPhone] = useState<string>("");
+  // State to manage the selected date of birth
   const [email, setEmail] = useState<string>("");
   // State to manage email error messages
   const [emailError, setEmailError] = useState<string>("");
-
+  const [password, setPassword] = useState<string>(""); // Store password state
+  const [confirmationMessage, setConfirmationMessage] = useState<string>(""); // State for confirmation message
+  
+  // --- Backend--- 
   // Function to validate the email format using regex
   const validateEmail = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -25,6 +36,30 @@ const LoginSignup: React.FC = () => {
     } else {
       setEmailError("");
     }
+  };
+  
+  const register = () => {
+    Axios.post(`${apiUrl}/users`, {// Log the URL
+
+      firstName,
+      lastName,
+      phoneNumber: `+${phone.replace(/^0/, '')}`, // Thêm mã quốc gia
+      dateOfBirth: dob ? dob.toISOString().split('T')[0] : null, // Định dạng YYYY-MM-DD
+      email,
+      password
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.data.isConfirmed === 1) {
+        setConfirmationMessage("Registration successful! A confirmation email has been sent to your email address. Please check your inbox.");
+      } else {
+        setConfirmationMessage("A confirmation email has been sent to your email address. Please check your inbox.");
+      }
+    })
+    .catch((error) => {
+      console.error("Có lỗi xảy ra trong quá trình đăng ký:", error);
+
+    });
   };
 
   return (
@@ -48,6 +83,7 @@ const LoginSignup: React.FC = () => {
                 className="input"
                 type="text"
                 placeholder="First Name"
+                onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
 
@@ -61,6 +97,7 @@ const LoginSignup: React.FC = () => {
                 className="input"
                 type="text"
                 placeholder="Last Name"
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
 
@@ -125,9 +162,12 @@ const LoginSignup: React.FC = () => {
             className="input"
             type="password"
             placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </div>
+
+      {confirmationMessage && <div className="confirmation-message">{confirmationMessage}</div>} {/* Show confirmation message */}
 
       {/* Toggle Link to switch between 'Sign Up' and 'Login' */}
       <div className="toggle-action">
@@ -141,7 +181,9 @@ const LoginSignup: React.FC = () => {
         ) : (
           <>
             Don't have an account yet?{" "}
-            <a href="#" onClick={() => setAction("Sign Up")}>
+            <a href="#" onClick={
+                () => { setAction("Sign Up"); 
+                        register();}}>
               Click Here
             </a>
           </>
@@ -157,10 +199,20 @@ const LoginSignup: React.FC = () => {
 
       {/* Single Action Button for 'Sign Up' or 'Login' */}
       <div className="submit-container">
-        <div className="submit" onClick={() => {}}>
-          {action}
+        <div
+           className="submit"
+           onClick={() => {
+           if (action === "Sign Up") {
+              register(); // Call register() when signing up
+           } else {
+              // Add login functionality here if needed
+           }
+           }}
+        >
+           {action}
         </div>
-      </div>
+       </div>
+
     </div>
   );
 };

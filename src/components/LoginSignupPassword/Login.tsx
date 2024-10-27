@@ -102,7 +102,7 @@ const Login: React.FC = () => {
       {/* Link to Sign Up page */}
 
       <div className="toggle-action">
-        Don't have an account yet?{" "}
+        First time? Create an account now!{" "}
         <span
           onClick={() => navigate("/signup")} // Redirect to Sign Up page
           style={{
@@ -117,7 +117,7 @@ const Login: React.FC = () => {
 
       {/* Link to Lost Password page */}
       <div className="forgot-password">
-        Lost Password?{" "}
+        Forgot Password?{" "}
         <span
           onClick={() => navigate("/lost-password")} // Redirect to Lost Password page
           style={{

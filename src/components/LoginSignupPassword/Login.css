@@ -1,5 +1,4 @@
-/* Login.css */
-
+/* Container styling */
 .container {
     display: flex;
     flex-direction: column;
@@ -65,24 +64,34 @@
     color: #333;
 }
 
-.forgot-password {
-    margin-top: 15px;
-    text-align: center;
-    color: #797979;
-    font-size: 16px;
-}
-
-.forgot-password span {
-    color: #3b1a96;
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 .toggle-action {
     margin-top: 15px;
     text-align: center;
     font-size: 16px;
-    color: #797979;
+    color: #333; 
+    text-decoration: none;
+}
+
+.forgot-password{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 16px;
+    color: #333; 
+    text-decoration: none;
+}
+
+
+.toggle-action span {
+    color: #1e57d2; 
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.forgot-password span {
+    color: #1e57d2; 
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .submit-container {

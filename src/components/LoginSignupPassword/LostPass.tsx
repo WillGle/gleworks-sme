@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "./LostPass.css";
 
 const LostPass: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
-  const navigate = useNavigate();
+  // State variables to manage form fields and messages
+  const [email, setEmail] = useState<string>(""); // Email address input
+  const [message, setMessage] = useState<string>(""); // Success message for reset link
+  const [emailError, setEmailError] = useState<string>(""); // Error message for invalid email
+  const navigate = useNavigate(); // Hook to navigate between pages
 
+  // Function to validate the email address input
   const validateEmail = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(email)) {
@@ -17,12 +19,12 @@ const LostPass: React.FC = () => {
     }
   };
 
+  // Function to handle password reset action
   const handlePasswordReset = () => {
     if (emailError || !email) {
       setEmailError("Please enter a valid email address.");
       return;
     }
-    // Giả sử xử lý gửi yêu cầu đặt lại mật khẩu
     setMessage("A password reset link has been sent to your email.");
   };
 
@@ -32,6 +34,7 @@ const LostPass: React.FC = () => {
         <div className="text">Forgot Password</div>
         <div className="underline"></div>
       </div>
+
       <div className="input-container">
         <label htmlFor="email" className="input-label">
           Enter your email address
@@ -47,10 +50,12 @@ const LostPass: React.FC = () => {
           }}
           placeholder="Email"
         />
+        {/* Display email validation error if present */}
         {emailError && (
           <span style={{ color: "red", fontSize: "14px" }}>{emailError}</span>
         )}
       </div>
+
       <button
         className="submit"
         onClick={handlePasswordReset}
@@ -58,6 +63,7 @@ const LostPass: React.FC = () => {
       >
         Send Reset Link
       </button>
+
       {message && (
         <p style={{ color: "green", marginTop: "20px" }}>{message}</p>
       )}

@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios"; // Import Axios for HTTP requests
 import "./Login.css";
+
+// Add this declaration at the top of your file
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
+  const [loginError, setLoginError] = useState<string>("");
   const navigate = useNavigate();
 
   const validateEmail = (email: string) => {
@@ -14,6 +19,28 @@ const Login: React.FC = () => {
       setEmailError("Invalid email address");
     } else {
       setEmailError("");
+    }
+  };
+
+  const handleLogin = async () => {
+    if (emailError || !email || !password) {
+      setLoginError("Please fill in all fields correctly.");
+      return;
+    }
+
+    try {
+      const response = await Axios.post(`${apiUrl}/users/login`, {
+        email,
+        password,
+      });
+
+      // Handle successful login
+      console.log("Login successful:", response.data);
+      // Redirect to a different page, e.g., dashboard
+      navigate("/landingpage");
+    } catch (error) {
+      console.error("Login error:", error);
+      setLoginError("Invalid email or password.");
     }
   };
 
@@ -58,6 +85,8 @@ const Login: React.FC = () => {
         </div>
       </div>
 
+      {loginError && <div className="error-message">{loginError}</div>} {/* Display login error messages */}
+
       <div className="toggle-action">
         Don't have an account yet?{" "}
         <span
@@ -87,7 +116,7 @@ const Login: React.FC = () => {
       </div>
 
       <div className="submit-container">
-        <div className="submit" onClick={() => {}}>
+        <div className="submit" onClick={handleLogin}>
           Login
         </div>
       </div>

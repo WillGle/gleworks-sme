@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Axios from 'axios'; // Import Axios for HTTP requests
 
 const Signup: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -14,7 +15,10 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
+  const [confirmationMessage, setConfirmationMessage] = useState<string>(""); // State for confirmation message
   const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_API_URL; // Use the API URL from environment variables
 
   const validateEmail = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -23,6 +27,29 @@ const Signup: React.FC = () => {
     } else {
       setEmailError("");
     }
+  };
+
+  const register = () => {
+    Axios.post(`${apiUrl}/users`, {
+      firstName,
+      lastName,
+      phoneNumber: `+${phone.replace(/^0/, '')}`,
+      dateOfBirth: dob ? dob.toISOString().split('T')[0] : null,
+      email,
+      password
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.data.isConfirmed === 1) {
+        setConfirmationMessage("Registration successful! A confirmation email has been sent to your email address. Please check your inbox.");
+      } else {
+        setConfirmationMessage("Your registration is pending confirmation. Please check your email to confirm your account.");
+      }
+    })
+    .catch((error) => {
+      console.error("An error occurred during registration:", error);
+      setConfirmationMessage("An error occurred during registration. Please try again later.");
+    });
   };
 
   return (
@@ -121,6 +148,8 @@ const Signup: React.FC = () => {
         </div>
       </div>
 
+      {confirmationMessage && <div className="confirmation-message">{confirmationMessage}</div>} {/* Show confirmation message */}
+
       <div className="toggle-action">
         Already have an account?{" "}
         <span
@@ -136,7 +165,7 @@ const Signup: React.FC = () => {
       </div>
 
       <div className="submit-container">
-        <div className="submit" onClick={() => {}}>
+        <div className="submit" onClick={register}>
           Sign Up
         </div>
       </div>

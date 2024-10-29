@@ -15,16 +15,18 @@ const Header: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="navigation">
+          <Link to="/about">About</Link>
           <Link to="/blogs">Blogs</Link>
           <Link to="/services">Services</Link>
           <Link to="/archive">Archive</Link>
-          <Link to="/login">Login</Link>
         </nav>
 
         {/* Icon Links */}
         <div className="icons">
           <FaSearch className="icon" />
-          <FaUser className="icon" />
+          <Link to="/login">
+            <FaUser className="icon" />
+          </Link>
           <FaShoppingBag className="icon" />
         </div>
       </div>

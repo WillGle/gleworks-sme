@@ -1,0 +1,133 @@
+/* Landing Page CSS */
+.landing {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 0;
+  }
+  
+  .hero-content {
+    max-width: 50%;
+  }
+  
+  .hero-content h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .hero-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  
+  .learn-more-button {
+    background-color: #000;
+    color: #fff;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .learn-more-button:hover {
+    background-color: #333;
+  }
+  
+  .hero-image {
+    max-width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-placeholder {
+    width: 300px;
+    height: 300px;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #888;
+  }
+  
+  /* Popular Blogs Section */
+  .popular-blogs {
+    padding: 50px 0;
+  }
+  
+  .popular-blogs h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .blog-list {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .blog-item {
+    width: 200px;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    transition: transform 0.3s;
+  }
+  
+  .blog-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .blog-item .image-placeholder {
+    width: 200px;
+    height: 150px;
+    background-color: #eee;
+    margin-bottom: 10px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .hero-content,
+    .hero-image {
+      max-width: 100%;
+    }
+  
+    .blog-list {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero-content h1 {
+      font-size: 28px;
+    }
+  
+    .hero-content p {
+      font-size: 14px;
+    }
+  
+    .blog-item {
+      width: 100%;
+      max-width: 300px;
+    }
+  } 

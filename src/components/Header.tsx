@@ -6,7 +6,7 @@ import { FaSearch, FaUser, FaShoppingBag } from "react-icons/fa";
 // Header component representing the top navigation bar
 const Header: React.FC = () => {
   return (
-    <header className="header">
+    <header className="topHeader">
       <div className="header-main">
         {/* Logo Section */}
         <div className="logo">

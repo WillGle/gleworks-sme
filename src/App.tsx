@@ -10,6 +10,8 @@ import LostPass from "./components/LoginSignupPassword/LostPass";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
+import About from "./components/About/About";
+import Archive from "./components/Archive/archive";
 import "./App.css";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
@@ -27,6 +29,8 @@ function AppLayout() {
       {!hideHeaderFooter && <Header />}
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/archive" element={<Archive />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />

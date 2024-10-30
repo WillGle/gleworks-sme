@@ -11,7 +11,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
 import About from "./components/About/About";
-import Archive from "./components/Archive/archive";
+import Archive from "./components/Archive/Archive";
 import "./App.css";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic

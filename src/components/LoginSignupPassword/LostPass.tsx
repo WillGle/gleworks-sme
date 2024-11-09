@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios"; // Import Axios for making API requests
 import "./LostPass.css";
 
 const LostPass: React.FC = () => {
+  const apiUrl = import.meta.env.VITE_API_URL; // Use the apiUrl variable
+  
   const [email, setEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
@@ -17,13 +20,20 @@ const LostPass: React.FC = () => {
     }
   };
 
-  const handlePasswordReset = () => {
+  const handlePasswordReset = async () => {
     if (emailError || !email) {
       setEmailError("Please enter a valid email address.");
       return;
     }
-    // Giả sử xử lý gửi yêu cầu đặt lại mật khẩu
-    setMessage("A password reset link has been sent to your email.");
+
+    try {
+      // Make API call to forgot-password endpoint using apiUrl
+      const response = await Axios.post(`${apiUrl}/users/forgot-password`, { email });
+      setMessage(response.data.message);
+    } catch (error) {
+      console.error("Error sending reset password email:", error);
+      setMessage("Failed to send reset password email. Please try again later.");
+    }
   };
 
   return (

@@ -27,29 +27,31 @@ const Login: React.FC = () => {
 
   // Function to handle login action
   const handleLogin = async () => {
-    // Validate form inputs before making a request
     if (emailError || !email || !password) {
       setLoginError("Please fill in all fields correctly.");
       return;
     }
-
+  
     try {
-      // Send a POST request to the server to log in the user
       const response = await Axios.post(`${apiUrl}/users/login`, {
         email,
         password,
       });
-
-      // Handle successful login
-      console.log("Login successful:", response.data);
-      // Redirect user to landing page after successful login
-      navigate("/landingpage");
+  
+      const user = response.data; // Thông tin người dùng từ server
+      console.log("Login successful:", user);
+  
+      // Lưu thông tin người dùng vào localStorage
+      localStorage.setItem("user", JSON.stringify(user));
+  
+      // Chuyển hướng sang trang about
+      navigate("/about");
     } catch (error) {
-      // Handle login error and set error message
       console.error("Login error:", error);
       setLoginError("Invalid email or password.");
     }
   };
+  
 
   return (
     <div className="container">

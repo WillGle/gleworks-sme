@@ -89,3 +89,12 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+#loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Đảm bảo nó chiếm toàn bộ chiều cao */
+    background-color: rgba(255, 255, 255, 0.8); /* Màu nền nhẹ để dễ nhìn */
+}
+

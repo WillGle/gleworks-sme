@@ -18,8 +18,8 @@ const Header: React.FC = () => {
         {/* Navigation Links */}
         <nav className="navigation">
           <Link to="/about">About</Link>
-          <Link to="/blogs">Blogs</Link>
-          <Link to="/services">Services</Link>
+          <Link to="/blog">Blogs</Link>
+          <Link to="/services">Service</Link>
           <Link to="/archive">Archive</Link>
         </nav>
 

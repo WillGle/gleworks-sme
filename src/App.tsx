@@ -7,6 +7,7 @@ import {
 import Login from "./components/LoginSignupPassword/Login";
 import Signup from "./components/LoginSignupPassword/Signup";
 import LostPass from "./components/LoginSignupPassword/LostPass";
+import NewPass from "./components/LoginSignupPassword/NewPass";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
@@ -19,21 +20,25 @@ function AppLayout() {
   const location = useLocation();
 
   // Define the paths where Header and Footer should be hidden
-  const hideHeaderFooter = ["/login", "/signup", "/lost-password"].includes(
-    location.pathname
-  );
+  const hideHeaderFooter = [
+    "/login",
+    "/signup",
+    "/lost-password",
+    "/new-password",
+  ].includes(location.pathname);
 
   return (
     <>
       {/* Conditionally render Header and Footer based on the route */}
       {!hideHeaderFooter && <Header />}
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Landing />} />
         <Route path="/about" element={<About />} />
         <Route path="/archive" element={<Archive />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />
+        <Route path="/new-password" element={<NewPass />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}
     </>

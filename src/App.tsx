@@ -34,8 +34,8 @@ function AppLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />
-        <Route path="/confirmation-success" element={<ConfirmationSuccess />} />
-        <Route path="/" element={<AccountConfirmation />} />
+        {/* <Route path="/confirmation-success" element={<ConfirmationSuccess />} />
+        <Route path="/" element={<AccountConfirmation />} /> */}
         {/* Thêm tuyến đường mặc định để điều hướng tới /login */}
         <Route path="*" element={<Login />} />
       </Routes>

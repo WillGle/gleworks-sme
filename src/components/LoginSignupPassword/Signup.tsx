@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 import PhoneInput from "react-phone-input-2";
@@ -6,6 +6,7 @@ import "react-phone-input-2/lib/style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Axios from "axios"; // Import Axios for HTTP requests
+import { DotLottie } from '@lottiefiles/dotlottie-web'; // Import DotLottie
 
 const Signup: React.FC = () => {
   // State variables to manage form fields
@@ -17,6 +18,7 @@ const Signup: React.FC = () => {
   const [password, setPassword] = useState<string>(""); // State for password
   const [emailError, setEmailError] = useState<string>(""); // State for email validation error
   const [confirmationMessage, setConfirmationMessage] = useState<string>(""); // State for registration confirmation message
+  const [loading, setLoading] = useState<boolean>(false); // State cho thanh tải
 
   const navigate = useNavigate(); // Hook to navigate between pages
 
@@ -24,7 +26,6 @@ const Signup: React.FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Function to validate the email address input
-
   const validateEmail = (email: string) => {
     // Regular expression for validating email format
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -37,6 +38,7 @@ const Signup: React.FC = () => {
 
   // Function to handle user registration
   const register = () => {
+    setLoading(true); // Hiện thanh tải khi bắt đầu đăng ký
     // Make a POST request to the server using Axios to register a new user
     Axios.post(`${apiUrl}/users`, {
       firstName,
@@ -47,6 +49,7 @@ const Signup: React.FC = () => {
       password,
     })
       .then((response) => {
+        setLoading(false); // Ẩn thanh tải khi hoàn tất
         // Handle successful response
         console.log(response);
         if (response.data.isConfirmed === 1) {
@@ -62,6 +65,7 @@ const Signup: React.FC = () => {
         }
       })
       .catch((error) => {
+        setLoading(false); // Ẩn thanh tải khi hoàn tất
         // Handle errors during registration
         console.error("An error occurred during registration:", error);
         setConfirmationMessage(
@@ -70,8 +74,32 @@ const Signup: React.FC = () => {
       });
   };
 
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (loading && canvasRef.current) {
+      const dotLottie = new DotLottie({
+        autoplay: true,
+        loop: true,
+        canvas: canvasRef.current,
+        src: "https://lottie.host/060e3688-7dc6-4f78-b3c0-60b06e6c0d8d/d5tx2NqgGL.lottie",
+      });
+
+      return () => {
+        dotLottie.destroy(); // Dọn dẹp khi component unmount
+      };
+    }
+  }, [loading]);
+
   return (
     <div className="container">
+      {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
+      {loading && (
+        <div id="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <canvas ref={canvasRef} id="dotlottie-canvas" style={{ width: '300px', height: '300px' }}></canvas>
+        </div>
+      )}
+
       {/* Header for the Signup page */}
       <div className="header">
         <div className="text">Sign Up</div>
@@ -181,7 +209,6 @@ const Signup: React.FC = () => {
       )}
 
       {/* Link to navigate to the login page */}
-
       <div className="toggle-action">
         Already have an account?{" "}
         <span

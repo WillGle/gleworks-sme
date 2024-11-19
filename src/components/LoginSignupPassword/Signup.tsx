@@ -82,7 +82,8 @@ const Signup: React.FC = () => {
         autoplay: true,
         loop: true,
         canvas: canvasRef.current,
-        src: "https://lottie.host/060e3688-7dc6-4f78-b3c0-60b06e6c0d8d/d5tx2NqgGL.lottie",
+        src: "https://lottie.host/d558d016-47eb-4dee-841d-4c414066909e/neo2e3YEP5.lottie",
+        speed: 2.5,
       });
 
       return () => {
@@ -96,7 +97,7 @@ const Signup: React.FC = () => {
       {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
       {loading && (
         <div id="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <canvas ref={canvasRef} id="dotlottie-canvas" style={{ width: '300px', height: '300px' }}></canvas>
+          <canvas ref={canvasRef} id="dotlottie-canvas" style={{ width: '500px', height: '500px' }}></canvas>
         </div>
       )}
 

@@ -45,7 +45,7 @@ const Login: React.FC = () => {
       localStorage.setItem("user", JSON.stringify(user));
   
       // Chuyển hướng sang trang about
-      navigate("/about");
+      navigate("/home");
     } catch (error) {
       console.error("Login error:", error);
       setLoginError("Invalid email or password.");

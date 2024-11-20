@@ -5,7 +5,11 @@ import "./SidePanel.css";
 const SidePanel: React.FC = () => {
   return (
     <div className="side-panel">
-      <h1 className="logo">GLE.WORK</h1>
+      <div className="logo">
+        <Link to="/">
+          <strong>GLE.WORK</strong>
+        </Link>
+      </div>
       <nav>
         <ul className="nav-list">
           <li>

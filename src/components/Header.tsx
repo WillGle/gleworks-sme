@@ -43,6 +43,7 @@ const Header: React.FC = () => {
           <Link to="/blog">Blogs</Link>
           <Link to="/services">Service</Link>
           <Link to="/archive">Archive</Link>
+          <Link to="/new-password">Quên mật khẩu?</Link>
         </nav>
 
         {/* Icon Links */}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios"; // Import Axios for HTTP requests
 import "./NewPass.css";
 
 const NewPass: React.FC = () => {
@@ -16,7 +17,7 @@ const NewPass: React.FC = () => {
   };
 
   // Function to handle password submission
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!password || !confirmPassword) {
       setErrorMessage("Vui lòng nhập đầy đủ các trường.");
       return;
@@ -34,12 +35,21 @@ const NewPass: React.FC = () => {
       return;
     }
 
-    // Simulate API call for password reset
-    setTimeout(() => {
-      console.log("Password reset successfully!");
+    // Lấy thông tin người dùng từ localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const userId = user.id; // Lấy ID người dùng
+
+    // Gửi yêu cầu đổi mật khẩu đến máy chủ
+    try {
+      const response = await Axios.post(`http://localhost:3001/auth/reset-password/${userId}`, {
+        newPassword: password,
+      });
       setSuccessMessage("Mật khẩu của bạn đã được cập nhật thành công!");
       setErrorMessage("");
-    }, 1000);
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      setErrorMessage("Đã xảy ra lỗi khi đổi mật khẩu. Vui lòng thử lại.");
+    }
   };
 
   return (

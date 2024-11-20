@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import "./UserPage.css";
 
 interface User {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   gender: string;
   rank: string;
-  tele: string;
+  phoneNumber: string;
   email: string;
-  dob: string;
+  dateOfBirth: string;
   address: string;
   city: string;
 }
@@ -17,7 +18,7 @@ const UserPage: React.FC = () => {
   const [userData, setUserData] = useState<User | null>(null);
 
   useEffect(() => {
-    // Simulate fetching user data (e.g., from API or localStorage)
+    // Lấy thông tin người dùng từ localStorage
     const fetchUserData = () => {
       const savedUser = JSON.parse(localStorage.getItem("userData") || "{}");
       setUserData(savedUser);
@@ -26,7 +27,7 @@ const UserPage: React.FC = () => {
   }, []);
 
   if (!userData) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Hiển thị loading nếu chưa có dữ liệu
   }
 
   return (
@@ -43,7 +44,9 @@ const UserPage: React.FC = () => {
             <li>Setting</li>
             <li>Setting</li>
             <li>Setting</li>
-            <li>Setting</li>
+            <li>
+              <Link to="/new-password">Change Password</Link>
+            </li>
           </ul>
         </nav>
       </aside>
@@ -52,7 +55,7 @@ const UserPage: React.FC = () => {
       <main className="content">
         <header className="profile-header">
           <div className="profile-details">
-            <h2>{userData.fullName || "N/A"}</h2>
+            <h2>{`${userData.firstName} ${userData.lastName}` || "N/A"}</h2>
             <p>{userData.gender || "N/A"}</p>
             <p>{userData.rank || "Ranked Member"}</p>
           </div>
@@ -61,9 +64,9 @@ const UserPage: React.FC = () => {
         <section className="user-about-section">
           <h3>About</h3>
           <div className="user-about-info">
-            <p>Tele: {userData.tele || "N/A"}</p>
+            <p>Tele: {userData.phoneNumber || "N/A"}</p>
             <p>Mail: {userData.email || "N/A"}</p>
-            <p>D.O.B: {userData.dob || "N/A"}</p>
+            <p>D.O.B: {userData.dateOfBirth || "N/A"}</p>
             <p>Address: {userData.address || "N/A"}</p>
             <p>City: {userData.city || "N/A"}</p>
           </div>

@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./MyAccount.css"; // Add your styles
+import { Link } from "react-router-dom";
+
+interface User {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  dateOfBirth: string;
+  address: string;
+  city: string;
+}
 
 const MyAccount: React.FC = () => {
   // State for form data
-  const [formData, setFormData] = useState({
-    fullName: "",
+  const [formData, setFormData] = useState<User>({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
     email: "",
-    tele: "",
-    dob: "",
+    dateOfBirth: "",
     address: "",
     city: "",
   });
@@ -15,21 +27,24 @@ const MyAccount: React.FC = () => {
   // State for success or error messages
   const [message, setMessage] = useState("");
 
-  // Fetch user data on component mount (mocked or API call)
+  // Fetch user data on component mount
   useEffect(() => {
-    // Simulate fetching user data
-    const fetchData = async () => {
-      const userData = {
-        fullName: "Nguyen Chi Cuong",
-        email: "ot*******@gmail.com",
-        tele: "********23",
-        dob: "1990-08-20",
-        address: "123 Main St",
-        city: "Hanoi",
-      };
-      setFormData(userData);
+    const fetchUserData = () => {
+      const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (savedUser) {
+        setFormData({
+          firstName: savedUser.firstName,
+          lastName: savedUser.lastName,
+          phoneNumber: savedUser.phoneNumber,
+          email: savedUser.email,
+          dateOfBirth: savedUser.dateOfBirth,
+          address: savedUser.address,
+          city: savedUser.city,
+        });
+      }
+      console.log("Retrieved user data:", savedUser);
     };
-    fetchData();
+    fetchUserData();
   }, []);
 
   // Handle form input changes
@@ -41,9 +56,24 @@ const MyAccount: React.FC = () => {
   // Handle form submission
   const handleSubmit = async () => {
     try {
-      // Simulate sending a request to the backend
-      console.log("Sending data to the backend:", formData);
-      setMessage("Thông tin đã được cập nhật thành công!");
+      const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = savedUser.id; // Assuming the user ID is stored in localStorage
+
+      // Send a PUT request to update user information
+      const response = await fetch(`http://localhost:3001/users/update/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setMessage("Thông tin đã được cập nhật thành công!");
+      } else {
+        setMessage("Có lỗi xảy ra. Vui lòng thử lại!");
+      }
+
       // Reset the message after a few seconds
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
@@ -58,11 +88,20 @@ const MyAccount: React.FC = () => {
       <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
       <div className="form-container">
         <div className="form-group">
-          <label>Tên đầy đủ</label>
+          <label>Họ</label>
           <input
             type="text"
-            name="fullName"
-            value={formData.fullName}
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Tên</label>
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
             onChange={handleChange}
           />
         </div>
@@ -79,8 +118,8 @@ const MyAccount: React.FC = () => {
           <label>Số điện thoại</label>
           <input
             type="text"
-            name="tele"
-            value={formData.tele}
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
           />
         </div>
@@ -88,8 +127,8 @@ const MyAccount: React.FC = () => {
           <label>Ngày sinh</label>
           <input
             type="date"
-            name="dob"
-            value={formData.dob}
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
             onChange={handleChange}
           />
         </div>
@@ -114,6 +153,7 @@ const MyAccount: React.FC = () => {
         <button onClick={handleSubmit} className="submit-btn">
           Xác nhận
         </button>
+        <Link to="/new-password">Thay Đổi Mật Khẩu</Link>
         {message && <p className="message">{message}</p>}
       </div>
     </div>

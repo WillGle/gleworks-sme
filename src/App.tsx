@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import Login from "./components/LoginSignupPassword/Login";
 import Signup from "./components/LoginSignupPassword/Signup";
@@ -34,6 +35,8 @@ function AppLayout() {
       {/* Conditionally render Header and Footer based on the route */}
       {!hideHeaderFooter && <Header />}
       <Routes>
+        {/* Redirect from "/" to "/home" */}
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Landing />} />
         <Route path="/about" element={<About />} />
         <Route path="/archive" element={<Archive />} />

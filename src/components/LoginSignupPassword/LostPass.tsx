@@ -32,7 +32,7 @@ const LostPass: React.FC = () => {
     setLoading(true); // Hiện thanh tải khi bắt đầu gửi yêu cầu
 
     try {
-      const response = await Axios.post(`${apiUrl}/users/forgot-password`, { email });
+      const response = await Axios.post(`${apiUrl}/auth/forgot-password`, { email });
       setMessage(response.data.message);
     } catch (error) {
       console.error("Error sending reset password email:", error);

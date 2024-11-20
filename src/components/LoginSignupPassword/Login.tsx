@@ -41,8 +41,13 @@ const Login: React.FC = () => {
       const user = response.data; // Thông tin người dùng từ server
       console.log("Login successful:", user);
   
-      // Lưu thông tin người dùng vào localStorage
+      // Xóa thông tin người dùng cũ trong localStorage
+      localStorage.removeItem("user");
+      console.log("Previous user data cleared from localStorage.");
+      
+      // Lưu thông tin người dùng mới vào localStorage
       localStorage.setItem("user", JSON.stringify(user));
+      console.log("New user data saved to localStorage:", user);
   
       // Chuyển hướng sang trang about
       navigate("/home");

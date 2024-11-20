@@ -20,8 +20,9 @@ const UserPage: React.FC = () => {
   useEffect(() => {
     // Lấy thông tin người dùng từ localStorage
     const fetchUserData = () => {
-      const savedUser = JSON.parse(localStorage.getItem("userData") || "{}");
+      const savedUser = JSON.parse(localStorage.getItem("user") || "{}"); // Changed "userData" to "user"
       setUserData(savedUser);
+      console.log("Retrieved user data:", savedUser);
     };
     fetchUserData();
   }, []);
@@ -59,7 +60,9 @@ const UserPage: React.FC = () => {
             <p>{userData.gender || "N/A"}</p>
             <p>{userData.rank || "Ranked Member"}</p>
           </div>
-        </header>
+        </header> 
+
+        <button className="edit-button">Edit Information</button>
 
         <section className="user-about-section">
           <h3>About</h3>

@@ -43,7 +43,6 @@ const Header: React.FC = () => {
           <Link to="/blog">Blogs</Link>
           <Link to="/services">Service</Link>
           <Link to="/archive">Archive</Link>
-          <Link to="/new-password">Quên mật khẩu?</Link>
         </nav>
 
         {/* Icon Links */}
@@ -51,10 +50,10 @@ const Header: React.FC = () => {
           <FaSearch className="icon" />
           {user ? (
             <>
-              {/* Hiển thị thông tin người dùng */}
-              <span className="user-info">
+              {/* Hiển thị thông tin người dùng với liên kết đến trang user */}
+              <Link to="/user" className="user-info">
                 {user.firstName} {user.lastName}
-              </span>
+              </Link>
               {/* Nút Logout */}
               <button
                 onClick={() => {

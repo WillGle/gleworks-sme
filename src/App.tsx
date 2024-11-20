@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
 import About from "./components/About/About";
 import Archive from "./components/Archive/Archive";
+import UserPage from "./components/UserPage/UserPage";
 import "./App.css";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
@@ -21,6 +22,7 @@ function AppLayout() {
 
   // Define the paths where Header and Footer should be hidden
   const hideHeaderFooter = [
+    "/user",
     "/login",
     "/signup",
     "/lost-password",
@@ -35,6 +37,7 @@ function AppLayout() {
         <Route path="/home" element={<Landing />} />
         <Route path="/about" element={<About />} />
         <Route path="/archive" element={<Archive />} />
+        <Route path="/user" element={<UserPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />

@@ -40,7 +40,7 @@ const Signup: React.FC = () => {
   const register = () => {
     setLoading(true); // Hiện thanh tải khi bắt đầu đăng ký
     // Make a POST request to the server using Axios to register a new user
-    Axios.post(`${apiUrl}/users`, {
+    Axios.post(`${apiUrl}/auth/register`, {
       firstName,
       lastName,
       phoneNumber: `+${phone.replace(/^0/, "")}`, // Format phone number

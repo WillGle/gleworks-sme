@@ -14,6 +14,8 @@ import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
 import About from "./components/About/About";
 import Archive from "./components/Archive/Archive";
+import Service from "./components/Service/ServiceSelect";
+import Switch from "./components/Service/Switch";
 import UserPageLayout from "./components/UserPageLayout";
 import Policies from "./components/Policies/Policies";
 import "./App.css";
@@ -40,6 +42,8 @@ function AppLayout() {
         <Route path="/home" element={<Landing />} />
         <Route path="/about" element={<About />} />
         <Route path="/archive" element={<Archive />} />
+        <Route path="/service/*" element={<Service />} />
+        <Route path="/service/switch-modding" element={<Switch />} />
         {/* Delegate all /user sub-routes to UserPageLayout */}
         <Route path="/user/*" element={<UserPageLayout />} />
         <Route path="/login" element={<Login />} />

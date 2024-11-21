@@ -5,11 +5,6 @@ import "./UserSidePanel.css";
 const SidePanel: React.FC = () => {
   return (
     <div className="side-panel">
-      <div className="logo">
-        <Link to="/">
-          <strong>GLE.WORK</strong>
-        </Link>
-      </div>
       <nav>
         <ul className="nav-list">
           <li>

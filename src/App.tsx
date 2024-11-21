@@ -24,7 +24,6 @@ function AppLayout() {
 
   // Define the paths where Header and Footer should be hidden
   const hideHeaderFooter = [
-    "/user", // Matches "/user" and all subroutes like "/user/my-account"
     "/login",
     "/signup",
     "/lost-password",

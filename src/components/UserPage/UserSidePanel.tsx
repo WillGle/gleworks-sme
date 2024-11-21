@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./SidePanel.css";
+import "./UserSidePanel.css";
 
 const SidePanel: React.FC = () => {
   return (
     <div className="side-panel">
-      <h1 className="logo">GLE.WORK</h1>
+      <div className="logo">
+        <Link to="/">
+          <strong>GLE.WORK</strong>
+        </Link>
+      </div>
       <nav>
         <ul className="nav-list">
           <li>
@@ -15,7 +19,7 @@ const SidePanel: React.FC = () => {
             <Link to="/user/my-orders">My Orders</Link>
           </li>
           <li>
-            <Link to="/user/notification">Policies</Link>
+            <Link to="/user/support">Support</Link>
           </li>
         </ul>
       </nav>

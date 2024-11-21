@@ -14,22 +14,22 @@
     color: #666;
   }
   
-  .form-container {
+  .account-form-container {
     margin-top: 20px;
   }
   
-  .form-group {
+  .account-form-group {
     margin-bottom: 15px;
   }
   
-  .form-group label {
+  .account-form-group label {
     display: block;
     font-size: 14px;
     color: #333;
     margin-bottom: 5px;
   }
   
-  .form-group input {
+  .account-form-group input {
     width: 100%;
     padding: 10px;
     font-size: 14px;

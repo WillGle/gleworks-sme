@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./MyAccount.css"; // Add your styles
+import "./MyAccount.css";
 
 const MyAccount: React.FC = () => {
   // State for form data
@@ -56,8 +56,8 @@ const MyAccount: React.FC = () => {
     <div className="my-account">
       <h1>Hồ Sơ Của Tôi</h1>
       <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-      <div className="form-container">
-        <div className="form-group">
+      <div className="account-form-container">
+        <div className="account-form-group">
           <label>Tên đầy đủ</label>
           <input
             type="text"
@@ -66,7 +66,7 @@ const MyAccount: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
+        <div className="account-form-group">
           <label>Email</label>
           <input
             type="email"
@@ -75,7 +75,7 @@ const MyAccount: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
+        <div className="account-form-group">
           <label>Số điện thoại</label>
           <input
             type="text"
@@ -84,7 +84,7 @@ const MyAccount: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
+        <div className="account-form-group">
           <label>Ngày sinh</label>
           <input
             type="date"
@@ -93,7 +93,7 @@ const MyAccount: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
+        <div className="account-form-group">
           <label>Địa chỉ</label>
           <input
             type="text"
@@ -102,7 +102,7 @@ const MyAccount: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
+        <div className="account-form-group">
           <label>Thành phố</label>
           <input
             type="text"

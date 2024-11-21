@@ -21,6 +21,9 @@ const SidePanel: React.FC = () => {
           <li>
             <Link to="/user/support">Support</Link>
           </li>
+          <li>
+            <Link to="/new-password">Change Password</Link>
+          </li>
         </ul>
       </nav>
     </div>

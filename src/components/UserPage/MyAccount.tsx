@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./MyAccount.css"; // Add your styles
-import { Link } from "react-router-dom";
 
 interface User {
   firstName: string;
@@ -87,11 +86,11 @@ const MyAccount: React.FC = () => {
 
   return (
     <div className="my-account">
-      <h1>Hồ Sơ Của Tôi</h1>
-      <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+      <h1>My Account</h1>
+      <p>Manage profile information for account security</p>
       <div className="form-container">
-        <div className="form-group">
-          <label>Họ</label>
+        <div className="account-form-group">
+          <label>Family Name</label>
           <input
             type="text"
             name="lastName"
@@ -99,8 +98,8 @@ const MyAccount: React.FC = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
-          <label>Tên</label>
+        <div className="account-form-group">
+          <label> First Name</label>
           <input
             type="text"
             name="firstName"
@@ -118,7 +117,7 @@ const MyAccount: React.FC = () => {
           />
         </div>
         <div className="account-form-group">
-          <label>Số điện thoại</label>
+          <label>Telephone</label>
           <input
             type="text"
             name="phoneNumber"
@@ -127,7 +126,7 @@ const MyAccount: React.FC = () => {
           />
         </div>
         <div className="account-form-group">
-          <label>Ngày sinh</label>
+          <label>Date Of Birth</label>
           <input
             type="date"
             name="dateOfBirth"
@@ -136,7 +135,7 @@ const MyAccount: React.FC = () => {
           />
         </div>
         <div className="account-form-group">
-          <label>Địa chỉ</label>
+          <label>Address</label>
           <input
             type="text"
             name="address"
@@ -145,7 +144,7 @@ const MyAccount: React.FC = () => {
           />
         </div>
         <div className="account-form-group">
-          <label>Thành phố</label>
+          <label>City</label>
           <input
             type="text"
             name="city"
@@ -156,7 +155,6 @@ const MyAccount: React.FC = () => {
         <button onClick={handleSubmit} className="submit-btn">
           Xác nhận
         </button>
-        <Link to="/new-password">Thay Đổi Mật Khẩu</Link>
         {message && <p className="message">{message}</p>}
       </div>
     </div>

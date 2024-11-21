@@ -6,6 +6,7 @@ const Support: React.FC = () => {
     <div className="support-container">
       <header className="support-header">
         <div className="support-info">
+          <h1>Support</h1>
           <h2>GLE.WORK</h2>
           <p>Address: ABC street</p>
           <p>Tel: 09xxxxxxxx</p>

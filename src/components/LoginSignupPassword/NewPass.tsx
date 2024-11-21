@@ -19,18 +19,18 @@ const NewPass: React.FC = () => {
   // Function to handle password submission
   const handleSubmit = async () => {
     if (!password || !confirmPassword) {
-      setErrorMessage("Vui lòng nhập đầy đủ các trường.");
+      setErrorMessage("Please fill in all required fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage("Mật khẩu và Xác nhận mật khẩu không khớp.");
+      setErrorMessage("Password and Confirm Password do not match.");
       return;
     }
 
     if (!validatePassword(password)) {
       setErrorMessage(
-        "Mật khẩu phải có ít nhất 8 ký tự và chứa ít nhất 1 ký tự đặc biệt (@, $, #, *, !, %, &)."
+        "Password must be at least 8 characters and contain at least 1 special character (@, $, #, *, !, %, &)."
       );
       return;
     }
@@ -44,39 +44,41 @@ const NewPass: React.FC = () => {
       await Axios.post(`http://localhost:3001/auth/reset-password/${userId}`, {
         newPassword: password,
       });
-      setSuccessMessage("Mật khẩu của bạn đã được cập nhật thành công!");
+      setSuccessMessage("Your password has been updated successfully!");
       setErrorMessage("");
     } catch (error) {
       console.error("Error resetting password:", error);
-      setErrorMessage("Đã xảy ra lỗi khi đổi mật khẩu. Vui lòng thử lại.");
+      setErrorMessage(
+        "An error occurred while changing the password. Please try again."
+      );
     }
   };
 
   return (
     <div className="new-password-container">
       <div className="header">
-        <h1>Đặt Lại Mật Khẩu</h1>
-        <p>Vui lòng nhập mật khẩu mới của bạn.</p>
+        <h1>Reset Password</h1>
+        <p>Please enter your new password</p>
       </div>
       <div className="form-container">
         {/* Password input */}
         <div className="input-group">
-          <label htmlFor="password">Mật Khẩu Mới</label>
+          <label htmlFor="password">New Password</label>
           <input
             type="password"
             id="password"
-            placeholder="Nhập mật khẩu mới"
+            placeholder="Enter new password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         {/* Confirm password input */}
         <div className="input-group">
-          <label htmlFor="confirm-password">Xác Nhận Mật Khẩu</label>
+          <label htmlFor="confirm-password">Confirm password</label>
           <input
             type="password"
             id="confirm-password"
-            placeholder="Xác nhận mật khẩu mới"
+            placeholder="Confirm new password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
@@ -94,14 +96,14 @@ const NewPass: React.FC = () => {
             className="cancel-button"
             onClick={() => navigate("/user")}
           >
-            Hủy
+            Cancle
           </button>
           <button
             type="button"
             className="confirm-button"
             onClick={handleSubmit}
           >
-            Xác Nhận
+            Confirm
           </button>
         </div>
       </div>

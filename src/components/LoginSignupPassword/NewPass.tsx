@@ -41,7 +41,7 @@ const NewPass: React.FC = () => {
 
     // Gửi yêu cầu đổi mật khẩu đến máy chủ
     try {
-      const response = await Axios.post(`http://localhost:3001/auth/reset-password/${userId}`, {
+      await Axios.post(`http://localhost:3001/auth/reset-password/${userId}`, {
         newPassword: password,
       });
       setSuccessMessage("Mật khẩu của bạn đã được cập nhật thành công!");
@@ -92,7 +92,7 @@ const NewPass: React.FC = () => {
           <button
             type="button"
             className="cancel-button"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/user")}
           >
             Hủy
           </button>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./SidePanel.css";
+import "./UserSidePanel.css";
 
 const SidePanel: React.FC = () => {
   return (
@@ -19,7 +19,7 @@ const SidePanel: React.FC = () => {
             <Link to="/user/my-orders">My Orders</Link>
           </li>
           <li>
-            <Link to="/user/notification">Policies</Link>
+            <Link to="/user/support">Support</Link>
           </li>
         </ul>
       </nav>

@@ -43,13 +43,13 @@ const Footer: React.FC = () => {
         <div className="footer-section">
           <ul>
             <li>
-              <a href="#">Term of Service</a>
+              <a href="/policies">Term of Service</a>
             </li>
             <li>
-              <a href="#">Privacy Policy</a>
+              <a href="/policies">Privacy Policy</a>
             </li>
             <li>
-              <a href="#">Return Policy</a>
+              <a href="/policies">Return Policy</a>
             </li>
           </ul>
         </div>

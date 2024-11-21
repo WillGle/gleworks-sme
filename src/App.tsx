@@ -15,6 +15,7 @@ import Landing from "./components/Landing/Landing";
 import About from "./components/About/About";
 import Archive from "./components/Archive/Archive";
 import UserPageLayout from "./components/UserPageLayout";
+import Policies from "./components/Policies/Policies";
 import "./App.css";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
@@ -46,6 +47,7 @@ function AppLayout() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />
         <Route path="/new-password" element={<NewPass />} />
+        <Route path="/policies/" element={<Policies />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}
     </>

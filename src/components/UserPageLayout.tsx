@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import SidePanel from "./SidePanel";
+import SidePanel from "./UserPage/UserSidePanel";
 import "./UserPageLayout.css";
 import MyAccount from "./UserPage/MyAccount";
-// import MyOrders from "./UserPage/MyOrders";
-// import Policies from "./UserPage/Policies";
+import MyOrders from "./UserPage/MyOrders";
+import Support from "./UserPage/Support";
 
 const UserPageLayout: React.FC = () => {
   return (
@@ -16,8 +16,8 @@ const UserPageLayout: React.FC = () => {
       <div className="user-content">
         <Routes>
           <Route path="my-account" element={<MyAccount />} />
-          {/* <Route path="my-orders" element={<MyOrders />} />
-          <Route path="notification" element={<Policies />} /> */}
+          <Route path="my-orders" element={<MyOrders />} />
+          <Route path="support" element={<Support />} />
         </Routes>
       </div>
     </div>

@@ -41,7 +41,7 @@ const NewPass: React.FC = () => {
 
     // Gửi yêu cầu đổi mật khẩu đến máy chủ
     try {
-      await Axios.post(`http://localhost:3001/auth/reset-password/${userId}`, {
+      await Axios.post(`http://localhost:3000/auth/reset-password/${userId}`, {
         newPassword: password,
       });
       setSuccessMessage("Your password has been updated successfully!");

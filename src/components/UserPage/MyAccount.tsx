@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
 import "./MyAccount.css"; // Add your styles
+// API URL imported from environment variables
+const apiUrl = import.meta.env.VITE_API_URL;
 
 interface User {
+  id: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -14,6 +18,7 @@ interface User {
 const MyAccount: React.FC = () => {
   // State for form data
   const [formData, setFormData] = useState<User>({
+    id: "",
     firstName: "",
     lastName: "",
     phoneNumber: "",
@@ -25,13 +30,73 @@ const MyAccount: React.FC = () => {
 
   // State for success or error messages
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Fetch user data on component mount
+  // Fetch user ID and user data on component mount
   useEffect(() => {
-    const fetchUserData = () => {
-      const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
-      if (savedUser) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to login if token is not found
+      navigate("/login");
+    } else {
+      fetchUserId(); // Fetch user ID if authenticated
+    }
+  }, []);
+
+  const fetchUserId = async () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const response = await fetch(`${apiUrl}/auth/auth-check`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          console.log("User Data:", userData); // Debugging line
+          
+          // Access the user ID correctly
+          const userId = userData.user.id; // Adjusted to access the user ID
+          localStorage.setItem("userId", userId); // Store user ID in local storage
+          fetchUserData(); // Fetch user data after storing user ID
+        } else {
+          setMessage("Failed to fetch user ID.");
+        }
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+        setMessage("Error fetching user ID.");
+      }
+    } else {
+      setMessage("Token is missing.");
+    }
+  };
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    console.log("Fetched User ID:", userId); // Debugging line
+
+    if (token && userId) {
+      try {
+        const response = await fetch(`${apiUrl}/auth/user/${userId}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const savedUser = await response.json();
         setFormData({
+          id: savedUser.id,
           firstName: savedUser.firstName,
           lastName: savedUser.lastName,
           phoneNumber: savedUser.phoneNumber,
@@ -40,11 +105,14 @@ const MyAccount: React.FC = () => {
           address: savedUser.address,
           city: savedUser.city,
         });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setMessage("Không thể lấy thông tin người dùng.");
       }
-      console.log("Retrieved user data:", savedUser);
-    };
-    fetchUserData();
-  }, []);
+    } else {
+      setMessage("Token or User ID is missing.");
+    }
+  };
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,16 +123,15 @@ const MyAccount: React.FC = () => {
   // Handle form submission
   const handleSubmit = async () => {
     try {
-      const savedUser = JSON.parse(localStorage.getItem("user") || "{}");
-      const userId = savedUser.id; // Assuming the user ID is stored in localStorage
-
+      const token = localStorage.getItem("token"); // Get token from localStorage
       // Send a PUT request to update user information
       const response = await fetch(
-        `http://localhost:3001/users/update/${userId}`,
+        `${apiUrl}/users/update/${formData.id}`, // Use user ID for the update
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Use token for authorization
           },
           body: JSON.stringify(formData),
         }
@@ -72,6 +139,7 @@ const MyAccount: React.FC = () => {
 
       if (response.ok) {
         setMessage("Thông tin đã được cập nhật thành công!");
+        fetchUserData(); // Fetch updated user data
       } else {
         setMessage("Có lỗi xảy ra. Vui lòng thử lại!");
       }
@@ -90,7 +158,7 @@ const MyAccount: React.FC = () => {
       <p>Manage profile information for account security</p>
       <div className="account-form-container">
         <div className="account-form-group">
-          <label> First Name</label>
+          <label>First Name</label>
           <input
             type="text"
             name="firstName"

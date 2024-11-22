@@ -53,11 +53,13 @@ const Signup: React.FC = () => {
 
     setIsLoading(true);
     try {
+      const formattedDateOfBirth = dob ? dob.toISOString().split("T")[0] : null;
+
       await Axios.post(`${apiUrl}/auth/register`, {
         firstName,
         lastName,
         phoneNumber: `+${phone.replace(/^0/, "")}`,
-        dateOfBirth: dob ? dob.toISOString().split("T")[0] : null,
+        dateOfBirth: formattedDateOfBirth,
         email,
         password,
       });

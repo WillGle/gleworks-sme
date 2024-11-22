@@ -87,7 +87,7 @@ const LostPass: React.FC = () => {
       <div className="form-container">
         {/* Email input */}
         <div className="input-group">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">Email</label>
           <input
             type="email"
             id="email"

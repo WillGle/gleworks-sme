@@ -37,6 +37,7 @@ const Login: React.FC = () => {
         email,
         password,
       });
+      localStorage.setItem("token", response.data.token); // Store the token in localStorage
   
       const user = response.data; // Thông tin người dùng từ server
       console.log("Login successful:", user);

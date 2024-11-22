@@ -80,7 +80,6 @@ const Signup: React.FC = () => {
     <div className="new-password-container">
       <div className="header">
         <h1>Sign Up</h1>
-        <p>Create your account by filling in the details below.</p>
       </div>
       <div className="form-container">
         <div className="input-group">
@@ -154,17 +153,9 @@ const Signup: React.FC = () => {
 
         <div className="toggle-action">
           Already have an account?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            style={{
-              color: "blue",
-              cursor: "pointer",
-              textDecoration: "underline",
-            }}
-          >
-            Log in here
-          </span>
+          <span onClick={() => navigate("/login")}>Log in here</span>
         </div>
+
         <button
           type="button"
           className="confirm-button"

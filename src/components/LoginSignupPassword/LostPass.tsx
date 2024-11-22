@@ -120,16 +120,7 @@ const LostPass: React.FC = () => {
         {/* Navigation links */}
         <div className="toggle-action">
           Already have an account?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            style={{
-              color: "blue",
-              cursor: "pointer",
-              textDecoration: "underline",
-            }}
-          >
-            Log in here
-          </span>
+          <span onClick={() => navigate("/login")}>Log in here</span>
         </div>
       </div>
     </div>

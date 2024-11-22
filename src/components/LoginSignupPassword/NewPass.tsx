@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios"; // Import Axios for HTTP requests
+import Axios from "axios";
 import "./NewPass.css";
 
 const NewPass: React.FC = () => {
-  const [password, setPassword] = useState<string>(""); // State for new password
-  const [confirmPassword, setConfirmPassword] = useState<string>(""); // State for confirming password
-  const [errorMessage, setErrorMessage] = useState<string>(""); // State for error message
-  const [successMessage, setSuccessMessage] = useState<string>(""); // State for success message
-  const navigate = useNavigate(); // Hook to navigate between pages
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  // Function to validate password
   const validatePassword = (password: string): boolean => {
-    const specialCharPattern = /[@$#*!%&]/; // Regex for special characters
-    return password.length >= 8 && specialCharPattern.test(password); // Minimum 8 chars and 1 special char
+    const specialCharPattern = /[@$#*!%&]/;
+    return password.length >= 8 && specialCharPattern.test(password);
   };
 
-  // Function to handle password submission
   const handleSubmit = async () => {
+    if (isLoading) return;
+
     if (!password || !confirmPassword) {
       setErrorMessage("Please fill in all required fields.");
       return;
@@ -35,24 +36,36 @@ const NewPass: React.FC = () => {
       return;
     }
 
-    // Lấy thông tin người dùng từ localStorage
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = user.id; // Lấy ID người dùng
+    if (!user || !user.id) {
+      setErrorMessage("User information is missing. Please log in again.");
+      return;
+    }
 
-    // Gửi yêu cầu đổi mật khẩu đến máy chủ
+    setIsLoading(true);
     try {
-      await Axios.post(`http://localhost:3001/auth/reset-password/${userId}`, {
+      await Axios.post(`http://localhost:3001/auth/reset-password/${user.id}`, {
         newPassword: password,
       });
       setSuccessMessage("Your password has been updated successfully!");
       setErrorMessage("");
+      setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
     } catch (error) {
       console.error("Error resetting password:", error);
       setErrorMessage(
         "An error occurred while changing the password. Please try again."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const handleInputChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setErrorMessage("");
+      setter(e.target.value);
+    };
 
   return (
     <div className="new-password-container">
@@ -61,7 +74,6 @@ const NewPass: React.FC = () => {
         <p>Please enter your new password</p>
       </div>
       <div className="form-container">
-        {/* Password input */}
         <div className="input-group">
           <label htmlFor="password">New Password</label>
           <input
@@ -69,10 +81,9 @@ const NewPass: React.FC = () => {
             id="password"
             placeholder="Enter new password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleInputChange(setPassword)}
           />
         </div>
-        {/* Confirm password input */}
         <div className="input-group">
           <label htmlFor="confirm-password">Confirm password</label>
           <input
@@ -80,16 +91,13 @@ const NewPass: React.FC = () => {
             id="confirm-password"
             placeholder="Confirm new password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={handleInputChange(setConfirmPassword)}
           />
         </div>
-        {/* Error message */}
         {errorMessage && <div className="error-message">{errorMessage}</div>}
-        {/* Success message */}
         {successMessage && (
           <div className="success-message">{successMessage}</div>
         )}
-        {/* Buttons */}
         <div className="button-group">
           <button
             type="button"
@@ -102,11 +110,13 @@ const NewPass: React.FC = () => {
             type="button"
             className="confirm-button"
             onClick={handleSubmit}
+            disabled={isLoading}
           >
-            Confirm
+            {isLoading ? "Submitting..." : "Confirm"}
           </button>
         </div>
       </div>
+      {isLoading && <div className="loading-spinner">Loading...</div>}
     </div>
   );
 };

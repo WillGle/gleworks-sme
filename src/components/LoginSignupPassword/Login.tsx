@@ -1,146 +1,123 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
 import Axios from "axios"; // Import Axios for HTTP requests
-
-// API URL imported from environment variables
-const apiUrl = import.meta.env.VITE_API_URL;
+import "./Login.css";
 
 const Login: React.FC = () => {
-  // State variables to manage form fields and errors
-  const [email, setEmail] = useState<string>(""); // State to store email
-  const [password, setPassword] = useState<string>(""); // State to store password
-  const [emailError, setEmailError] = useState<string>(""); // State to store email validation error
-  const [loginError, setLoginError] = useState<string>(""); // State to store login error
+  const [email, setEmail] = useState<string>(""); // State for email input
+  const [password, setPassword] = useState<string>(""); // State for password input
+  const [errorMessage, setErrorMessage] = useState<string>(""); // State for error messages
+  const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading status
   const navigate = useNavigate(); // Hook to navigate between pages
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  // Function to validate email input
-  const validateEmail = (email: string) => {
-    // Regular expression for validating an email address
+  // Email validation function
+  const validateEmail = (email: string): boolean => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailPattern.test(email)) {
-      setEmailError("Invalid email address"); // Set error if email is invalid
-    } else {
-      setEmailError(""); // Clear error if email is valid
-    }
+    return emailPattern.test(email);
   };
 
-  // Function to handle login action
-  const handleLogin = async () => {
-    if (emailError || !email || !password) {
-      setLoginError("Please fill in all fields correctly.");
+  // Handle login submission
+  const handleSubmit = async () => {
+    setErrorMessage(""); // Clear previous errors
+    if (!email || !password) {
+      setErrorMessage("Please fill in all required fields.");
       return;
     }
-  
+    if (!validateEmail(email)) {
+      setErrorMessage("Invalid email address.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const response = await Axios.post(`${apiUrl}/auth/login`, {
         email,
         password,
       });
-  
-      const user = response.data; // Thông tin người dùng từ server
-      console.log("Login successful:", user);
-  
-      // Xóa thông tin người dùng cũ trong localStorage
-      localStorage.removeItem("user");
-      console.log("Previous user data cleared from localStorage.");
-      
-      // Lưu thông tin người dùng mới vào localStorage
+      const user = response.data;
+
+      // Save user information in localStorage
       localStorage.setItem("user", JSON.stringify(user));
-      console.log("New user data saved to localStorage:", user);
-  
-      // Chuyển hướng sang trang about
-      navigate("/home");
+      console.log("User data saved to localStorage:", user);
+
+      navigate("/home"); // Navigate to the home page after successful login
     } catch (error) {
       console.error("Login error:", error);
-      setLoginError("Invalid email or password.");
+      setErrorMessage("Invalid email or password.");
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   return (
-    <div className="container">
+    <div className="new-password-container">
       <div className="header">
-        <div className="text">Login</div>
-        <div className="underline"></div>
+        <h1>Login</h1>
+        <p>Welcome back! Please enter your login details.</p>
       </div>
-
-      {/* Input fields for email and password */}
-      <div className="inputs">
+      <div className="form-container">
         {/* Email input */}
-        <div className="input-container">
-          <label htmlFor="email" className="input-label">
-            Email
-          </label>
+        <div className="input-group">
+          <label htmlFor="email">Email</label>
           <input
-            id="email"
-            className="input"
             type="email"
+            id="email"
+            placeholder="Enter your email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              validateEmail(e.target.value); // Validate email as user types
-            }}
-            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
           />
-          {emailError && <span className="error-message">{emailError}</span>}{" "}
-          {/* Display email validation error */}
         </div>
-
         {/* Password input */}
-        <div className="input-container">
-          <label htmlFor="password" className="input-label">
-            Password
-          </label>
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
           <input
-            id="password"
-            className="input"
             type="password"
+            id="password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
           />
         </div>
-      </div>
-
-      {/* Display login error messages if present */}
-      {loginError && <div className="error-message">{loginError}</div>}
-
-      {/* Link to Sign Up page */}
-
-      <div className="toggle-action">
-        First time? Create an account now!{" "}
-        <span
-          onClick={() => navigate("/signup")} // Redirect to Sign Up page
-          style={{
-            color: "blue",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
-        >
-          Click Here
-        </span>
-      </div>
-
-      {/* Link to Lost Password page */}
-      <div className="forgot-password">
-        Forgot Password?{" "}
-        <span
-          onClick={() => navigate("/lost-password")} // Redirect to Lost Password page
-          style={{
-            color: "blue",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
-        >
-          Click Here
-        </span>
-      </div>
-
-      {/* Login button */}
-      <div className="submit-container">
-        <div className="submit" onClick={handleLogin}>
-          Login
+        {/* Error message */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {/* Links for signup and password recovery */}
+        <div className="toggle-action">
+          First time?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
+            Create an account now!
+          </span>
+        </div>
+        <div className="toggle-action">
+          Forgot Password?{" "}
+          <span
+            onClick={() => navigate("/lost-password")}
+            style={{
+              color: "blue",
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
+            Click Here
+          </span>
+        </div>
+        {/* Buttons */}
+        <div className="button-group">
+          <button
+            type="button"
+            className="confirm-button"
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? "Logging in..." : "Login"}
+          </button>
         </div>
       </div>
     </div>

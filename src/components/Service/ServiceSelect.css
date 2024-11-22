@@ -37,6 +37,12 @@
   }
   
   /* Notes Section */
+  .service-notes h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
   .service-notes h2 {
     font-size: 20px;
     margin-bottom: 10px;

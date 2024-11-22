@@ -60,6 +60,9 @@ const Service: React.FC = () => {
 
       {/* Notes Section */}
       <div className="service-notes">
+        <h1>
+          Commission Status: <span style={{ color: "green" }}>Open</span>
+        </h1>
         <h2>Notes:</h2>
         <p>
           Remember that all materials, with the exception of lubricant, solder

@@ -95,10 +95,9 @@ const Switch: React.FC = () => {
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Check if at least one modding preference is selected
     const hasSelectedModdingPreference = Object.values(
       formData.moddingPreferences
     ).some((selected) => selected);
@@ -115,8 +114,37 @@ const Switch: React.FC = () => {
       return;
     }
 
-    alert("Form submitted successfully!");
-    console.log("Form data:", formData);
+    // Prepare data for submission
+    const orderData = {
+      switchName: formData.switchName,
+      amount: parseInt(formData.amount),
+      lube: formData.moddingPreferences.lube,
+      films: formData.moddingPreferences.films,
+      springs: formData.moddingPreferences.springs,
+      clean: formData.moddingPreferences.clean,
+      springPreference: formData.springPreference,
+      additionalNotes: formData.additionalNotes,
+      termsAccepted: formData.termsAccepted,
+      total: total,
+    };
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/services/switch-modding`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert("Order created successfully!");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred while submitting the form.");
+    }
   };
 
   return (

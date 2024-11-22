@@ -114,8 +114,8 @@ const Switch: React.FC = () => {
       return;
     }
 
-    // Prepare data for submission
-    const orderData = {
+    // Prepare data for submission to switchModding
+    const switchModdingData = {
       switchName: formData.switchName,
       amount: parseInt(formData.amount),
       lube: formData.moddingPreferences.lube,
@@ -125,11 +125,35 @@ const Switch: React.FC = () => {
       springPreference: formData.springPreference,
       additionalNotes: formData.additionalNotes,
       termsAccepted: formData.termsAccepted,
-      total: total,
+      total: total, // Include the total cost
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/services/switch-modding`, {
+      // Create switch modding order
+      const switchResponse = await fetch(`${import.meta.env.VITE_API_URL}/services/switch-modding`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(switchModdingData),
+      });
+
+      if (!switchResponse.ok) {
+        throw new Error("Failed to create switch modding order");
+      }
+
+      const switchData = await switchResponse.json();
+
+      // Prepare data for submission to orders
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      const orderData = {
+        user_id: userData.id, // Assuming the user object has an 'id' property
+        service_type: "Switch",
+        total_cost: total,
+      };
+
+      // Create order
+      const orderResponse = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,13 +161,15 @@ const Switch: React.FC = () => {
         body: JSON.stringify(orderData),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        alert("Order created successfully!");
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create order");
       }
+
+      const orderDataResponse = await orderResponse.json();
+      alert("Order created successfully!");
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred while submitting the form.");
+      console.error("Error:", error);
+      alert("An error occurred while creating the order.");
     }
   };
 

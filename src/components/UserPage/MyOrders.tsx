@@ -1,52 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MyOrders.css";
 import OrderDetail from "./OrderDetail";
 
+interface User {
+  address?: string; // Optional address field
+  // Add other user fields if necessary
+}
+
+interface Order {
+  service_type: string;
+  created_at: string; // or Date if you are converting it
+  total_cost: number;
+  paymentStatus?: string;
+  order_status: string;
+  payment_status: string;
+  User?: User; // Include the User property
+}
+
 const MyOrders: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [orders, setOrders] = useState<Order[]>([]);
 
-  const orders = [
-    {
-      order: "Keyboard build",
-      date: "DD/MM/YY",
-      address: "ABC Street",
-      value: "xxx.xxx VND",
-      paymentStatus: "Completed",
-      orderStatus: "Finished",
-    },
-    {
-      order: "Switch Modding",
-      date: "DD/MM/YY",
-      address: "XYZ Street",
-      value: "xxx.xxx VND",
-      paymentStatus: "Pending",
-      orderStatus: "Ongoing",
-    },
-    {
-      order: "Keyboard build",
-      date: "DD/MM/YY",
-      address: "CBD Street",
-      value: "xxx.xxx VND",
-      paymentStatus: "Canceled",
-      orderStatus: "Canceled",
-    },
-    {
-      order: "Switch Modding",
-      date: "DD/MM/YY",
-      address: "XYZ Street",
-      value: "xxx.xxx VND",
-      paymentStatus: "Pending",
-      orderStatus: "Pending",
-    },
-    {
-      order: "Keyboard build",
-      date: "DD/MM/YY",
-      address: "CBD Street",
-      value: "xxx.xxx VND",
-      paymentStatus: "Canceled",
-      orderStatus: "Paused",
-    },
-  ];
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      const token = userData.token; // Assuming the token is stored in the user object
+      const userId = userData.id; // Assuming the user ID is stored in the user object
+
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders?user_id=${userId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch orders");
+        }
+
+        const data = await response.json();
+        console.log(data); // Log the data to check the structure
+        setOrders(data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   const handleOrderClick = (order: any) => {
     setSelectedOrder(order);
@@ -74,12 +76,12 @@ const MyOrders: React.FC = () => {
             key={index}
             onClick={() => handleOrderClick(order)}
           >
-            <div>{order.order}</div>
-            <div>{order.date}</div>
-            <div>{order.address}</div>
-            <div>{order.value}</div>
-            <div>{order.paymentStatus}</div>
-            <div>{order.orderStatus}</div>
+            <div>{order.service_type || "N/A"}</div>
+            <div>{order.created_at ? new Date(order.created_at).toLocaleDateString() : "N/A"}</div>
+            <div>{order.User?.address || "N/A"}</div>
+            <div>{order.total_cost ? order.total_cost.toLocaleString() + " VND" : "N/A"}</div>
+            <div>{order.payment_status || "N/A"}</div>
+            <div>{order.order_status || "N/A"}</div>
           </div>
         ))}
       </div>

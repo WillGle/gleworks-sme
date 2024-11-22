@@ -122,13 +122,14 @@ const Build: React.FC = () => {
 
   return (
     <div className="build-container">
-      <h1>Keyboard Build Service</h1>
+      <h1 className="build-title"> Keyboard Build Service</h1>
       <form className="build-form" onSubmit={handleFormSubmit}>
         <div className="form-group">
           <label>Keyboard Kit Name (Required)</label>
           <input
             type="text"
             name="keyboardKitName"
+            className="input-field"
             value={formData.keyboardKitName}
             placeholder="Provide the name of the keyboard kit"
             onChange={handleInputChange}
@@ -141,6 +142,7 @@ const Build: React.FC = () => {
           <input
             type="text"
             name="switchesName"
+            className="input-field"
             placeholder="Provide the name of the switches"
             value={formData.switchesName}
             onChange={handleInputChange}
@@ -200,6 +202,7 @@ const Build: React.FC = () => {
           <input
             type="text"
             name="stabilizerName"
+            className="input-field"
             placeholder="All build are required to provide stabs"
             value={formData.stabilizerName}
             onChange={handleInputChange}
@@ -212,6 +215,7 @@ const Build: React.FC = () => {
           <input
             type="number"
             name="switchQuantity"
+            className="input-field"
             placeholder="Recommended +5 more than the build need for backup"
             value={formData.switchQuantity}
             onChange={handleInputChange}
@@ -224,6 +228,7 @@ const Build: React.FC = () => {
           <input
             type="text"
             name="plateChoice"
+            className="input-field"
             placeholder="Materials like Aluminum / FR4 / PP / etc for the build"
             value={formData.plateChoice}
             onChange={handleInputChange}
@@ -255,6 +260,7 @@ const Build: React.FC = () => {
           <input
             type="text"
             name="providingKeycap"
+            className="input-field"
             placeholder="[Keycap Model] - Optional, but final stab tuning will not be guarantee"
             value={formData.providingKeycap}
             onChange={handleInputChange}

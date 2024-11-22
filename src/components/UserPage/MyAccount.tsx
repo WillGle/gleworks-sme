@@ -90,20 +90,20 @@ const MyAccount: React.FC = () => {
       <p>Manage profile information for account security</p>
       <div className="account-form-container">
         <div className="account-form-group">
-          <label>Family Name</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="account-form-group">
           <label> First Name</label>
           <input
             type="text"
             name="firstName"
             value={formData.firstName}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="account-form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
             onChange={handleChange}
           />
         </div>

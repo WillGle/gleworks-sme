@@ -151,7 +151,9 @@ const Switch: React.FC = () => {
 
         <div className="form-group">
           <label>Switch Modding Preference (ea) (Required)</label>
-          <h4>Can select more than one option, unit: each</h4>
+          <div className="form-group-note">
+            Can select more than one option. Unit: each
+          </div>
           <div className="checkbox-group">
             <label>
               <input
@@ -194,7 +196,9 @@ const Switch: React.FC = () => {
 
         <div className="form-group">
           <label>My Spring Preference (ea) (if you use mine)</label>
-          <h4>Can select only one option, unit: each</h4>
+          <div className="form-group-note">
+            Can select only one option. Unit: each
+          </div>
           <div className="radio-group">
             {["Payson", "Geon", "TX", "Chewy", "SPRiT"].map((option) => (
               <label key={option}>

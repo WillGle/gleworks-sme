@@ -35,9 +35,16 @@ const Login: React.FC = () => {
         email,
         password,
       });
-      const user = response.data;
+      localStorage.setItem("token", response.data.token); // Store the token in localStorage
 
-      // Save user information in localStorage
+      const user = response.data; // Thông tin người dùng từ server
+      console.log("Login successful:", user);
+
+      // Xóa thông tin người dùng cũ trong localStorage
+      localStorage.removeItem("user");
+      console.log("Previous user data cleared from localStorage.");
+
+      // Lưu thông tin người dùng mới vào localStorage
       localStorage.setItem("user", JSON.stringify(user));
       console.log("User data saved to localStorage:", user);
 

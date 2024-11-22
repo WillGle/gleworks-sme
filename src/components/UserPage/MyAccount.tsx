@@ -88,7 +88,7 @@ const MyAccount: React.FC = () => {
     <div className="my-account">
       <h1>My Account</h1>
       <p>Manage profile information for account security</p>
-      <div className="form-container">
+      <div className="account-form-container">
         <div className="account-form-group">
           <label>Family Name</label>
           <input

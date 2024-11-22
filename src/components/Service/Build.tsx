@@ -7,6 +7,7 @@ const prices = {
     "60 - 65%": 200000,
     "75% - TKL": 250000,
     "TKL +": 300000,
+    None: 0,
   },
   assembly: {
     "Less than 60 %": 350000,
@@ -129,6 +130,7 @@ const Build: React.FC = () => {
             type="text"
             name="keyboardKitName"
             value={formData.keyboardKitName}
+            placeholder="Provide the name of the keyboard kit"
             onChange={handleInputChange}
             required
           />
@@ -139,6 +141,7 @@ const Build: React.FC = () => {
           <input
             type="text"
             name="switchesName"
+            placeholder="Provide the name of the switches"
             value={formData.switchesName}
             onChange={handleInputChange}
             required
@@ -163,6 +166,7 @@ const Build: React.FC = () => {
                   value={option}
                   checked={formData.layout === option}
                   onChange={handleInputChange}
+                  required
                 />
                 {option}
               </label>
@@ -182,6 +186,7 @@ const Build: React.FC = () => {
                     value={option}
                     checked={formData.withSwitches === option}
                     onChange={handleInputChange}
+                    required
                   />
                   {option}
                 </label>
@@ -191,11 +196,36 @@ const Build: React.FC = () => {
         </div>
 
         <div className="form-group">
+          <label>Stabilizer Name (Required)</label>
+          <input
+            type="text"
+            name="stabilizerName"
+            placeholder="All build are required to provide stabs"
+            value={formData.stabilizerName}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
           <label>Switch Quantity (Required)</label>
           <input
             type="number"
             name="switchQuantity"
+            placeholder="Recommended +5 more than the build need for backup"
             value={formData.switchQuantity}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Plate Choice (Required)</label>
+          <input
+            type="text"
+            name="plateChoice"
+            placeholder="Materials like Aluminum / FR4 / PP / etc for the build"
+            value={formData.plateChoice}
             onChange={handleInputChange}
             required
           />
@@ -212,11 +242,23 @@ const Build: React.FC = () => {
                   value={key}
                   checked={formData.desoldering === key}
                   onChange={handleInputChange}
+                  required
                 />
                 {key} ({value.toLocaleString()} VND)
               </label>
             ))}
           </div>
+        </div>
+
+        <div className="form-group">
+          <label>Are You Providing Keycap</label>
+          <input
+            type="text"
+            name="providingKeycap"
+            placeholder="[Keycap Model] - Optional, but final stab tuning will not be guarantee"
+            value={formData.providingKeycap}
+            onChange={handleInputChange}
+          />
         </div>
 
         <div className="form-group">
@@ -230,6 +272,7 @@ const Build: React.FC = () => {
                   value={key}
                   checked={formData.assembly === key}
                   onChange={handleInputChange}
+                  required
                 />
                 {key} ({value.toLocaleString()} VND)
               </label>

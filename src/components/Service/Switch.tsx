@@ -85,7 +85,7 @@ const Switch: React.FC = () => {
       setFormData((prev) => ({
         ...prev,
         springPreference:
-          prev.springPreference === value ? "" : (value as SpringPreference), // Nếu đã chọn, nhấn lần hai sẽ hủy chọn
+          prev.springPreference === value ? "" : (value as SpringPreference), // Toggle selection
       }));
     } else {
       setFormData((prev) => ({
@@ -97,10 +97,24 @@ const Switch: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formData.switchName || !formData.amount || !formData.termsAccepted) {
-      alert("Please fill all required fields and agree to the terms.");
+
+    // Check if at least one modding preference is selected
+    const hasSelectedModdingPreference = Object.values(
+      formData.moddingPreferences
+    ).some((selected) => selected);
+
+    if (
+      !formData.switchName ||
+      !formData.amount ||
+      !hasSelectedModdingPreference ||
+      !formData.termsAccepted
+    ) {
+      alert(
+        "Please fill all required fields, select at least one modding preference, and agree to the terms."
+      );
       return;
     }
+
     alert("Form submitted successfully!");
     console.log("Form data:", formData);
   };
@@ -117,9 +131,11 @@ const Switch: React.FC = () => {
             value={formData.switchName}
             onChange={handleInputChange}
             className="input-field"
+            placeholder="Provide the name of the switches"
             required
           />
         </div>
+
         <div className="form-group">
           <label>Amount (Required)</label>
           <input
@@ -128,11 +144,14 @@ const Switch: React.FC = () => {
             value={formData.amount}
             onChange={handleInputChange}
             className="input-field"
+            placeholder="Enter the amount"
             required
           />
         </div>
+
         <div className="form-group">
           <label>Switch Modding Preference (ea) (Required)</label>
+          <h4>Can select more than one option, unit: each</h4>
           <div className="checkbox-group">
             <label>
               <input
@@ -172,8 +191,10 @@ const Switch: React.FC = () => {
             </label>
           </div>
         </div>
+
         <div className="form-group">
           <label>My Spring Preference (ea) (if you use mine)</label>
+          <h4>Can select only one option, unit: each</h4>
           <div className="radio-group">
             {["Payson", "Geon", "TX", "Chewy", "SPRiT"].map((option) => (
               <label key={option}>
@@ -193,6 +214,7 @@ const Switch: React.FC = () => {
             ))}
           </div>
         </div>
+
         <div className="form-group">
           <label>Additional Notes</label>
           <textarea

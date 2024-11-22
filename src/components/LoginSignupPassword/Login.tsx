@@ -114,7 +114,7 @@ const Login: React.FC = () => {
         </div>
         <div className="toggle-action">
           Forgot Password?{" "}
-          <span onClick={() => navigate("/lost-password")}>Click Here</span>
+          <span onClick={() => navigate("/lost-password")}>Reset Here</span>
         </div>
       </div>
     </div>

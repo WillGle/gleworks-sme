@@ -50,6 +50,7 @@ const Switch: React.FC = () => {
         const savedData = sessionStorage.getItem("switchModdingData");
         if (savedData) {
           const parsedData = JSON.parse(savedData);
+          console.log("Saved data from session storage:", parsedData); // In ra dữ liệu đã lưu
           setFormData((prev) => ({
             ...prev,
             moddingPreferences: {
@@ -120,6 +121,16 @@ const Switch: React.FC = () => {
         springPreference: value as string,
       }));
     } else {
+      // Kiểm tra nếu trường là "amount"
+      if (name === "amount") {
+        // Kiểm tra xem giá trị nhập vào có phải là số không
+        const numericValue = parseInt(value);
+        // Chỉ hiển thị thông báo nếu giá trị không phải là số và không phải là chuỗi rỗng
+        if (value !== "" && (isNaN(numericValue) || numericValue < 0)) {
+          alert("Amount must be a positive number."); // Thông báo nếu không phải số hoặc số âm
+          return; // Không cập nhật state nếu giá trị không hợp lệ
+        }
+      }
       setFormData((prev) => ({
         ...prev,
         [name]: value,

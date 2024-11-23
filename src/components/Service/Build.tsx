@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./Build.css";
 
-const prices = {
-  desoldering: {
-    "Less than 60 %": 150000,
-    "60 - 65%": 200000,
-    "75% - TKL": 250000,
-    "TKL +": 300000,
-    None: 0,
-  },
-  assembly: {
-    "Less than 60 %": 350000,
-    "60 - 65%": 400000,
-    "75% - TKL": 500000,
-    "TKL +": 600000,
-    "Hotswap all size": 250000,
-  },
+// Define the type for the options
+type Option = {
+  optionName: string;
+  price: number;
+  optionGroup: string;
 };
 
 const Build: React.FC = () => {
@@ -48,18 +38,55 @@ const Build: React.FC = () => {
   });
 
   const [total, setTotal] = useState(0);
+  const [prices, setPrices] = useState<{
+    desoldering: Record<string, number>;
+    assembly: Record<string, number>;
+  }>({
+    desoldering: {},
+    assembly: {},
+  });
+
+  // Fetch prices when the component mounts
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/service-options/2`); // Adjust the ID as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch prices");
+        }
+        const data = await response.json();
+        
+        // Organize the data into the expected structure
+        const desolderingOptions = data.options.filter((option: Option) => option.optionGroup === "Desoldering");
+        const assemblyOptions = data.options.filter((option: Option) => option.optionGroup === "Assembly");
+
+        setPrices({
+          desoldering: desolderingOptions.reduce((acc: any, option: any) => {
+            acc[option.optionName] = option.price;
+            return acc;
+          }, {}),
+          assembly: assemblyOptions.reduce((acc: any, option: any) => {
+            acc[option.optionName] = option.price;
+            return acc;
+          }, {}),
+        });
+      } catch (error) {
+        console.error("Error fetching prices:", error);
+      }
+    };
+
+    fetchPrices();
+  }, []);
 
   // Calculate total cost
   useEffect(() => {
     const desolderingCost =
-      prices.desoldering[
-        formData.desoldering as keyof typeof prices.desoldering
-      ] || 0;
+      prices.desoldering[formData.desoldering as keyof typeof prices.desoldering] || 0;
     const assemblyCost =
       prices.assembly[formData.assembly as keyof typeof prices.assembly] || 0;
 
     setTotal(desolderingCost + assemblyCost);
-  }, [formData]);
+  }, [formData, prices]);
 
   // Handle input changes
   const handleInputChange = (
@@ -122,7 +149,7 @@ const Build: React.FC = () => {
 
   return (
     <div className="build-container">
-      <h1 className="build-title"> Keyboard Build Service</h1>
+      <h1 className="build-title">Keyboard Build Service</h1>
       <form className="build-form" onSubmit={handleFormSubmit}>
         <div className="form-group">
           <label>Keyboard Kit Name (Required)</label>
@@ -239,7 +266,7 @@ const Build: React.FC = () => {
         <div className="form-group">
           <label>Desoldering (Required)</label>
           <div className="radio-group">
-            {Object.entries(prices.desoldering).map(([key, value]) => (
+            {Object.entries(prices.desoldering).map(([key, value]: [string, number]) => (
               <label key={key}>
                 <input
                   type="radio"

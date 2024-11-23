@@ -7,6 +7,8 @@ const Checkout: React.FC = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
   const [orderDate, setOrderDate] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -28,6 +30,8 @@ const Checkout: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setUserInfo(data);
+          setPhone(data.phoneNumber || "");
+          setAddress(data.address || "");
         } else {
           console.error("Failed to fetch user info:", response.statusText);
         }
@@ -50,10 +54,16 @@ const Checkout: React.FC = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setUserInfo((prevUserInfo: any) => ({
-      ...prevUserInfo,
-      [name]: value,
-    }));
+    if (name === "phone") {
+      setPhone(value);
+    } else if (name === "address") {
+      setAddress(value);
+    } else {
+      setUserInfo((prevUserInfo: any) => ({
+        ...prevUserInfo,
+        [name]: value,
+      }));
+    }
   };
 
   const handleProceed = async () => {
@@ -68,7 +78,11 @@ const Checkout: React.FC = () => {
       totalCost: orderData.total,
       status: "Pending",
       paymentStatus: "Pending",
+      address: address,
+      telephone: phone,
     };
+
+    console.log("Order Payload:", orderPayload);
 
     try {
       const response = await fetch("http://localhost:3000/orders/", {
@@ -184,7 +198,7 @@ const Checkout: React.FC = () => {
                 type="tel"
                 name="phone"
                 className="input-field"
-                value={userInfo.phoneNumber}
+                value={phone}
                 onChange={handleInputChange}
               />
             </div>
@@ -195,7 +209,7 @@ const Checkout: React.FC = () => {
                 type="text"
                 name="address"
                 className="input-field"
-                value={userInfo.address}
+                value={address}
                 onChange={handleInputChange}
               />
             </div>

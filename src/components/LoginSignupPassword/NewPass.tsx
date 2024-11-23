@@ -104,7 +104,7 @@ const NewPass: React.FC = () => {
             className="cancel-button"
             onClick={() => navigate("/home")}
           >
-            Cancle
+            Cancel
           </button>
           <button
             type="button"

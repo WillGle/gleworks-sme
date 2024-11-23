@@ -50,7 +50,7 @@ const Checkout: React.FC = () => {
 
       {/* Editable Customer Information */}
       <div className="customer-info">
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Customer</label>
           <input
             type="text"
@@ -62,7 +62,7 @@ const Checkout: React.FC = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Email</label>
           <input
             type="email"
@@ -74,7 +74,7 @@ const Checkout: React.FC = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Phone</label>
           <input
             type="tel"
@@ -85,7 +85,7 @@ const Checkout: React.FC = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Address</label>
           <input
             type="text"

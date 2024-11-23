@@ -1,7 +1,7 @@
 /* OrderDetail.css */
 
 .order-detail-container {
-  width: 80%;
+  width: 600px;
   margin: 0 auto;
   padding: 30px;
   background-color: #f9f9f9;
@@ -17,37 +17,44 @@ h1 {
   color: #333;
   font-weight: bold;
   padding-bottom: 10px;
-  border-bottom: 1px solid #ccc;
 }
 
 .customer-info,
-.order-info,
+
 .total-section,
 .status-section {
   margin-bottom: 30px;
 }
 
-.form-group {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+.status-section {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 
-.form-group label {
+.order-form-group {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.order-form-group label {
   font-weight: bold;
   font-size: 14px;
   color: #333;
   text-align: left;
 }
 
-.form-group p {
+.order-form-group p {
   font-size: 14px;
   color: #555;
   padding: 5px 10px;
   background-color: #eee;
   border-radius: 4px;
+  margin: 5px;
 }
 
 .status-section select {
@@ -60,24 +67,34 @@ h1 {
   margin-top: 5px;
 }
 
-.total-section {
-  text-align: center;
-  margin-top: 20px;
-  border-top: 1px solid #ddd;
-  padding-top: 20px;
+.button-status-form{
+  display: flex;
+  margin-bottom: 15px;
+  justify-content: end;
 }
 
-.total-section h2 {
+.order-total-section {
+    display: flex;
+    align-items: flex-start;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    border-top: 1px solid #cccccc;
+    flex-direction: column;
+}
+
+.order-total-section p {
+    margin: 5px 0;
+    font-size: 30px;
+    color: #333;
+}
+
+
+.order-total-section h2 {
   font-size: 20px;
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
-}
-
-.total-section p {
-  font-size: 18px;
-  font-weight: bold;
-  color: #000;
 }
 
 hr {
@@ -86,6 +103,38 @@ hr {
   margin: 20px 0;
 }
 
+.status-form-group {
+  gap: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-form-group label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+}
+
+.admin-order-total-section{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  border-top: 1px solid #cccccc;
+}
+
+.admin-order-total-section p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
 @media (max-width: 768px) {
   .form-group {
       grid-template-columns: 1fr;

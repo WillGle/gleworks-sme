@@ -163,7 +163,7 @@ const Switch: React.FC = () => {
     alert("Order saved to session storage!");
 
     // Điều hướng đến trang checkout cho switch modding
-    navigate("/service/switch-modding/checkout");
+    navigate("/service/checkout-switch");
   };
 
   return (

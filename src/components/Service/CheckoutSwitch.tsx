@@ -106,9 +106,9 @@ const Checkout: React.FC = () => {
         { fieldName: "Amount", fieldValue: orderData.amount.toString() }, // Assuming amount is a number
         { 
           fieldName: "Switch Modding Preference", 
-          fieldValue: Array.isArray(orderData.moddingPreferences) 
-            ? orderData.moddingPreferences.join(", ") 
-            : "N/A" // Default value if not an array
+          fieldValue: Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).length > 0
+            ? Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).join(", ") 
+            : null // Thay đổi từ "N/A" thành null hoặc không lưu trường này
         },
         { fieldName: "My Spring Preference", fieldValue: orderData.springPreference },
         { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },

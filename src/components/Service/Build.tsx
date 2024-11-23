@@ -345,7 +345,15 @@ const Build: React.FC = () => {
             ))}
           </div>
         </div>
-
+        <div className="form-group">
+          <label>Additional Notes</label>
+          <textarea
+            name="additionalNotes"
+            value={formData.additionalNotes}
+            onChange={handleInputChange}
+            className="input-field additional-notes"
+          />
+        </div>
         <div className="form-group terms-group">
           <label>
             <input

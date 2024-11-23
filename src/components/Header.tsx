@@ -30,6 +30,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user"); // Xóa thông tin người dùng khỏi localStorage
+    sessionStorage.clear(); // Xóa toàn bộ sessionStorage
     localStorage.removeItem("token"); // Remove the token from local storage
     setUser(null); // Reset state user
     navigate("/login"); // Redirect to login page
@@ -59,7 +60,7 @@ const Header: React.FC = () => {
           {user ? (
             <>
               {/* Hiển thị thông tin người dùng với liên kết đến trang user */}
-              <Link to="/user" className="user-info">
+              <Link to="/user/my-account" className="user-info">
                 {user.firstName} {user.lastName}
               </Link>
               {/* Nút Logout */}

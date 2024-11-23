@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./MyOrders.css";
 import OrderDetail from "./OrderDetail";
 
-interface User {
-  address: string;
-}
-
 interface Service {
   name: string;
   description: string;
@@ -16,7 +12,8 @@ interface Order {
   totalCost: number; // Tổng giá trị đơn hàng
   paymentStatus: string; // Trạng thái thanh toán
   status: string; // Trạng thái đơn hàng
-  User?: User; // Thông tin người dùng
+  address: string; // Địa chỉ
+  telephone: string; // Số điện thoại
   Service?: Service; // Thông tin dịch vụ
 }
 
@@ -33,7 +30,7 @@ const MyOrders: React.FC = () => {
 
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/orders?user_id=${userId}`,
+          `${import.meta.env.VITE_API_URL}/orders?userId=${userId}`,
           {
             method: "GET",
             headers: {
@@ -47,7 +44,7 @@ const MyOrders: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data)
+        console.log(data);
 
         // Map API data to fit frontend structure
         const transformedOrders = data.map((order: any) => ({
@@ -56,6 +53,8 @@ const MyOrders: React.FC = () => {
           totalCost: order.totalCost || order.total_cost,
           paymentStatus: order.paymentStatus || order.payment_status,
           status: order.status || order.order_status,
+          address: order.address || order.address, // Đảm bảo lấy địa chỉ từ order
+          telephone: order.telephone || order.telephone, // Lấy số điện thoại nếu cần
         }));
 
         setOrders(transformedOrders);
@@ -84,37 +83,37 @@ const MyOrders: React.FC = () => {
         <div className="table-header">
           <div>Order</div>
           <div>Date</div>
-          <div>Adress</div>
+          <div>Address</div>
           <div>Value</div>
           <div>Payment Status</div>
           <div>Order Status</div>
         </div>
-        {orders.map((order, index) => (
-          <div
-            className="table-row"
-            key={index}
-            onClick={() => handleOrderClick(order)}
-          >
-            <div>{order.Service?.name || "N/A"}</div>
-            <div>
-              {order.createdAt
-                ? new Date(order.createdAt).toLocaleDateString()
-                : "N/A"}
+        {orders
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .map((order, index) => (
+            <div
+              className="table-row"
+              key={index}
+              onClick={() => handleOrderClick(order)}
+            >
+              <div>{order.Service?.name || "N/A"}</div>
+              <div>
+                {order.createdAt
+                  ? new Date(order.createdAt).toLocaleDateString()
+                  : "N/A"}
+              </div>
+              <div>
+                {order.address || "N/A"}
+              </div>
+              <div>
+                {order.totalCost
+                  ? order.totalCost.toLocaleString() + " VND"
+                  : "N/A"}
+              </div>
+              <div>{order.paymentStatus || "N/A"}</div>
+              <div>{order.status || "N/A"}</div>
             </div>
-            <div>
-              {order.User
-                ? `${order.User.address}`
-                : "N/A"}
-            </div>
-            <div>
-              {order.totalCost
-                ? order.totalCost.toLocaleString() + " VND"
-                : "N/A"}
-            </div>
-            <div>{order.paymentStatus || "N/A"}</div>
-            <div>{order.status || "N/A"}</div>
-          </div>
-        ))}
+          ))}
       </div>
       {selectedOrder && (
         <OrderDetail
@@ -123,9 +122,7 @@ const MyOrders: React.FC = () => {
             date: selectedOrder.createdAt
               ? new Date(selectedOrder.createdAt).toLocaleDateString()
               : "N/A",
-            address: selectedOrder.User
-              ? `${selectedOrder.User.address}`
-              : "N/A",
+            address: selectedOrder.address || "N/A",
             value: selectedOrder.totalCost
               ? selectedOrder.totalCost.toLocaleString() + " VND"
               : "N/A",

@@ -1,52 +1,163 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Checkout.css";
 
-// Mock data to display in checkout
-const customerInfo = {
-  customer: "John Doe",
-  email: "john.doe@example.com",
-  phone: "0123456789",
-  address: "123 ABC Street, City, Country",
-};
-
-// Mock order data
-const mockOrderData = {
-  switchesName: "Cherry MX Red",
-  withSwitches: "Yes, I have a Switch Mod order",
-  keyboardKitName: "Custom Keyboard Kit",
-  layout: "60 - 65%",
-  stabilizerName: "Durock V2",
-  switchQuantity: "70",
-  plateChoice: "Aluminum",
-  desoldering: "60 - 65%",
-  providingKeycap: "Yes",
-  assembly: "Less than 60 %",
-  additionalNotes: "Please handle with care!",
-  total: 550000,
-};
-
-const Checkout: React.FC = () => {
+const CheckoutBuild: React.FC = () => {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [orderData, setOrderData] = useState<any>(null);
+  const [orderDate, setOrderDate] = useState<string>("");
 
-  // State for editable customer information
-  const [customerData, setCustomerData] = useState(customerInfo);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
+      if (!userId || !token) {
+        console.error("No userId or token found in localStorage");
+        return;
+      }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCustomerData((prev) => ({
-      ...prev,
+      try {
+        const response = await fetch(
+          `http://localhost:3000/auth/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserInfo(data);
+        } else {
+          console.error("Failed to fetch user info:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserInfo();
+
+    const savedOrderData = sessionStorage.getItem("buildData");
+    if (savedOrderData) {
+      setOrderData(JSON.parse(savedOrderData));
+    }
+
+    // Set order date to current date in DD/MM/YYYY format
+    const currentDate = new Date();
+    const formattedDate = `${String(currentDate.getDate()).padStart(
+      2,
+      "0"
+    )}/${String(currentDate.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${currentDate.getFullYear()}`;
+    setOrderDate(formattedDate);
+  }, []);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setUserInfo((prevUserInfo: any) => ({
+      ...prevUserInfo,
       [name]: value,
     }));
   };
 
-  const handleProceed = () => {
-    alert("Order confirmed successfully! Thank you for your purchase.");
+  const handleProceed = async () => {
+    if (!orderData || !userInfo) {
+      alert("Order data or user information is missing.");
+      return;
+    }
+
+    const orderPayload = {
+      userId: userInfo.id,
+      serviceId: 2, // Assuming serviceId for build service
+      totalCost: orderData.total,
+      status: "Pending",
+      paymentStatus: "Pending",
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/orders/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderPayload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const createdOrder = await response.json();
+      alert("Order created successfully!");
+
+      // Save order details to the database
+      const orderDetailPayload = {
+        orderId: createdOrder.orderId,
+        fieldName: "Keyboard Kit",
+        fieldValue: orderData.keyboardKitName,
+      };
+
+      await fetch("http://localhost:3000/order-details/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderDetailPayload),
+      });
+
+      // Additional fields to save
+      const additionalDetails = [
+        { fieldName: "Switches", fieldValue: orderData.switchesName },
+        { fieldName: "With Switches", fieldValue: orderData.withSwitches },
+        { fieldName: "Layout", fieldValue: orderData.layout },
+        { fieldName: "Stabilizer Name", fieldValue: orderData.stabilizerName },
+        { fieldName: "Switch Quantity", fieldValue: orderData.switchQuantity },
+        { fieldName: "Plate Choice", fieldValue: orderData.plateChoice },
+        { fieldName: "Desoldering", fieldValue: orderData.desoldering },
+        {
+          fieldName: "Are You Providing Keycap?",
+          fieldValue: orderData.providingKeycap,
+        },
+        { fieldName: "Assembly", fieldValue: orderData.assembly },
+        {
+          fieldName: "Additional Notes",
+          fieldValue: orderData.additionalNotes,
+        },
+      ];
+
+      for (const detail of additionalDetails) {
+        const detailPayload = {
+          orderId: createdOrder.orderId,
+          fieldName: detail.fieldName,
+          fieldValue: detail.fieldValue,
+        };
+
+        await fetch("http://localhost:3000/order-details/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(detailPayload),
+        });
+      }
+
+      sessionStorage.clear();
+      navigate("/service/checkout-success"); // Navigate to a success page or similar
+    } catch (error) {
+      console.error("Error saving order:", error);
+      alert("Failed to save order. Please try again.");
+    }
   };
 
   return (
     <div className="checkout-container">
-      <h1>Checkout - Keyboard Building Service</h1>
+      <h1>Checkout - Build Service</h1>
 
       {/* Editable Customer Information */}
       <div className="customer-info">
@@ -56,7 +167,7 @@ const Checkout: React.FC = () => {
             type="text"
             name="customer"
             className="input-field"
-            value={customerData.customer}
+            value={`${userInfo.firstName} ${userInfo.lastName}`}
             onChange={handleInputChange}
             readOnly
           />
@@ -68,7 +179,7 @@ const Checkout: React.FC = () => {
             type="email"
             name="email"
             className="input-field"
-            value={customerData.email}
+            value={userInfo.email}
             onChange={handleInputChange}
             readOnly
           />
@@ -80,7 +191,7 @@ const Checkout: React.FC = () => {
             type="tel"
             name="phone"
             className="input-field"
-            value={customerData.phone}
+            value={userInfo.phoneNumber}
             onChange={handleInputChange}
           />
         </div>
@@ -91,7 +202,7 @@ const Checkout: React.FC = () => {
             type="text"
             name="address"
             className="input-field"
-            value={customerData.address}
+            value={userInfo.address}
             onChange={handleInputChange}
           />
         </div>
@@ -101,58 +212,59 @@ const Checkout: React.FC = () => {
 
       {/* Non-editable Order Details */}
       <div className="order-details">
-        <div className="order-form-group">
-          <label>Switches</label>
-          <p>{mockOrderData.switchesName}</p>
-        </div>
-
-        <div className="order-form-group">
-          <label>With Switches</label>
-          <p>{mockOrderData.withSwitches}</p>
-        </div>
-
-        <div className="order-form-group">
+        <div className="form-group">
           <label>Keyboard Kit Name</label>
-          <p>{mockOrderData.keyboardKitName}</p>
+          <span>{orderData?.keyboardKitName}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
+          <label>Switches</label>
+          <span>{orderData?.switchesName}</span>
+        </div>
+
+        <div className="form-group">
           <label>Layout</label>
-          <p>{mockOrderData.layout}</p>
+          <span>{orderData?.layout}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
+          <label>With Switches</label>
+          <span>{orderData?.withSwitches}</span>
+        </div>
+
+        <div className="form-group">
           <label>Stabilizer Name</label>
-          <p>{mockOrderData.stabilizerName}</p>
+          <span>{orderData?.stabilizerName}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
           <label>Switch Quantity</label>
-          <p>{mockOrderData.switchQuantity}</p>
+          <span>{orderData?.switchQuantity}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
           <label>Plate Choice</label>
-          <p>{mockOrderData.plateChoice}</p>
+          <span>{orderData?.plateChoice}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
           <label>Desoldering</label>
-          <p>{mockOrderData.desoldering}</p>
+          <span>{orderData?.desoldering}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
           <label>Are You Providing Keycap?</label>
-          <p>{mockOrderData.providingKeycap}</p>
+          <span>{orderData?.providingKeycap}</span>
         </div>
 
-        <div className="order-form-group">
+        <div className="form-group">
           <label>Assembly</label>
-          <p>{mockOrderData.assembly}</p>
+          <span>{orderData?.assembly}</span>
         </div>
-        <div className="order-form-group">
+
+        <div className="form-group">
           <label>Additional Notes</label>
-          <p>{mockOrderData.additionalNotes}</p>
+          <span>{orderData?.additionalNotes}</span>
         </div>
       </div>
 
@@ -161,7 +273,7 @@ const Checkout: React.FC = () => {
       {/* Total Section */}
       <div className="checkout-total-section">
         <h2>TOTAL</h2>
-        <p>{mockOrderData.total.toLocaleString()} VND</p>
+        <p>{orderData?.total.toLocaleString()} VND</p>
       </div>
 
       {/* Buttons */}
@@ -169,7 +281,7 @@ const Checkout: React.FC = () => {
         <button
           type="button"
           className="return-button"
-          onClick={() => navigate("/service")}
+          onClick={() => navigate("/service/keyboard-building")}
         >
           Return
         </button>
@@ -185,4 +297,4 @@ const Checkout: React.FC = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutBuild;

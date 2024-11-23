@@ -24,6 +24,7 @@ import UserPageLayout from "./components/UserPage/UserPageLayout";
 import AdminPageLayout from "./components/AdminPage/AdminPageLayout";
 import Policies from "./components/Policies/Policies";
 import NotFound from "./components/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
 function AppLayout() {
@@ -50,17 +51,17 @@ function AppLayout() {
         <Route path="/archive" element={<Archive />} />
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />
-        <Route path="/service/keyboard-build" element={<Build />} />
-        <Route path="/service/checkout-build" element={<CheckoutBuild />} />
-        <Route path="/service/checkout-switch" element={<CheckoutSwitch />} />
+        <Route path="/service/keyboard-building" element={<Build />} />
+        <Route path="/service/checkout-build" element={<ProtectedRoute><CheckoutBuild /></ProtectedRoute>} />
+        <Route path="/service/checkout-switch" element={<ProtectedRoute><CheckoutSwitch /></ProtectedRoute>} />
         {/* Delegate all /user sub-routes to UserPageLayout */}
-        <Route path="/user/*" element={<UserPageLayout />} />
+        <Route path="/user/*" element={<ProtectedRoute><UserPageLayout /></ProtectedRoute>} />
         {/* Delegate all /admin sub-routes to AdminPageLayout */}
         <Route path="/admin/*" element={<AdminPageLayout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />
-        <Route path="/new-password" element={<NewPass />} />
+        <Route path="/user/new-password" element={<NewPass />} />
         <Route path="/policies/" element={<Policies />} />
         <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
       </Routes>

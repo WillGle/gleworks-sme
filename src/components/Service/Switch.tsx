@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Switch.css";
 
 const Switch: React.FC = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<{
     switchName: string;
     amount: string;
@@ -37,14 +40,30 @@ const Switch: React.FC = () => {
         setServiceOptions(data.options); // Set the options in state
 
         // Initialize moddingPreferences based on fetched options
-        const moddingPreferences = data.options.reduce(
-          (acc: any, option: any) => {
-            acc[option.optionName.toLowerCase().replace(/\s+/g, "")] = false; // Initialize all to false
+        const moddingPreferences = data.options.reduce((acc: any, option: any) => {
+            acc[option.optionName.toLowerCase()] = false; // Chỉ chuyển thành chữ thường
             return acc;
-          },
-          {}
-        );
-        setFormData((prev) => ({ ...prev, moddingPreferences }));
+          }, {});
+          
+
+        // Retrieve saved form data from session storage
+        const savedData = sessionStorage.getItem("switchModdingData");
+        if (savedData) {
+          const parsedData = JSON.parse(savedData);
+          setFormData((prev) => ({
+            ...prev,
+            moddingPreferences: {
+              ...moddingPreferences, // Use the initialized preferences
+              ...parsedData.moddingPreferences, // Merge with existing preferences
+            },
+            ...parsedData, // Spread the rest of the data
+          })); // Populate formData with saved data
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            moddingPreferences, // Set initial preferences if no saved data
+          }));
+        }
       } catch (error) {
         console.error("Error fetching service options:", error);
       }
@@ -127,70 +146,24 @@ const Switch: React.FC = () => {
       return;
     }
 
-    // Prepare data for submission to switchModding
+    // Prepare data for session storage
     const switchModdingData = {
       switchName: formData.switchName,
       amount: parseInt(formData.amount),
-      lube: formData.moddingPreferences.lube,
-      films: formData.moddingPreferences.films,
-      springs: formData.moddingPreferences.springs,
-      clean: formData.moddingPreferences.clean,
+      moddingPreferences: formData.moddingPreferences,
       springPreference: formData.springPreference,
       additionalNotes: formData.additionalNotes,
       termsAccepted: formData.termsAccepted,
       total: total, // Include the total cost
     };
 
-    try {
-      // Create switch modding order
-      const switchResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/services/switch-modding`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(switchModdingData),
-        }
-      );
+    // Save data to session storage
+    sessionStorage.setItem("switchModdingData", JSON.stringify(switchModdingData));
 
-      if (!switchResponse.ok) {
-        throw new Error("Failed to create switch modding order");
-      }
+    alert("Order saved to session storage!");
 
-      const switchData = await switchResponse.json();
-
-      // Prepare data for submission to orders
-      const userData = JSON.parse(localStorage.getItem("user") || "{}");
-      const orderData = {
-        userId: userData.id, // Assuming the user object has an 'id' property
-        serviceId: serviceOptions[0].id, // Assuming you want to use the first service option's ID
-        totalCost: total,
-        switchDetails: switchData, // Include switch details if needed
-      };
-
-      // Create order
-      const orderResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/orders`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        }
-      );
-
-      if (!orderResponse.ok) {
-        throw new Error("Failed to create order");
-      }
-
-      const orderDataResponse = await orderResponse.json();
-      alert("Order created successfully!");
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred while creating the order.");
-    }
+    // Điều hướng đến trang checkout cho switch modding
+    navigate("/service/switch-modding/checkout");
   };
 
   return (
@@ -254,7 +227,7 @@ const Switch: React.FC = () => {
 
         {/* My Spring Preference Section */}
         <div className="form-group">
-          <label>My Spring Preference (ea) (if you use mine)</label>
+          <label>My Spring Preference Ư(ea) (if you use mine)</label>
           <div className="form-group-note">
             Can select only one option. Unit: each
           </div>

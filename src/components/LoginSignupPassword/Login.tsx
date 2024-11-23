@@ -56,6 +56,7 @@ const Login: React.FC = () => {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userId", user.id); // Save user ID to localStorage
       localStorage.setItem("token", user.token); // Save token to localStorage
+      localStorage.setItem("role", user.role); // Lưu role vào localStorage
 
       // Navigate to the home page
       navigate("/home");

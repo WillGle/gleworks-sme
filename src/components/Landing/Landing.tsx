@@ -23,7 +23,7 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      <section className="popular-blogs">
+      {/* <section className="popular-blogs">
         <h2>Popular Blogs</h2>
         <div className="blog-list">
           <Link to="/blogs" className="blog-item">
@@ -39,7 +39,7 @@ const Landing: React.FC = () => {
             <p>Blog title 3</p>
           </Link>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

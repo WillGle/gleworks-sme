@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Build.css";
+import "./BuildAndSwitch.css";
 
 // Define the type for the options
 type Option = {

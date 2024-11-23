@@ -4,7 +4,7 @@ import "./UserSidePanel.css";
 
 const SidePanel: React.FC = () => {
   return (
-    <div className="side-panel">
+    <div className="user-side-panel">
       <nav>
         <ul className="nav-list">
           <li>

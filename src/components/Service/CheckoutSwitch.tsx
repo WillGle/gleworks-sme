@@ -82,6 +82,59 @@ const Checkout: React.FC = () => {
       console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
+      // Save order details to the database
+      const orderDetailPayload = {
+        orderId: createdOrder.orderId, // Use the orderId from the created order
+        fieldName: "Switches",
+        fieldValue: orderData.switchName, // Assuming switchName is the name of the switch
+      };
+
+      const detailResponse = await fetch("http://localhost:3000/order-details/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderDetailPayload),
+      });
+
+      if (!detailResponse.ok) {
+        throw new Error("Failed to save order details");
+      }
+
+      // Additional fields to save
+      const additionalDetails = [
+        { fieldName: "Amount", fieldValue: orderData.amount.toString() }, // Assuming amount is a number
+        { 
+          fieldName: "Switch Modding Preference", 
+          fieldValue: Array.isArray(orderData.moddingPreferences) 
+            ? orderData.moddingPreferences.join(", ") 
+            : "N/A" // Default value if not an array
+        },
+        { fieldName: "My Spring Preference", fieldValue: orderData.springPreference },
+        { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
+      ];
+
+      // Save additional details
+      for (const detail of additionalDetails) {
+        const detailPayload = {
+          orderId: createdOrder.orderId,
+          fieldName: detail.fieldName,
+          fieldValue: detail.fieldValue,
+        };
+
+        const detailResponse = await fetch("http://localhost:3000/order-details/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(detailPayload),
+        });
+
+        if (!detailResponse.ok) {
+          throw new Error(`Failed to save ${detail.fieldName}`);
+        }
+      }
+
       // Clear session storage
       sessionStorage.clear(); // This will remove all items from session storage
 

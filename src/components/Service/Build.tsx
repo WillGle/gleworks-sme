@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Build.css";
 
 // Define the type for the options
@@ -9,6 +10,7 @@ type Option = {
 };
 
 const Build: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<{
     keyboardKitName: string;
     switchesName: string;
@@ -78,6 +80,14 @@ const Build: React.FC = () => {
     fetchPrices();
   }, []);
 
+  // Load data from sessionStorage when the component mounts
+  useEffect(() => {
+    const savedData = sessionStorage.getItem("buildData");
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+  }, []);
+
   // Calculate total cost
   useEffect(() => {
     const desolderingCost =
@@ -143,8 +153,31 @@ const Build: React.FC = () => {
       return;
     }
 
-    alert("Form submitted successfully!");
-    console.log("Form Data:", formData);
+    // Prepare data for session storage
+    const buildData = {
+      keyboardKitName: formData.keyboardKitName,
+      switchesName: formData.switchesName,
+      layout: formData.layout,
+      withSwitches: formData.withSwitches,
+      switchQuantity: parseInt(formData.switchQuantity),
+      stabilizerName: formData.stabilizerName,
+      plateChoice: formData.plateChoice,
+      providingKeycap: formData.providingKeycap,
+      desoldering: formData.desoldering,
+      assembly: formData.assembly,
+      additionalNotes: formData.additionalNotes,
+      termsAccepted: formData.termsAccepted,
+      total: total, // Include the total cost
+    };
+
+    // Save data to session storage
+    sessionStorage.setItem("buildData", JSON.stringify(buildData));
+
+    alert("Build data saved to session storage!");
+    console.log("Build Data:", buildData);
+    
+    // Navigate to checkout
+    navigate("/service/checkout-build");
   };
 
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./CheckoutBuild.css";
+import "./Checkout.css";
 
 // Mock data for Checkout
 const mockFormData = {

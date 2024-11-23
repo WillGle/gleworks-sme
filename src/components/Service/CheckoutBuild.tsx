@@ -283,7 +283,7 @@ const CheckoutBuild: React.FC = () => {
         <button
           type="button"
           className="return-button"
-          onClick={() => navigate("/service/build")}
+          onClick={() => navigate("/service/keyboard-building")}
         >
           Return
         </button>

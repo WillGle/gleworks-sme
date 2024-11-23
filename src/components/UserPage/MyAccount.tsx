@@ -32,16 +32,16 @@ const MyAccount: React.FC = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
 
-  // // Fetch user ID and user data on component mount
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     // Redirect to login if token is not found
-  //     navigate("/login");
-  //   } else {
-  //     fetchUserId(); // Fetch user ID if authenticated
-  //   }
-  // }, []);
+//   // Fetch user ID and user data on component mount
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (!token) {
+//       // Redirect to login if token is not found
+//       navigate("/login");
+//     } else {
+//       fetchUserId(); // Fetch user ID if authenticated
+//     }
+//   }, []);
 
   const fetchUserId = async () => {
     const token = localStorage.getItem("token");

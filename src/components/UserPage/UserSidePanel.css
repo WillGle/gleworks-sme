@@ -10,15 +10,6 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   }
   
-  /* Logo styling */
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #1e57d2;
-    margin-bottom: 30px;
-    text-align: center;
-  }
-  
   /* Navigation list styling */
   .nav-list {
     list-style: none;

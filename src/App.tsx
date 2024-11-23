@@ -20,7 +20,8 @@ import Switch from "./components/Service/Switch";
 import Build from "./components/Service/Build";
 import CheckoutBuild from "./components/Service/CheckoutBuild";
 import CheckoutSwitch from "./components/Service/CheckoutSwitch";
-import UserPageLayout from "./components/UserPageLayout";
+import UserPageLayout from "./components/UserPage/UserPageLayout";
+import AdminPageLayout from "./components/AdminPage/AdminPageLayout";
 import Policies from "./components/Policies/Policies";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
@@ -53,6 +54,8 @@ function AppLayout() {
         <Route path="/service/checkout-switch" element={<CheckoutSwitch />} />
         {/* Delegate all /user sub-routes to UserPageLayout */}
         <Route path="/user/*" element={<UserPageLayout />} />
+        {/* Delegate all /admin sub-routes to AdminPageLayout */}
+        <Route path="/admin/*" element={<AdminPageLayout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />

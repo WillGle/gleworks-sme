@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import SidePanel from "./UserPage/UserSidePanel";
+import SidePanel from "./UserSidePanel";
 import "./UserPageLayout.css";
-import MyAccount from "./UserPage/MyAccount";
-import MyOrders from "./UserPage/MyOrders";
-import Support from "./UserPage/Support";
+import MyAccount from "./MyAccount";
+import MyOrders from "./MyOrders";
+import Support from "./Support";
 
 const UserPageLayout: React.FC = () => {
   return (

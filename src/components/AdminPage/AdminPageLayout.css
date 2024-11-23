@@ -1,0 +1,25 @@
+/* General layout for the user page */
+.admin-layout {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+    background: #f9f9f9;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevent overflow issues */
+  }
+  
+  /* Sidebar styling */
+  .side-panel {
+    flex: 0 0 250px; /* Fixed width for the sidebar */
+    background: #eaeaea;
+    height: 100%; /* Match parent height */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Add shadow for better contrast */
+  }
+  
+  /* Main content area */
+  .user-content {
+    flex: 1; /* Fill remaining space */
+    padding: 20px;
+    overflow-y: auto; /* Scroll if content exceeds height */
+    background: #ffffff;
+  }
+  

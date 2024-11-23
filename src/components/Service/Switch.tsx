@@ -30,7 +30,9 @@ const Switch: React.FC = () => {
   useEffect(() => {
     const fetchServiceOptions = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/service-options/1`); // Adjust the ID as needed
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/service-options/1`
+        ); // Adjust the ID as needed
         if (!response.ok) {
           throw new Error("Failed to fetch service options");
         }
@@ -38,6 +40,7 @@ const Switch: React.FC = () => {
         setServiceOptions(data.options); // Set the options in state
 
         // Initialize moddingPreferences based on fetched options
+<<<<<<< HEAD
         const moddingPreferences = data.options.reduce((acc: any, option: any) => {
             acc[option.optionName.toLowerCase()] = false; // Chỉ chuyển thành chữ thường
             return acc;
@@ -62,6 +65,16 @@ const Switch: React.FC = () => {
             moddingPreferences, // Set initial preferences if no saved data
           }));
         }
+=======
+        const moddingPreferences = data.options.reduce(
+          (acc: any, option: any) => {
+            acc[option.optionName.toLowerCase().replace(/\s+/g, "")] = false; // Initialize all to false
+            return acc;
+          },
+          {}
+        );
+        setFormData((prev) => ({ ...prev, moddingPreferences }));
+>>>>>>> e54502750d4382070949746e761570af9a1b56f6
       } catch (error) {
         console.error("Error fetching service options:", error);
       }
@@ -75,7 +88,11 @@ const Switch: React.FC = () => {
 
     // Calculate the total based on selected modding preferences
     const moddingTotal = serviceOptions.reduce((total, option) => {
-      if (formData.moddingPreferences[option.optionName.toLowerCase().replace(/\s+/g, '')]) {
+      if (
+        formData.moddingPreferences[
+          option.optionName.toLowerCase().replace(/\s+/g, "")
+        ]
+      ) {
         return total + (option.price || 0); // Add the price of the selected option
       }
       return total;
@@ -151,13 +168,64 @@ const Switch: React.FC = () => {
       total: total, // Include the total cost
     };
 
+<<<<<<< HEAD
     // Save data to session storage
     sessionStorage.setItem("switchModdingData", JSON.stringify(switchModdingData));
+=======
+    try {
+      // Create switch modding order
+      const switchResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/services/switch-modding`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(switchModdingData),
+        }
+      );
+>>>>>>> e54502750d4382070949746e761570af9a1b56f6
 
     alert("Order saved to session storage!");
 
+<<<<<<< HEAD
     // Điều hướng đến trang checkout cho switch modding
     navigate("/service/switch-modding/checkout");
+=======
+      const switchData = await switchResponse.json();
+
+      // Prepare data for submission to orders
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      const orderData = {
+        userId: userData.id, // Assuming the user object has an 'id' property
+        serviceId: serviceOptions[0].id, // Assuming you want to use the first service option's ID
+        totalCost: total,
+        switchDetails: switchData, // Include switch details if needed
+      };
+
+      // Create order
+      const orderResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
+
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const orderDataResponse = await orderResponse.json();
+      alert("Order created successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while creating the order.");
+    }
+>>>>>>> e54502750d4382070949746e761570af9a1b56f6
   };
 
   return (
@@ -198,13 +266,19 @@ const Switch: React.FC = () => {
           </div>
           <div className="checkbox-group">
             {serviceOptions
-              .filter(option => option.optionGroup === "Switch Modding Preference")
+              .filter(
+                (option) => option.optionGroup === "Switch Modding Preference"
+              )
               .map((option) => (
                 <label key={option.id}>
                   <input
                     type="checkbox"
-                    name={option.optionName.toLowerCase().replace(/\s+/g, '')}
-                    checked={formData.moddingPreferences[option.optionName.toLowerCase().replace(/\s+/g, '')] || false}
+                    name={option.optionName.toLowerCase().replace(/\s+/g, "")}
+                    checked={
+                      formData.moddingPreferences[
+                        option.optionName.toLowerCase().replace(/\s+/g, "")
+                      ] || false
+                    }
                     onChange={handleInputChange}
                   />
                   {option.optionName} ({option.price} VND)
@@ -221,7 +295,7 @@ const Switch: React.FC = () => {
           </div>
           <div className="radio-group">
             {serviceOptions
-              .filter(option => option.optionGroup === "My Spring Preference")
+              .filter((option) => option.optionGroup === "My Spring Preference")
               .map((option) => (
                 <label key={option.id}>
                   <input

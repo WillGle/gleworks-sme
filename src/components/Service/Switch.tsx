@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Switch.css";
 
 const Switch: React.FC = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<{
     switchName: string;
     amount: string;
@@ -118,64 +121,24 @@ const Switch: React.FC = () => {
       return;
     }
 
-    // Prepare data for submission to switchModding
+    // Prepare data for session storage
     const switchModdingData = {
       switchName: formData.switchName,
       amount: parseInt(formData.amount),
-      lube: formData.moddingPreferences.lube,
-      films: formData.moddingPreferences.films,
-      springs: formData.moddingPreferences.springs,
-      clean: formData.moddingPreferences.clean,
+      moddingPreferences: formData.moddingPreferences,
       springPreference: formData.springPreference,
       additionalNotes: formData.additionalNotes,
       termsAccepted: formData.termsAccepted,
       total: total, // Include the total cost
     };
 
-    try {
-      // Create switch modding order
-      const switchResponse = await fetch(`${import.meta.env.VITE_API_URL}/services/switch-modding`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(switchModdingData),
-      });
+    // Save data to session storage
+    sessionStorage.setItem("switchModdingData", JSON.stringify(switchModdingData));
 
-      if (!switchResponse.ok) {
-        throw new Error("Failed to create switch modding order");
-      }
+    alert("Order saved to session storage!");
 
-      const switchData = await switchResponse.json();
-
-      // Prepare data for submission to orders
-      const userData = JSON.parse(localStorage.getItem("user") || "{}");
-      const orderData = {
-        userId: userData.id, // Assuming the user object has an 'id' property
-        serviceId: serviceOptions[0].id, // Assuming you want to use the first service option's ID
-        totalCost: total,
-        switchDetails: switchData, // Include switch details if needed
-      };
-
-      // Create order
-      const orderResponse = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!orderResponse.ok) {
-        throw new Error("Failed to create order");
-      }
-
-      const orderDataResponse = await orderResponse.json();
-      alert("Order created successfully!");
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred while creating the order.");
-    }
+    // Điều hướng đến trang checkout cho switch modding
+    navigate("/service/switch-modding/checkout");
   };
 
   return (

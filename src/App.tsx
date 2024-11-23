@@ -49,7 +49,8 @@ function AppLayout() {
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />
         <Route path="/service/keyboard-build" element={<Build />} />
-        <Route path="/service/checkout" element={<Checkout />} />
+        <Route path="/service/switch-modding/checkout" element={<Checkout />} />
+        <Route path="/service/keyboard-build/checkout" element={<Checkout />} />
         {/* Delegate all /user sub-routes to UserPageLayout */}
         <Route path="/user/*" element={<UserPageLayout />} />
         <Route path="/login" element={<Login />} />

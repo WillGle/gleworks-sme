@@ -39,10 +39,29 @@ const Switch: React.FC = () => {
 
         // Initialize moddingPreferences based on fetched options
         const moddingPreferences = data.options.reduce((acc: any, option: any) => {
-          acc[option.optionName.toLowerCase().replace(/\s+/g, '')] = false; // Initialize all to false
-          return acc;
-        }, {});
-        setFormData((prev) => ({ ...prev, moddingPreferences }));
+            acc[option.optionName.toLowerCase()] = false; // Chỉ chuyển thành chữ thường
+            return acc;
+          }, {});
+          
+
+        // Retrieve saved form data from session storage
+        const savedData = sessionStorage.getItem("switchModdingData");
+        if (savedData) {
+          const parsedData = JSON.parse(savedData);
+          setFormData((prev) => ({
+            ...prev,
+            moddingPreferences: {
+              ...moddingPreferences, // Use the initialized preferences
+              ...parsedData.moddingPreferences, // Merge with existing preferences
+            },
+            ...parsedData, // Spread the rest of the data
+          })); // Populate formData with saved data
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            moddingPreferences, // Set initial preferences if no saved data
+          }));
+        }
       } catch (error) {
         console.error("Error fetching service options:", error);
       }
@@ -196,7 +215,7 @@ const Switch: React.FC = () => {
 
         {/* My Spring Preference Section */}
         <div className="form-group">
-          <label>My Spring Preference (ea) (if you use mine)</label>
+          <label>My Spring Preference Ư(ea) (if you use mine)</label>
           <div className="form-group-note">
             Can select only one option. Unit: each
           </div>

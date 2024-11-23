@@ -18,10 +18,9 @@ import Archive from "./components/Archive/Archive";
 import Service from "./components/Service/ServiceSelect";
 import Switch from "./components/Service/Switch";
 import Build from "./components/Service/Build";
-import Checkout from "./components/Service/CheckoutBuild";
+import Checkout from "./components/Service/Checkout";
 import UserPageLayout from "./components/UserPageLayout";
 import Policies from "./components/Policies/Policies";
-import "./App.css";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
 function AppLayout() {

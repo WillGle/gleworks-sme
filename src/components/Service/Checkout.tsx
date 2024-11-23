@@ -1,54 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Checkout.css";
 
-// Mock data for Checkout
-const mockFormData = {
-  keyboardKitName: "Custom Keyboard Kit",
-  switchesName: "Cherry MX Red",
-  layout: "60 - 65%",
-  withSwitches: "Yes, I have a Switch Mod order",
-  switchQuantity: "70",
-  stabilizerName: "Durock V2",
-  plateChoice: "Aluminum",
-  providingKeycap: "Yes",
-  desoldering: "60 - 65%",
-  assembly: "Less than 60 %",
-  additionalNotes: "Please make sure the stabilizers are perfectly tuned.",
-  termsAccepted: true,
+// Mock data to display in checkout
+const customerInfo = {
+  customer: "John Doe",
+  email: "john.doe@example.com",
+  phone: "0123456789",
+  address: "123 ABC Street, City, Country",
 };
 
-const mockPrices = {
-  desoldering: {
-    "Less than 60 %": 150000,
-    "60 - 65%": 200000,
-    "75% - TKL": 250000,
-    "TKL +": 300000,
-    None: 0,
-  },
-  assembly: {
-    "Less than 60 %": 350000,
-    "60 - 65%": 400000,
-    "75% - TKL": 500000,
-    "TKL +": 600000,
-    "Hotswap all size": 250000,
-  },
+// Mock order data
+const mockOrderData = {
+  switchesName: "Cherry MX Red",
+  withSwitches: "Yes, I have a Switch Mod order",
+  keyboardKitName: "Custom Keyboard Kit",
+  layout: "60 - 65%",
+  stabilizerName: "Durock V2",
+  switchQuantity: "70",
+  plateChoice: "Aluminum",
+  desoldering: "60 - 65%",
+  providingKeycap: "Yes",
+  assembly: "Less than 60 %",
+  total: 550000,
 };
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
 
-  // Calculate the total price based on the mock data
-  const desolderingCost =
-    mockPrices.desoldering[
-      mockFormData.desoldering as keyof typeof mockPrices.desoldering
-    ] || 0;
-  const assemblyCost =
-    mockPrices.assembly[
-      mockFormData.assembly as keyof typeof mockPrices.assembly
-    ] || 0;
+  // State for editable customer information
+  const [customerData, setCustomerData] = useState(customerInfo);
 
-  const total = desolderingCost + assemblyCost;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCustomerData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleProceed = () => {
     alert("Order confirmed successfully! Thank you for your purchase.");
@@ -57,75 +46,133 @@ const Checkout: React.FC = () => {
   return (
     <div className="checkout-container">
       <h1>Checkout</h1>
+
+      {/* Editable Customer Information */}
       <div className="customer-info">
-        <h3>Customer Information</h3>
-        <p>
-          <strong>Customer:</strong> John Doe
-        </p>
-        <p>
-          <strong>Mail:</strong> john.doe@example.com
-        </p>
-        <p>
-          <strong>Tel:</strong> 0123456789
-        </p>
-        <p>
-          <strong>Address:</strong> 123 ABC Street, City, Country
-        </p>
+        <div className="form-group">
+          <label>Customer</label>
+          <input
+            type="text"
+            name="customer"
+            className="input-field"
+            value={customerData.customer}
+            onChange={handleInputChange}
+            readOnly
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            className="input-field"
+            value={customerData.email}
+            onChange={handleInputChange}
+            readOnly
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            className="input-field"
+            value={customerData.phone}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Address</label>
+          <input
+            type="text"
+            name="address"
+            className="input-field"
+            value={customerData.address}
+            onChange={handleInputChange}
+          />
+        </div>
       </div>
 
       <hr />
 
-      <div className="service-details">
-        <h3>Service Details</h3>
-        <p>
-          <strong>Keyboard Kit Name:</strong> {mockFormData.keyboardKitName}
-        </p>
-        <p>
-          <strong>Switches:</strong> {mockFormData.switchesName}
-        </p>
-        <p>
-          <strong>Layout:</strong> {mockFormData.layout}
-        </p>
-        <p>
-          <strong>With Switches:</strong> {mockFormData.withSwitches}
-        </p>
-        <p>
-          <strong>Stabilizer Name:</strong> {mockFormData.stabilizerName}
-        </p>
-        <p>
-          <strong>Switch Quantity:</strong> {mockFormData.switchQuantity}
-        </p>
-        <p>
-          <strong>Plate Choice:</strong> {mockFormData.plateChoice}
-        </p>
-        <p>
-          <strong>Providing Keycap:</strong> {mockFormData.providingKeycap}
-        </p>
-        <p>
-          <strong>Desoldering:</strong> {mockFormData.desoldering} (
-          {desolderingCost.toLocaleString()} VND)
-        </p>
-        <p>
-          <strong>Assembly:</strong> {mockFormData.assembly} (
-          {assemblyCost.toLocaleString()} VND)
-        </p>
-        <p>
-          <strong>Additional Notes:</strong> {mockFormData.additionalNotes}
-        </p>
+      {/* Non-editable Order Details */}
+      <div className="order-details">
+        <div className="form-group">
+          <label>Switches</label>
+          <p>{mockOrderData.switchesName}</p>
+        </div>
+
+        <div className="form-group">
+          <label>With Switches</label>
+          <p>{mockOrderData.withSwitches}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Keyboard Kit Name</label>
+          <p>{mockOrderData.keyboardKitName}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Layout</label>
+          <p>{mockOrderData.layout}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Stabilizer Name</label>
+          <p>{mockOrderData.stabilizerName}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Switch Quantity</label>
+          <p>{mockOrderData.switchQuantity}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Plate Choice</label>
+          <p>{mockOrderData.plateChoice}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Desoldering</label>
+          <p>{mockOrderData.desoldering}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Are You Providing Keycap?</label>
+          <p>{mockOrderData.providingKeycap}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Assembly</label>
+          <p>{mockOrderData.assembly}</p>
+        </div>
       </div>
 
       <hr />
 
-      <div className="total">
-        <h3>TOTAL</h3>
-        <p>{total.toLocaleString()} VND</p>
+      {/* Total Section */}
+      <div className="checkout-total-section">
+        <h2>TOTAL</h2>
+        <p>{mockOrderData.total.toLocaleString()} VND</p>
       </div>
 
+      {/* Buttons */}
       <div className="button-group">
-        <button className="return-button" onClick={() => navigate("/service")}>
+        <button
+          type="button"
+          className="return-button"
+          onClick={() => navigate("/service")}
+        >
           Return
         </button>
-        <button className="proceed-button" onClick={handleProceed}>
+        <button
+          type="button"
+          className="proceed-button"
+          onClick={handleProceed}
+        >
           Proceed
         </button>
       </div>

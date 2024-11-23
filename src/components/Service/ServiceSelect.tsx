@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ServiceSelect.css";
 
 const Service: React.FC = () => {
-  const navigate = useNavigate(); // Hook để điều hướng trang
-  const [activeNote, setActiveNote] = useState<number | null>(null); // Trạng thái mở rộng dropdown
+  const navigate = useNavigate();
+  const [activeNote, setActiveNote] = useState<number | null>(null);
+  const [services, setServices] = useState<any[]>([]);
+
+  // Fetch services from the API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/services`);  // Use the API URL from .env
+        const data = await response.json();
+        setServices(data);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   // Dữ liệu FAQ (Frequently Asked Questions)
   const faqData = [
@@ -36,26 +52,16 @@ const Service: React.FC = () => {
     <div className="service-container">
       {/* Shortcut Services */}
       <div className="service-shortcuts">
-        <div
-          className="service-card"
-          onClick={() => navigate("/service/switch-modding")}
-        >
-          <h3>Switch Modding Service</h3>
-          <p>
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page when looking at its layout.
-          </p>
-        </div>
-        <div
-          className="service-card"
-          onClick={() => navigate("/service/keyboard-build")}
-        >
-          <h3>Keyboard Build Service</h3>
-          <p>
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page when looking at its layout.
-          </p>
-        </div>
+        {services.map((service) => (
+          <div
+            key={service.id}
+            className="service-card"
+            onClick={() => navigate(`/service/${service.name.toLowerCase().replace(/\s+/g, '-')}`)}
+          >
+            <h3>{service.name} Service</h3>
+            <p>{service.description}</p>
+          </div>
+        ))}
       </div>
 
       {/* Notes Section */}

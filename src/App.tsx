@@ -51,7 +51,7 @@ function AppLayout() {
         <Route path="/archive" element={<Archive />} />
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />
-        <Route path="/service/keyboard-build" element={<Build />} />
+        <Route path="/service/keyboard-building" element={<Build />} />
         <Route path="/service/checkout-build" element={<ProtectedRoute><CheckoutBuild /></ProtectedRoute>} />
         <Route path="/service/checkout-switch" element={<ProtectedRoute><CheckoutSwitch /></ProtectedRoute>} />
         {/* Delegate all /user sub-routes to UserPageLayout */}

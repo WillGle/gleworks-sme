@@ -1,54 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import "./OrderDetail.css";
 
-// Mock data for orders (replace with actual API or state data)
-const mockOrders = [
-  {
-    orderId: "000001",
-    customer: "John Doe",
-    email: "john.doe@example.com",
-    phone: "0123456789",
-    address: "123 ABC Street, City, Country",
-    orderDate: "20/11/2024",
-    switchesName: "Cherry MX Red",
-    withSwitches: "Yes, I have a Switch Mod order",
-    keyboardKitName: "Custom Keyboard Kit",
-    layout: "60 - 65%",
-    stabilizerName: "Durock V2",
-    switchQuantity: "70",
-    plateChoice: "Aluminum",
-    desoldering: "60 - 65%",
-    providingKeycap: "Yes",
-    assembly: "Less than 60 %",
-    total: "350,000 VND",
-    paymentStatus: "Pending",
-    orderStatus: "Pending",
-  },
-  {
-    orderId: "000002",
-    customer: "Jane Smith",
-    email: "jane.smith@example.com",
-    phone: "0987654321",
-    address: "456 XYZ Street, City, Country",
-    orderDate: "21/11/2024",
-    switchesName: "Gateron Brown",
-    withSwitches: "No, I will include mine",
-    keyboardKitName: "Advanced Keyboard Kit",
-    layout: "TKL",
-    stabilizerName: "Everglide Panda",
-    switchQuantity: "87",
-    plateChoice: "Brass",
-    desoldering: "None",
-    providingKeycap: "No",
-    assembly: "TKL +",
-    total: "600,000 VND",
-    paymentStatus: "Paid",
-    orderStatus: "Finished",
-  },
-];
-
-// Options for statuses
 const paymentStatusOptions = ["Paid", "Pending", "Canceled"];
 const orderStatusOptions = [
   "Finished",
@@ -59,28 +11,36 @@ const orderStatusOptions = [
 ];
 
 const OrderDetail: React.FC = () => {
-  const { orderId } = useParams<{ orderId: string }>(); // Extract orderId from URL
-  const [orderData, setOrderData] = useState<(typeof mockOrders)[0] | null>(
-    null
-  );
+  // Mock data for order detail
+  const [orderData, setOrderData] = useState({
+    orderId: "123456",
+    customer: "John Doe",
+    email: "john.doe@example.com",
+    phone: "0123456789",
+    address: "123 ABC Street, City, Country",
+    orderDate: "DD/MM/YYYY",
+    switchesName: "Cherry MX Red",
+    withSwitches: "Yes, I have a Switch Mod order",
+    keyboardKitName: "Custom Keyboard Kit",
+    layout: "60 - 65%",
+    stabilizerName: "Durock V2",
+    switchQuantity: "70",
+    plateChoice: "Aluminum",
+    desoldering: "60 - 65%",
+    providingKeycap: "Yes",
+    assembly: "Less than 60 %",
+    total: "xxx.xxx VND",
+    paymentStatus: "Pending",
+    orderStatus: "Ongoing",
+  });
 
-  useEffect(() => {
-    // Fetch order data based on orderId
-    const order = mockOrders.find((order) => order.orderId === orderId);
-    if (order) {
-      setOrderData(order);
-    } else {
-      console.error(`Order with ID ${orderId} not found.`);
-    }
-  }, [orderId]);
-
-  if (!orderData) {
-    return <p>Loading order details...</p>;
-  }
-
+  // Handlers for updating the dropdown values
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setOrderData((prev) => (prev ? { ...prev, [name]: value } : null));
+    setOrderData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (

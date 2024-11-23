@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Switch.css";
+import "./BuildAndSwitch.css";
 
 const Switch: React.FC = () => {
   const [formData, setFormData] = useState<{

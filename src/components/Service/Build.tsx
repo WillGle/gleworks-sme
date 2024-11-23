@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Build.css";
+import "./BuildAndSwitch.css";
 
 // Define the type for the options
 type Option = {
@@ -50,15 +50,21 @@ const Build: React.FC = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/service-options/2`); // Adjust the ID as needed
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/service-options/2`
+        ); // Adjust the ID as needed
         if (!response.ok) {
           throw new Error("Failed to fetch prices");
         }
         const data = await response.json();
-        
+
         // Organize the data into the expected structure
-        const desolderingOptions = data.options.filter((option: Option) => option.optionGroup === "Desoldering");
-        const assemblyOptions = data.options.filter((option: Option) => option.optionGroup === "Assembly");
+        const desolderingOptions = data.options.filter(
+          (option: Option) => option.optionGroup === "Desoldering"
+        );
+        const assemblyOptions = data.options.filter(
+          (option: Option) => option.optionGroup === "Assembly"
+        );
 
         setPrices({
           desoldering: desolderingOptions.reduce((acc: any, option: any) => {
@@ -81,7 +87,9 @@ const Build: React.FC = () => {
   // Calculate total cost
   useEffect(() => {
     const desolderingCost =
-      prices.desoldering[formData.desoldering as keyof typeof prices.desoldering] || 0;
+      prices.desoldering[
+        formData.desoldering as keyof typeof prices.desoldering
+      ] || 0;
     const assemblyCost =
       prices.assembly[formData.assembly as keyof typeof prices.assembly] || 0;
 
@@ -266,19 +274,21 @@ const Build: React.FC = () => {
         <div className="form-group">
           <label>Desoldering (Required)</label>
           <div className="radio-group">
-            {Object.entries(prices.desoldering).map(([key, value]: [string, number]) => (
-              <label key={key}>
-                <input
-                  type="radio"
-                  name="desoldering"
-                  value={key}
-                  checked={formData.desoldering === key}
-                  onChange={handleInputChange}
-                  required
-                />
-                {key} ({value.toLocaleString()} VND)
-              </label>
-            ))}
+            {Object.entries(prices.desoldering).map(
+              ([key, value]: [string, number]) => (
+                <label key={key}>
+                  <input
+                    type="radio"
+                    name="desoldering"
+                    value={key}
+                    checked={formData.desoldering === key}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  {key} ({value.toLocaleString()} VND)
+                </label>
+              )
+            )}
           </div>
         </div>
 

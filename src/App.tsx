@@ -21,7 +21,6 @@ import Build from "./components/Service/Build";
 import Checkout from "./components/Service/Checkout";
 import UserPageLayout from "./components/UserPageLayout";
 import Policies from "./components/Policies/Policies";
-import "./App.css";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
 function AppLayout() {

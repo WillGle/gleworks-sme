@@ -27,7 +27,9 @@ const Switch: React.FC = () => {
   useEffect(() => {
     const fetchServiceOptions = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/service-options/1`); // Adjust the ID as needed
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/service-options/1`
+        ); // Adjust the ID as needed
         if (!response.ok) {
           throw new Error("Failed to fetch service options");
         }
@@ -35,10 +37,13 @@ const Switch: React.FC = () => {
         setServiceOptions(data.options); // Set the options in state
 
         // Initialize moddingPreferences based on fetched options
-        const moddingPreferences = data.options.reduce((acc: any, option: any) => {
-          acc[option.optionName.toLowerCase().replace(/\s+/g, '')] = false; // Initialize all to false
-          return acc;
-        }, {});
+        const moddingPreferences = data.options.reduce(
+          (acc: any, option: any) => {
+            acc[option.optionName.toLowerCase().replace(/\s+/g, "")] = false; // Initialize all to false
+            return acc;
+          },
+          {}
+        );
         setFormData((prev) => ({ ...prev, moddingPreferences }));
       } catch (error) {
         console.error("Error fetching service options:", error);
@@ -53,7 +58,11 @@ const Switch: React.FC = () => {
 
     // Calculate the total based on selected modding preferences
     const moddingTotal = serviceOptions.reduce((total, option) => {
-      if (formData.moddingPreferences[option.optionName.toLowerCase().replace(/\s+/g, '')]) {
+      if (
+        formData.moddingPreferences[
+          option.optionName.toLowerCase().replace(/\s+/g, "")
+        ]
+      ) {
         return total + (option.price || 0); // Add the price of the selected option
       }
       return total;
@@ -134,13 +143,16 @@ const Switch: React.FC = () => {
 
     try {
       // Create switch modding order
-      const switchResponse = await fetch(`${import.meta.env.VITE_API_URL}/services/switch-modding`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(switchModdingData),
-      });
+      const switchResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/services/switch-modding`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(switchModdingData),
+        }
+      );
 
       if (!switchResponse.ok) {
         throw new Error("Failed to create switch modding order");
@@ -158,13 +170,16 @@ const Switch: React.FC = () => {
       };
 
       // Create order
-      const orderResponse = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const orderResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       if (!orderResponse.ok) {
         throw new Error("Failed to create order");
@@ -216,13 +231,19 @@ const Switch: React.FC = () => {
           </div>
           <div className="checkbox-group">
             {serviceOptions
-              .filter(option => option.optionGroup === "Switch Modding Preference")
+              .filter(
+                (option) => option.optionGroup === "Switch Modding Preference"
+              )
               .map((option) => (
                 <label key={option.id}>
                   <input
                     type="checkbox"
-                    name={option.optionName.toLowerCase().replace(/\s+/g, '')}
-                    checked={formData.moddingPreferences[option.optionName.toLowerCase().replace(/\s+/g, '')] || false}
+                    name={option.optionName.toLowerCase().replace(/\s+/g, "")}
+                    checked={
+                      formData.moddingPreferences[
+                        option.optionName.toLowerCase().replace(/\s+/g, "")
+                      ] || false
+                    }
                     onChange={handleInputChange}
                   />
                   {option.optionName} ({option.price} VND)
@@ -239,7 +260,7 @@ const Switch: React.FC = () => {
           </div>
           <div className="radio-group">
             {serviceOptions
-              .filter(option => option.optionGroup === "My Spring Preference")
+              .filter((option) => option.optionGroup === "My Spring Preference")
               .map((option) => (
                 <label key={option.id}>
                   <input

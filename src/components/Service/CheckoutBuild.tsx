@@ -22,6 +22,7 @@ const mockOrderData = {
   desoldering: "60 - 65%",
   providingKeycap: "Yes",
   assembly: "Less than 60 %",
+  additionalNotes: "Please handle with care!",
   total: 550000,
 };
 
@@ -45,7 +46,7 @@ const Checkout: React.FC = () => {
 
   return (
     <div className="checkout-container">
-      <h1>Checkout</h1>
+      <h1>Checkout - Keyboard Building Service</h1>
 
       {/* Editable Customer Information */}
       <div className="customer-info">
@@ -100,54 +101,58 @@ const Checkout: React.FC = () => {
 
       {/* Non-editable Order Details */}
       <div className="order-details">
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Switches</label>
           <p>{mockOrderData.switchesName}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>With Switches</label>
           <p>{mockOrderData.withSwitches}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Keyboard Kit Name</label>
           <p>{mockOrderData.keyboardKitName}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Layout</label>
           <p>{mockOrderData.layout}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Stabilizer Name</label>
           <p>{mockOrderData.stabilizerName}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Switch Quantity</label>
           <p>{mockOrderData.switchQuantity}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Plate Choice</label>
           <p>{mockOrderData.plateChoice}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Desoldering</label>
           <p>{mockOrderData.desoldering}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Are You Providing Keycap?</label>
           <p>{mockOrderData.providingKeycap}</p>
         </div>
 
-        <div className="form-group">
+        <div className="order-form-group">
           <label>Assembly</label>
           <p>{mockOrderData.assembly}</p>
+        </div>
+        <div className="order-form-group">
+          <label>Additional Notes</label>
+          <p>{mockOrderData.additionalNotes}</p>
         </div>
       </div>
 

@@ -18,7 +18,8 @@ import Archive from "./components/Archive/Archive";
 import Service from "./components/Service/ServiceSelect";
 import Switch from "./components/Service/Switch";
 import Build from "./components/Service/Build";
-import Checkout from "./components/Service/Checkout";
+import CheckoutBuild from "./components/Service/CheckoutBuild";
+import CheckoutSwitch from "./components/Service/CheckoutSwitch";
 import UserPageLayout from "./components/UserPageLayout";
 import Policies from "./components/Policies/Policies";
 
@@ -48,7 +49,8 @@ function AppLayout() {
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />
         <Route path="/service/keyboard-build" element={<Build />} />
-        <Route path="/service/checkout" element={<Checkout />} />
+        <Route path="/service/checkout-build" element={<CheckoutBuild />} />
+        <Route path="/service/checkout-switch" element={<CheckoutSwitch />} />
         {/* Delegate all /user sub-routes to UserPageLayout */}
         <Route path="/user/*" element={<UserPageLayout />} />
         <Route path="/login" element={<Login />} />

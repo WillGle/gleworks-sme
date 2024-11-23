@@ -59,7 +59,7 @@ const Header: React.FC = () => {
           {user ? (
             <>
               {/* Hiển thị thông tin người dùng với liên kết đến trang user */}
-              <Link to="/user" className="user-info">
+              <Link to="/user/my-account" className="user-info">
                 {user.firstName} {user.lastName}
               </Link>
               {/* Nút Logout */}

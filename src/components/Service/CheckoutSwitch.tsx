@@ -9,6 +9,7 @@ const Checkout: React.FC = () => {
   const [orderDate, setOrderDate] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -32,6 +33,7 @@ const Checkout: React.FC = () => {
           setUserInfo(data);
           setPhone(data.phoneNumber || "");
           setAddress(data.address || "");
+          setCity(data.city || "");
         } else {
           console.error("Failed to fetch user info:", response.statusText);
         }
@@ -58,6 +60,8 @@ const Checkout: React.FC = () => {
       setPhone(value);
     } else if (name === "address") {
       setAddress(value);
+    } else if (name === "city") {
+      setCity(value);
     } else {
       setUserInfo((prevUserInfo: any) => ({
         ...prevUserInfo,
@@ -78,7 +82,7 @@ const Checkout: React.FC = () => {
       totalCost: orderData.total,
       status: "Pending",
       paymentStatus: "Pending",
-      address: address,
+      address: `${address}${city ? `, ${city}` : ''}`,
       telephone: phone,
     };
 
@@ -209,7 +213,7 @@ const Checkout: React.FC = () => {
                 type="text"
                 name="address"
                 className="input-field"
-                value={address}
+                value={`${address}${city ? `, ${city}` : ''}`}
                 onChange={handleInputChange}
               />
             </div>

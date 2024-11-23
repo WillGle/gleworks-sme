@@ -1,65 +1,76 @@
 import React, { useState, useEffect } from "react";
 import "./Switch.css";
 
-type SpringPreference = "Payson" | "Geon" | "TX" | "Chewy" | "SPRiT" | "";
-
-const prices = {
-  lube: 5000,
-  films: 3000,
-  springs: 1000,
-  clean: 4000,
-  payson: 3000,
-  geon: 2500,
-  tx: 3000,
-  chewy: 3000,
-  sprit: 4000,
-};
-
 const Switch: React.FC = () => {
   const [formData, setFormData] = useState<{
     switchName: string;
     amount: string;
     moddingPreferences: {
-      lube: boolean;
-      films: boolean;
-      springs: boolean;
-      clean: boolean;
+      [key: string]: boolean; // Allow dynamic keys for modding preferences
     };
-    springPreference: SpringPreference;
+    springPreference: string;
     additionalNotes: string;
     termsAccepted: boolean;
   }>({
     switchName: "",
     amount: "",
-    moddingPreferences: {
-      lube: false,
-      films: false,
-      springs: false,
-      clean: false,
-    },
+    moddingPreferences: {},
     springPreference: "",
     additionalNotes: "",
     termsAccepted: false,
   });
 
   const [total, setTotal] = useState(0);
+  const [serviceOptions, setServiceOptions] = useState<any[]>([]); // State to hold service options
+
+  // Fetch service options when the component mounts
+  useEffect(() => {
+    const fetchServiceOptions = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/service-options/1`); // Adjust the ID as needed
+        if (!response.ok) {
+          throw new Error("Failed to fetch service options");
+        }
+        const data = await response.json();
+        setServiceOptions(data.options); // Set the options in state
+
+        // Initialize moddingPreferences based on fetched options
+        const moddingPreferences = data.options.reduce((acc: any, option: any) => {
+          acc[option.optionName.toLowerCase().replace(/\s+/g, '')] = false; // Initialize all to false
+          return acc;
+        }, {});
+        setFormData((prev) => ({ ...prev, moddingPreferences }));
+      } catch (error) {
+        console.error("Error fetching service options:", error);
+      }
+    };
+
+    fetchServiceOptions();
+  }, []);
 
   useEffect(() => {
     const amount = parseInt(formData.amount) || 0;
 
-    const moddingTotal =
-      (formData.moddingPreferences.lube ? prices.lube : 0) +
-      (formData.moddingPreferences.films ? prices.films : 0) +
-      (formData.moddingPreferences.springs ? prices.springs : 0) +
-      (formData.moddingPreferences.clean ? prices.clean : 0);
+    // Calculate the total based on selected modding preferences
+    const moddingTotal = serviceOptions.reduce((total, option) => {
+      if (formData.moddingPreferences[option.optionName.toLowerCase().replace(/\s+/g, '')]) {
+        return total + (option.price || 0); // Add the price of the selected option
+      }
+      return total;
+    }, 0);
 
-    const springTotal =
-      prices[formData.springPreference.toLowerCase() as keyof typeof prices] ||
-      0;
+    // Calculate the total based on the selected spring preference
+    const springTotal = serviceOptions.reduce((total, option) => {
+      if (formData.springPreference === option.optionName) {
+        return total + (option.price || 0); // Add the price of the selected spring option
+      }
+      return total;
+    }, 0);
 
-    const calculatedTotal = amount * moddingTotal + amount * springTotal;
+    // Calculate the final total
+    const calculatedTotal = amount * (moddingTotal + springTotal);
     setTotal(calculatedTotal);
-  }, [formData]);
+  }, [formData, serviceOptions]); // Add serviceOptions to the dependency array
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,25 +78,17 @@ const Switch: React.FC = () => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
 
     if (type === "checkbox") {
-      if (name in formData.moddingPreferences) {
-        setFormData((prev) => ({
-          ...prev,
-          moddingPreferences: {
-            ...prev.moddingPreferences,
-            [name]: checked,
-          },
-        }));
-      } else {
-        setFormData((prev) => ({
-          ...prev,
+      setFormData((prev) => ({
+        ...prev,
+        moddingPreferences: {
+          ...prev.moddingPreferences,
           [name]: checked,
-        }));
-      }
+        },
+      }));
     } else if (type === "radio") {
       setFormData((prev) => ({
         ...prev,
-        springPreference:
-          prev.springPreference === value ? "" : (value as SpringPreference), // Toggle selection
+        springPreference: value as string,
       }));
     } else {
       setFormData((prev) => ({
@@ -203,73 +206,53 @@ const Switch: React.FC = () => {
           />
         </div>
 
+        {/* Switch Modding Preference Section */}
         <div className="form-group">
           <label>Switch Modding Preference (ea) (Required)</label>
           <div className="form-group-note">
             Can select more than one option. Unit: each
           </div>
           <div className="checkbox-group">
-            <label>
-              <input
-                type="checkbox"
-                name="lube"
-                checked={formData.moddingPreferences.lube}
-                onChange={handleInputChange}
-              />
-              Lube (5000 VND)
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="films"
-                checked={formData.moddingPreferences.films}
-                onChange={handleInputChange}
-              />
-              Films (3000 VND)
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="springs"
-                checked={formData.moddingPreferences.springs}
-                onChange={handleInputChange}
-              />
-              Springs Change (1000 VND)
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="clean"
-                checked={formData.moddingPreferences.clean}
-                onChange={handleInputChange}
-              />
-              Clean (4000 VND)
-            </label>
+            {serviceOptions
+              .filter(option => option.optionGroup === "Switch Modding Preference")
+              .map((option) => (
+                <label key={option.id}>
+                  <input
+                    type="checkbox"
+                    name={option.optionName.toLowerCase().replace(/\s+/g, '')}
+                    checked={formData.moddingPreferences[option.optionName.toLowerCase().replace(/\s+/g, '')] || false}
+                    onChange={handleInputChange}
+                  />
+                  {option.optionName} ({option.price} VND)
+                </label>
+              ))}
           </div>
         </div>
 
+        {/* My Spring Preference Section */}
         <div className="form-group">
           <label>My Spring Preference (ea) (if you use mine)</label>
           <div className="form-group-note">
             Can select only one option. Unit: each
           </div>
           <div className="radio-group">
-            {["Payson", "Geon", "TX", "Chewy", "SPRiT"].map((option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  name="springPreference"
-                  value={option}
-                  checked={formData.springPreference === option}
-                  onChange={handleInputChange}
-                  onDoubleClick={() =>
-                    setFormData((prev) => ({ ...prev, springPreference: "" }))
-                  }
-                />
-                {option} ({prices[option.toLowerCase() as keyof typeof prices]}{" "}
-                VND)
-              </label>
-            ))}
+            {serviceOptions
+              .filter(option => option.optionGroup === "My Spring Preference")
+              .map((option) => (
+                <label key={option.id}>
+                  <input
+                    type="radio"
+                    name="springPreference"
+                    value={option.optionName}
+                    checked={formData.springPreference === option.optionName}
+                    onChange={handleInputChange}
+                    onDoubleClick={() =>
+                      setFormData((prev) => ({ ...prev, springPreference: "" }))
+                    }
+                  />
+                  {option.optionName} ({option.price} VND)
+                </label>
+              ))}
           </div>
         </div>
 

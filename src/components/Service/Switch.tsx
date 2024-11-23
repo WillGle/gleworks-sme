@@ -84,6 +84,7 @@ const Switch: React.FC = () => {
           ...prev.moddingPreferences,
           [name]: checked,
         },
+        termsAccepted: checked,
       }));
     } else if (type === "radio") {
       setFormData((prev) => ({
@@ -150,9 +151,10 @@ const Switch: React.FC = () => {
       // Prepare data for submission to orders
       const userData = JSON.parse(localStorage.getItem("user") || "{}");
       const orderData = {
-        user_id: userData.id, // Assuming the user object has an 'id' property
-        service_type: "Switch",
-        total_cost: total,
+        userId: userData.id, // Assuming the user object has an 'id' property
+        serviceId: serviceOptions[0].id, // Assuming you want to use the first service option's ID
+        totalCost: total,
+        switchDetails: switchData, // Include switch details if needed
       };
 
       // Create order

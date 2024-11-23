@@ -49,7 +49,7 @@ const NewPass: React.FC = () => {
       });
       setSuccessMessage("Your password has been updated successfully!");
       setErrorMessage("");
-      setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
+      setTimeout(() => navigate("/home"), 3000); // Redirect after 3 seconds
     } catch (error) {
       console.error("Error resetting password:", error);
       setErrorMessage(
@@ -102,7 +102,7 @@ const NewPass: React.FC = () => {
           <button
             type="button"
             className="cancel-button"
-            onClick={() => navigate("/user")}
+            onClick={() => navigate("/home")}
           >
             Cancle
           </button>

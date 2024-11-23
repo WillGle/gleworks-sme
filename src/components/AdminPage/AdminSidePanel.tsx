@@ -8,7 +8,7 @@ const SidePanel: React.FC = () => {
       <nav>
         <ul className="nav-list">
           <li>
-            <Link to="/admin/dashboard">My Account</Link>
+            <Link to="/admin/dashboard">Dashboard</Link>
           </li>
           <li>
             <Link to="/admin/my-orders">My Orders</Link>

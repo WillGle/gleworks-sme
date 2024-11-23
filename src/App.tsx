@@ -23,6 +23,7 @@ import CheckoutSwitch from "./components/Service/CheckoutSwitch";
 import UserPageLayout from "./components/UserPage/UserPageLayout";
 import AdminPageLayout from "./components/AdminPage/AdminPageLayout";
 import Policies from "./components/Policies/Policies";
+import NotFound from "./components/NotFound";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
 function AppLayout() {
@@ -61,6 +62,7 @@ function AppLayout() {
         <Route path="/lost-password" element={<LostPass />} />
         <Route path="/new-password" element={<NewPass />} />
         <Route path="/policies/" element={<Policies />} />
+        <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
       </Routes>
       {!hideHeaderFooter && <Footer />}
     </>

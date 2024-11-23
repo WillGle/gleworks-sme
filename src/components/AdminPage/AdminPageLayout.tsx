@@ -3,8 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import SidePanel from "./AdminSidePanel";
 import "./AdminPageLayout.css";
 import AdminDashboard from "./AdminDashboard";
-import AdminOrder from "./AdminOrder";
-import UserList from "./UserList";
+// import AdminOrder from "./AdminOrder";
+// import UserList from "./UserList";
 
 const UserPageLayout: React.FC = () => {
   return (
@@ -16,8 +16,8 @@ const UserPageLayout: React.FC = () => {
       <div className="user-content">
         <Routes>
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="my-orders" element={<AdminOrder />} />
-          <Route path="user-list" element={<UserList />} />
+          {/* <Route path="my-orders" element={<AdminOrder />} />
+          <Route path="user-list" element={<UserList />} /> */}
         </Routes>
       </div>
     </div>

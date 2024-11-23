@@ -1,0 +1,98 @@
+.admin-dashboard-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .overview-section {
+    margin-bottom: 30px;
+  }
+  
+  .overview-cards {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  
+  .overview-card {
+    flex: 1;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .overview-card h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .overview-card p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+  }
+
+
+  .overview-card {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .overview-card:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+  }
+  
+  
+  .client-section {
+    margin-top: 30px;
+  }
+  
+  .client-table {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table-header,
+  .table-row {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .table-header {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .table-row {
+    background-color: #fff;
+  }
+  
+  .table-row:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .table-header div,
+  .table-row div {
+    text-align: center;
+    font-size: 14px;
+  }
+  

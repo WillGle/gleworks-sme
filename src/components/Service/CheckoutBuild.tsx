@@ -6,6 +6,7 @@ const CheckoutBuild: React.FC = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const [orderDate, setOrderDate] = useState<string>("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -41,6 +42,11 @@ const CheckoutBuild: React.FC = () => {
     if (savedOrderData) {
       setOrderData(JSON.parse(savedOrderData));
     }
+
+    // Set order date to current date in DD/MM/YYYY format
+    const currentDate = new Date();
+    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
+    setOrderDate(formattedDate);
   }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,6 +192,16 @@ const CheckoutBuild: React.FC = () => {
                 className="input-field"
                 value={userInfo.address}
                 onChange={handleInputChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>Order Date</label>
+              <input
+                type="text"
+                name="orderDate"
+                className="input-field"
+                value={orderDate}
+                readOnly
               />
             </div>
           </>

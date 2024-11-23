@@ -6,6 +6,7 @@ const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const [orderDate, setOrderDate] = useState<string>("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -41,6 +42,10 @@ const Checkout: React.FC = () => {
     if (savedOrderData) {
       setOrderData(JSON.parse(savedOrderData));
     }
+
+    const currentDate = new Date();
+    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
+    setOrderDate(formattedDate);
   }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,11 +63,11 @@ const Checkout: React.FC = () => {
     }
 
     const orderPayload = {
-      userId: userInfo.id, // Assuming userInfo contains the user's ID
-      serviceId: 1, // Assuming you have this in orderData
-      totalCost: orderData.total, // Total cost from orderData
-      status: "Pending", // Default status
-      paymentStatus: "Pending", // Default payment status
+      userId: userInfo.id,
+      serviceId: 1,
+      totalCost: orderData.total,
+      status: "Pending",
+      paymentStatus: "Pending",
     };
 
     try {
@@ -82,11 +87,10 @@ const Checkout: React.FC = () => {
       console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
-      // Save order details to the database
       const orderDetailPayload = {
-        orderId: createdOrder.orderId, // Use the orderId from the created order
+        orderId: createdOrder.orderId,
         fieldName: "Switches",
-        fieldValue: orderData.switchName, // Assuming switchName is the name of the switch
+        fieldValue: orderData.switchName,
       };
 
       const detailResponse = await fetch("http://localhost:3000/order-details/", {
@@ -101,20 +105,18 @@ const Checkout: React.FC = () => {
         throw new Error("Failed to save order details");
       }
 
-      // Additional fields to save
       const additionalDetails = [
-        { fieldName: "Amount", fieldValue: orderData.amount.toString() }, // Assuming amount is a number
+        { fieldName: "Amount", fieldValue: orderData.amount.toString() },
         { 
           fieldName: "Switch Modding Preference", 
           fieldValue: Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).length > 0
             ? Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).join(", ") 
-            : null // Thay đổi từ "N/A" thành null hoặc không lưu trường này
+            : null
         },
         { fieldName: "My Spring Preference", fieldValue: orderData.springPreference },
         { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
       ];
 
-      // Save additional details
       for (const detail of additionalDetails) {
         const detailPayload = {
           orderId: createdOrder.orderId,
@@ -135,10 +137,8 @@ const Checkout: React.FC = () => {
         }
       }
 
-      // Clear session storage
-      sessionStorage.clear(); // This will remove all items from session storage
+      sessionStorage.clear();
 
-      // Optionally, you can navigate to another page or perform additional actions here
       navigate("/service/switch-modding");
     } catch (error) {
       console.error("Error saving order:", error);
@@ -150,7 +150,6 @@ const Checkout: React.FC = () => {
     <div className="checkout-container">
       <h1>Checkout</h1>
 
-      {/* Editable Customer Information */}
       <div className="customer-info">
         <h3>Customer Information</h3>
         {userInfo ? (
@@ -200,6 +199,18 @@ const Checkout: React.FC = () => {
                 onChange={handleInputChange}
               />
             </div>
+
+            <div className="form-group">
+              <label>Order Date</label>
+              <input
+                type="text"
+                name="orderDate"
+                className="input-field"
+                value={orderDate}
+                readOnly
+              />
+            </div>
+
           </>
         ) : (
           <p>Loading user information...</p>
@@ -208,7 +219,6 @@ const Checkout: React.FC = () => {
 
       <hr />
 
-      {/* Non-editable Order Details */}
       <div className="order-details">
         <div className="form-group">
           <label>Switches</label>
@@ -238,13 +248,11 @@ const Checkout: React.FC = () => {
 
       <hr />
 
-      {/* Total Section */}
       <div className="checkout-total-section">
         <h2>TOTAL</h2>
         <p>{orderData ? orderData.total.toLocaleString() : "Loading..."} VND</p>
       </div>
 
-      {/* Buttons */}
       <div className="button-group">
         <button
           type="button"

@@ -238,7 +238,7 @@ const Switch: React.FC = () => {
 
         {/* My Spring Preference Section */}
         <div className="form-group">
-          <label>My Spring Preference Ư(ea) (if you use mine)</label>
+          <label>My Spring Preference (ea) (if you use mine)</label>
           <div className="form-group-note">
             Can select only one option. Unit: each
           </div>

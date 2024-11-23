@@ -10,6 +10,7 @@ const Checkout: React.FC = () => {
   const [phone, setPhone] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
+  const [showQRCodePopup, setShowQRCodePopup] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -157,7 +158,9 @@ const Checkout: React.FC = () => {
 
       sessionStorage.clear();
 
-      navigate("/service/switch-modding");
+    //   navigate("/service/switch-modding");
+
+      setShowQRCodePopup(true);
     } catch (error) {
       console.error("Error saving order:", error);
       alert("Failed to save order. Please try again.");
@@ -287,6 +290,16 @@ const Checkout: React.FC = () => {
           Proceed
         </button>
       </div>
+
+      {/* QR Code Popup */}
+      {showQRCodePopup && (
+        <div className="qr-popup">
+          <div className="qr-popup-content">
+            <img src="https://i.imgur.com/TRhD6Kv.png" alt="QR Code" style={{ width: '256px', height: '256px' }} />
+            <button onClick={() => setShowQRCodePopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

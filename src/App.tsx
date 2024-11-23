@@ -13,10 +13,12 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
 import About from "./components/About/About";
+// import Blog from "./components/Blog (dev later)/Blog";
 import Archive from "./components/Archive/Archive";
 import Service from "./components/Service/ServiceSelect";
 import Switch from "./components/Service/Switch";
 import Build from "./components/Service/Build";
+import Checkout from "./components/Service/CheckoutBuild";
 import UserPageLayout from "./components/UserPageLayout";
 import Policies from "./components/Policies/Policies";
 import "./App.css";
@@ -42,10 +44,12 @@ function AppLayout() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Landing />} />
         <Route path="/about" element={<About />} />
+        {/* <Route path="/blog" element={<Blog />} /> */}
         <Route path="/archive" element={<Archive />} />
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />
         <Route path="/service/keyboard-build" element={<Build />} />
+        <Route path="/service/checkout" element={<Checkout />} />
         {/* Delegate all /user sub-routes to UserPageLayout */}
         <Route path="/user/*" element={<UserPageLayout />} />
         <Route path="/login" element={<Login />} />

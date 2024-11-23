@@ -1,0 +1,120 @@
+.blog-container {
+    padding: 20px;
+  }
+  
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: #333;
+    color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .blog-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .blog-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .blog-content {
+    padding: 15px;
+  }
+  
+  .blog-content h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .blog-date {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #ffa500;
+  }
+  
+  .blog-snippet {
+    font-size: 14px;
+    color: #bbb;
+    margin: 10px 0;
+  }
+  
+  .read-more {
+    font-size: 14px;
+    color: #1e90ff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  /* Popup styles */
+  .blog-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: #fff;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .blog-popup-content {
+    position: relative;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  .blog-popup-body {
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  

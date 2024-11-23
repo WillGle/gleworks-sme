@@ -48,7 +48,7 @@ const Header: React.FC = () => {
         {/* Navigation Links */}
         <nav className="navigation">
           <Link to="/about">About</Link>
-          <Link to="/blog">Blogs</Link>
+          {/* <Link to="/blog">Blogs</Link> */}
           <Link to="/service">Service</Link>
           <Link to="/archive">Archive</Link>
         </nav>
@@ -63,19 +63,7 @@ const Header: React.FC = () => {
                 {user.firstName} {user.lastName}
               </Link>
               {/* Nút Logout */}
-              <button
-                onClick={handleLogout}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "blue",
-                  cursor: "pointer",
-                  textDecoration: "underline",
-                  marginLeft: "10px",
-                }}
-              >
-                Logout
-              </button>
+              <button onClick={handleLogout}>Logout</button>
             </>
           ) : (
             <Link to="/login">

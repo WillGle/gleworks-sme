@@ -51,8 +51,46 @@ const Checkout: React.FC = () => {
     }));
   };
 
-  const handleProceed = () => {
-    alert("Order confirmed successfully! Thank you for your purchase.");
+  const handleProceed = async () => {
+    if (!orderData || !userInfo) {
+      alert("Order data or user information is missing.");
+      return;
+    }
+
+    const orderPayload = {
+      userId: userInfo.id, // Assuming userInfo contains the user's ID
+      serviceId: 1, // Assuming you have this in orderData
+      totalCost: orderData.total, // Total cost from orderData
+      status: "Pending", // Default status
+      paymentStatus: "Pending", // Default payment status
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/orders/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderPayload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const createdOrder = await response.json();
+      console.log("Created Order:", createdOrder);
+      alert("Order created successfully!");
+
+      // Clear session storage
+      sessionStorage.clear(); // This will remove all items from session storage
+
+      // Optionally, you can navigate to another page or perform additional actions here
+      navigate("/service/switch-modding");
+    } catch (error) {
+      console.error("Error saving order:", error);
+      alert("Failed to save order. Please try again.");
+    }
   };
 
   return (

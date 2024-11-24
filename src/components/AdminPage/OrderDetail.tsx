@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./OrderDetail.css";
 
 const paymentStatusOptions = ["Paid", "Pending", "Canceled"];
@@ -11,37 +12,47 @@ const orderStatusOptions = [
 ];
 
 const OrderDetail: React.FC = () => {
-  // Mock data for order detail
-  const [orderData, setOrderData] = useState({
-    orderId: "123456",
-    customer: "John Doe",
-    email: "john.doe@example.com",
-    phone: "0123456789",
-    address: "123 ABC Street, City, Country",
-    orderDate: "DD/MM/YYYY",
-    switchesName: "Cherry MX Red",
-    withSwitches: "Yes, I have a Switch Mod order",
-    keyboardKitName: "Custom Keyboard Kit",
-    layout: "60 - 65%",
-    stabilizerName: "Durock V2",
-    switchQuantity: "70",
-    plateChoice: "Aluminum",
-    desoldering: "60 - 65%",
-    providingKeycap: "Yes",
-    assembly: "Less than 60 %",
-    total: "xxx.xxx VND",
-    paymentStatus: "Pending",
-    orderStatus: "Ongoing",
-  });
+  const { orderId } = useParams<{ orderId: string }>();
+  const [orderData, setOrderData] = useState<any>(null);
+
+  // Fetch order details from API
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      if (!orderId) {
+        console.error("Order ID is undefined");
+        return; // Ngừng thực hiện nếu orderId không hợp lệ
+      }
+      try {
+        const response = await fetch(`http://localhost:3000/order-details/${orderId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch order details");
+        }
+        const data = await response.json();
+        console.log("Fetched Order Data:", data);
+        setOrderData(data);
+        console.log("Order Data State:", orderData);
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [orderId]);
 
   // Handlers for updating the dropdown values
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setOrderData((prev) => ({
+    setOrderData((prev: any) => ({
       ...prev,
       [name]: value,
     }));
   };
+
+  if (!orderData) {
+    return <div>Loading...</div>;
+  }
+
+  console.log("Current Order Data:", orderData);
 
   return (
     <div className="order-detail-container">
@@ -53,7 +64,7 @@ const OrderDetail: React.FC = () => {
             <label>Order Status</label>
             <select
               name="orderStatus"
-              value={orderData.orderStatus}
+              value={orderData[0].Order?.status || ''}
               onChange={handleStatusChange}
             >
               {orderStatusOptions.map((status) => (
@@ -67,7 +78,7 @@ const OrderDetail: React.FC = () => {
             <label>Payment Status</label>
             <select
               name="paymentStatus"
-              value={orderData.paymentStatus}
+              value={orderData[0]?.Order?.paymentStatus || ''}
               onChange={handleStatusChange}
             >
               {paymentStatusOptions.map((status) => (
@@ -89,27 +100,31 @@ const OrderDetail: React.FC = () => {
       <div className="customer-info">
         <div className="order-form-group">
           <label>Order ID</label>
-          <p>{orderData.orderId}</p>
+          <p>{orderData[0]?.orderId || 'N/A'}</p>
         </div>
         <div className="order-form-group">
           <label>Customer</label>
-          <p>{orderData.customer}</p>
+          <p>{`${orderData[0]?.Order?.User?.firstName || 'N/A'} ${orderData[0]?.Order?.User?.lastName || 'N/A'}`}</p>
         </div>
         <div className="order-form-group">
           <label>Mail</label>
-          <p>{orderData.email}</p>
+          <p>{orderData[0]?.Order?.User?.email || 'N/A'}</p>
         </div>
         <div className="order-form-group">
           <label>Tel</label>
-          <p>{orderData.phone}</p>
+          <p>{orderData[0]?.Order?.telephone || 'N/A'}</p>
         </div>
         <div className="order-form-group">
           <label>Address</label>
-          <p>{orderData.address}</p>
+          <p>{orderData[0]?.Order?.address || 'N/A'}</p>
         </div>
         <div className="order-form-group">
           <label>Order Date</label>
-          <p>{orderData.orderDate}</p>
+          <p>
+            {orderData[0]?.Order?.createdAt 
+              ? new Date(orderData[0].Order.createdAt).toLocaleDateString() 
+              : 'N/A'}
+          </p>
         </div>
       </div>
 
@@ -117,52 +132,18 @@ const OrderDetail: React.FC = () => {
 
       {/* Order Information */}
       <div className="order-info">
-        <div className="order-form-group">
-          <label>Switches</label>
-          <p>{orderData.switchesName}</p>
-        </div>
-        <div className="order-form-group">
-          <label>With Switches</label>
-          <p>{orderData.withSwitches}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Keyboard Kit Name</label>
-          <p>{orderData.keyboardKitName}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Layout</label>
-          <p>{orderData.layout}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Stabilizer Name</label>
-          <p>{orderData.stabilizerName}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Switch Quantity</label>
-          <p>{orderData.switchQuantity}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Plate Choice</label>
-          <p>{orderData.plateChoice}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Desoldering</label>
-          <p>{orderData.desoldering}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Are You Providing Keycap?</label>
-          <p>{orderData.providingKeycap}</p>
-        </div>
-        <div className="order-form-group">
-          <label>Assembly</label>
-          <p>{orderData.assembly}</p>
-        </div>
+        {Array.isArray(orderData) && orderData.map((field: { id: string; fieldName: string; fieldValue: string }) => (
+          <div className="order-form-group" key={field.id}>
+            <label>{field.fieldName}</label>
+            <p>{field.fieldValue || 'N/A'}</p>
+          </div>
+        ))}
       </div>
 
       {/* Total Section */}
       <div className="admin-order-total-section">
         <h2>Total</h2>
-        <p>{orderData.total}</p>
+        <p>{orderData[0]?.Order?.totalCost ? `${orderData[0].Order.totalCost.toLocaleString()} VND` : "N/A"}</p>
       </div>
     </div>
   );

@@ -7,6 +7,11 @@ const CheckoutBuild: React.FC = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
   const [orderDate, setOrderDate] = useState<string>("");
+  const [showQRCodePopup, setShowQRCodePopup] = useState<boolean>(false);
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [fullAddress, setFullAddress] = useState<string>("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -18,19 +23,19 @@ const CheckoutBuild: React.FC = () => {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:3000/auth/user/${userId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`http://localhost:3000/auth/user/${userId}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
 
         if (response.ok) {
           const data = await response.json();
           setUserInfo(data);
+          setPhone(data.phoneNumber || "");
+          setAddress(data.address || "");
+          setCity(data.city || "");
         } else {
           console.error("Failed to fetch user info:", response.statusText);
         }
@@ -48,22 +53,38 @@ const CheckoutBuild: React.FC = () => {
 
     // Set order date to current date in DD/MM/YYYY format
     const currentDate = new Date();
-    const formattedDate = `${String(currentDate.getDate()).padStart(
-      2,
-      "0"
-    )}/${String(currentDate.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}/${currentDate.getFullYear()}`;
+    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
     setOrderDate(formattedDate);
   }, []);
 
+  useEffect(() => {
+    const combinedAddress = `${address}${city ? `, ${city}` : ""}`;
+    setFullAddress(combinedAddress);
+  }, [address, city]);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setUserInfo((prevUserInfo: any) => ({
-      ...prevUserInfo,
-      [name]: value,
-    }));
+    if (name === "phone") {
+      setPhone(value);
+    } else if (name === "address") {
+      setAddress(value);
+    } else if (name === "city") {
+      setCity(value);
+    } else {
+      setUserInfo((prevUserInfo: any) => ({
+        ...prevUserInfo,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleFullAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFullAddress(value);
+
+    const [newAddress, newCity] = value.split(',').map(part => part.trim());
+    setAddress(newAddress || "");
+    setCity(newCity || "");
   };
 
   const handleProceed = async () => {
@@ -78,7 +99,11 @@ const CheckoutBuild: React.FC = () => {
       totalCost: orderData.total,
       status: "Pending",
       paymentStatus: "Pending",
+      address: `${address}${city ? `, ${city}` : ""}`,
+      telephone: phone,
     };
+
+    console.log("Order Payload:", orderPayload);
 
     try {
       const response = await fetch("http://localhost:3000/orders/", {
@@ -94,16 +119,16 @@ const CheckoutBuild: React.FC = () => {
       }
 
       const createdOrder = await response.json();
+      console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
-      // Save order details to the database
       const orderDetailPayload = {
         orderId: createdOrder.orderId,
         fieldName: "Keyboard Kit",
         fieldValue: orderData.keyboardKitName,
       };
 
-      await fetch("http://localhost:3000/order-details/", {
+      const detailResponse = await fetch("http://localhost:3000/order-details/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +136,10 @@ const CheckoutBuild: React.FC = () => {
         body: JSON.stringify(orderDetailPayload),
       });
 
-      // Additional fields to save
+      if (!detailResponse.ok) {
+        throw new Error("Failed to save order details");
+      }
+
       const additionalDetails = [
         { fieldName: "Switches", fieldValue: orderData.switchesName },
         { fieldName: "With Switches", fieldValue: orderData.withSwitches },
@@ -120,15 +148,9 @@ const CheckoutBuild: React.FC = () => {
         { fieldName: "Switch Quantity", fieldValue: orderData.switchQuantity },
         { fieldName: "Plate Choice", fieldValue: orderData.plateChoice },
         { fieldName: "Desoldering", fieldValue: orderData.desoldering },
-        {
-          fieldName: "Are You Providing Keycap?",
-          fieldValue: orderData.providingKeycap,
-        },
+        { fieldName: "Are You Providing Keycap?", fieldValue: orderData.providingKeycap },
         { fieldName: "Assembly", fieldValue: orderData.assembly },
-        {
-          fieldName: "Additional Notes",
-          fieldValue: orderData.additionalNotes,
-        },
+        { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
       ];
 
       for (const detail of additionalDetails) {
@@ -138,21 +160,32 @@ const CheckoutBuild: React.FC = () => {
           fieldValue: detail.fieldValue,
         };
 
-        await fetch("http://localhost:3000/order-details/", {
+        const detailResponse = await fetch("http://localhost:3000/order-details/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(detailPayload),
         });
+
+        if (!detailResponse.ok) {
+          throw new Error(`Failed to save ${detail.fieldName}`);
+        }
       }
 
       sessionStorage.clear();
-      navigate("/service/checkout-success"); // Navigate to a success page or similar
+
+      // Show QR Code Popup
+      setShowQRCodePopup(true);
     } catch (error) {
       console.error("Error saving order:", error);
       alert("Failed to save order. Please try again.");
     }
+  };
+
+  const handleCloseQRCodePopup = () => {
+    alert("Your payment will be processed later.");
+    navigate("/user/my-orders");
   };
 
   return (
@@ -161,51 +194,68 @@ const CheckoutBuild: React.FC = () => {
 
       {/* Editable Customer Information */}
       <div className="customer-info">
-        <div className="order-form-group">
-          <label>Customer</label>
-          <input
-            type="text"
-            name="customer"
-            className="input-field"
-            value={`${userInfo.firstName} ${userInfo.lastName}`}
-            onChange={handleInputChange}
-            readOnly
-          />
-        </div>
+        <h3>Customer Information</h3>
+        {userInfo ? (
+          <>
+            <div className="form-group">
+              <label>Customer</label>
+              <input
+                type="text"
+                name="customer"
+                className="input-field"
+                value={`${userInfo.firstName} ${userInfo.lastName}`}
+                onChange={handleInputChange}
+                readOnly
+              />
+            </div>
 
-        <div className="order-form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            className="input-field"
-            value={userInfo.email}
-            onChange={handleInputChange}
-            readOnly
-          />
-        </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                className="input-field"
+                value={userInfo.email}
+                onChange={handleInputChange}
+                readOnly
+              />
+            </div>
 
-        <div className="order-form-group">
-          <label>Phone</label>
-          <input
-            type="tel"
-            name="phone"
-            className="input-field"
-            value={userInfo.phoneNumber}
-            onChange={handleInputChange}
-          />
-        </div>
+            <div className="form-group">
+              <label>Phone</label>
+              <input
+                type="tel"
+                name="phone"
+                className="input-field"
+                value={phone}
+                onChange={handleInputChange}
+              />
+            </div>
 
-        <div className="order-form-group">
-          <label>Address</label>
-          <input
-            type="text"
-            name="address"
-            className="input-field"
-            value={userInfo.address}
-            onChange={handleInputChange}
-          />
-        </div>
+            <div className="form-group">
+              <label>Address</label>
+              <input
+                type="text"
+                name="fullAddress"
+                className="input-field"
+                value={fullAddress}
+                onChange={handleFullAddressChange}
+              />
+            </div>
+            <div className="form-group">
+              <label>Order Date</label>
+              <input
+                type="text"
+                name="orderDate"
+                className="input-field"
+                value={orderDate}
+                readOnly
+              />
+            </div>
+          </>
+        ) : (
+          <p>Loading user information...</p>
+        )}
       </div>
 
       <hr />
@@ -293,6 +343,16 @@ const CheckoutBuild: React.FC = () => {
           Proceed
         </button>
       </div>
+
+      {/* QR Code Popup */}
+      {showQRCodePopup && (
+        <div className="qr-popup">
+          <div className="qr-popup-content">
+            <img src="https://i.imgur.com/TRhD6Kv.png" alt="QR Code" style={{ width: '256px', height: '256px' }} />
+            <button onClick={handleCloseQRCodePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

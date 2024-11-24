@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Switch.css";
+import "./BuildAndSwitch.css";
 
 const Switch: React.FC = () => {
   const navigate = useNavigate();
@@ -40,11 +40,13 @@ const Switch: React.FC = () => {
         setServiceOptions(data.options); // Set the options in state
 
         // Initialize moddingPreferences based on fetched options
-        const moddingPreferences = data.options.reduce((acc: any, option: any) => {
+        const moddingPreferences = data.options.reduce(
+          (acc: any, option: any) => {
             acc[option.optionName.toLowerCase()] = false; // Chỉ chuyển thành chữ thường
             return acc;
-          }, {});
-          
+          },
+          {}
+        );
 
         // Retrieve saved form data from session storage
         const savedData = sessionStorage.getItem("switchModdingData");
@@ -169,7 +171,10 @@ const Switch: React.FC = () => {
     };
 
     // Save data to session storage
-    sessionStorage.setItem("switchModdingData", JSON.stringify(switchModdingData));
+    sessionStorage.setItem(
+      "switchModdingData",
+      JSON.stringify(switchModdingData)
+    );
 
     alert("Order saved to session storage!");
 

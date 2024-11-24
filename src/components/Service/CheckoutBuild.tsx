@@ -18,12 +18,15 @@ const CheckoutBuild: React.FC = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:3000/auth/user/${userId}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3000/auth/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
@@ -45,7 +48,13 @@ const CheckoutBuild: React.FC = () => {
 
     // Set order date to current date in DD/MM/YYYY format
     const currentDate = new Date();
-    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
+    const formattedDate = `${String(currentDate.getDate()).padStart(
+      2,
+      "0"
+    )}/${String(currentDate.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${currentDate.getFullYear()}`;
     setOrderDate(formattedDate);
   }, []);
 
@@ -111,9 +120,15 @@ const CheckoutBuild: React.FC = () => {
         { fieldName: "Switch Quantity", fieldValue: orderData.switchQuantity },
         { fieldName: "Plate Choice", fieldValue: orderData.plateChoice },
         { fieldName: "Desoldering", fieldValue: orderData.desoldering },
-        { fieldName: "Are You Providing Keycap?", fieldValue: orderData.providingKeycap },
+        {
+          fieldName: "Are You Providing Keycap?",
+          fieldValue: orderData.providingKeycap,
+        },
         { fieldName: "Assembly", fieldValue: orderData.assembly },
-        { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
+        {
+          fieldName: "Additional Notes",
+          fieldValue: orderData.additionalNotes,
+        },
       ];
 
       for (const detail of additionalDetails) {
@@ -146,68 +161,51 @@ const CheckoutBuild: React.FC = () => {
 
       {/* Editable Customer Information */}
       <div className="customer-info">
-        <h3>Customer Information</h3>
-        {userInfo ? (
-          <>
-            <div className="form-group">
-              <label>Customer</label>
-              <input
-                type="text"
-                name="customer"
-                className="input-field"
-                value={`${userInfo.firstName} ${userInfo.lastName}`}
-                onChange={handleInputChange}
-                readOnly
-              />
-            </div>
+        <div className="order-form-group">
+          <label>Customer</label>
+          <input
+            type="text"
+            name="customer"
+            className="input-field"
+            value={`${userInfo.firstName} ${userInfo.lastName}`}
+            onChange={handleInputChange}
+            readOnly
+          />
+        </div>
 
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                className="input-field"
-                value={userInfo.email}
-                onChange={handleInputChange}
-                readOnly
-              />
-            </div>
+        <div className="order-form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            className="input-field"
+            value={userInfo.email}
+            onChange={handleInputChange}
+            readOnly
+          />
+        </div>
 
-            <div className="form-group">
-              <label>Phone</label>
-              <input
-                type="tel"
-                name="phone"
-                className="input-field"
-                value={userInfo.phoneNumber}
-                onChange={handleInputChange}
-              />
-            </div>
+        <div className="order-form-group">
+          <label>Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            className="input-field"
+            value={userInfo.phoneNumber}
+            onChange={handleInputChange}
+          />
+        </div>
 
-            <div className="form-group">
-              <label>Address</label>
-              <input
-                type="text"
-                name="address"
-                className="input-field"
-                value={userInfo.address}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Order Date</label>
-              <input
-                type="text"
-                name="orderDate"
-                className="input-field"
-                value={orderDate}
-                readOnly
-              />
-            </div>
-          </>
-        ) : (
-          <p>Loading user information...</p>
-        )}
+        <div className="order-form-group">
+          <label>Address</label>
+          <input
+            type="text"
+            name="address"
+            className="input-field"
+            value={userInfo.address}
+            onChange={handleInputChange}
+          />
+        </div>
       </div>
 
       <hr />

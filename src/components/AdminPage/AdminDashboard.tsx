@@ -2,32 +2,28 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminDashboard.css";
 
-// Mock API function to simulate fetching orders from the database
+// Fetch orders from the backend
 const fetchOrders = async () => {
-  return [
-    {
-      id: 1,
-      status: "Today",
-      orders: "Keyboard Building",
-      date: "20-11-2024",
-      address: "ABC Street C, Sai Gon, Viet Nam",
-      name: "John Doe",
-      value: 500000,
-      paymentStatus: "Paid",
-      orderStatus: "Finished",
-    },
-    { id: 2, status: "Pending", name: "Jane Smith", value: 200000 },
-    { id: 3, status: "Ongoing", name: "Mike Ross", value: 350000 },
-    { id: 4, status: "Today", name: "Chris Adams", value: 450000 },
-    { id: 5, status: "Pending", name: "Sarah Connor", value: 300000 },
-    { id: 6, status: "Ongoing", name: "Kate Winslet", value: 400000 },
-  ];
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch orders");
+  }
+  return response.json();
+};
+
+// Fetch all orders from the backend
+const fetchAllOrders = async () => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/all`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch all orders");
+  }
+  return response.json();
 };
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<
-    { id: number; status: string; name: string; value: number }[]
+    { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }[]
   >([]);
   const [overview, setOverview] = useState({
     todayOrder: 0,
@@ -37,31 +33,35 @@ const AdminDashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    // Fetch orders and update overview data
-    const getOrders = async () => {
-      const data = await fetchOrders();
-      setOrders(data);
+    // Fetch all orders and update overview data
+    const getAllOrders = async () => {
+      try {
+        const data = await fetchAllOrders();
+        setOrders(data);
 
-      // Calculate order counts based on statuses
-      const todayCount = data.filter(
-        (order) => order.status === "Today"
-      ).length;
-      const pendingCount = data.filter(
-        (order) => order.status === "Pending"
-      ).length;
-      const ongoingCount = data.filter(
-        (order) => order.status === "Ongoing"
-      ).length;
+        // Calculate order counts based on statuses
+        const todayCount = data.filter(
+          (order) => new Date(order.createdAt).toDateString() === new Date().toDateString()
+        ).length;
+        const pendingCount = data.filter(
+          (order) => order.status === "Pending"
+        ).length;
+        const ongoingCount = data.filter(
+          (order) => order.status === "Ongoing"
+        ).length;
 
-      setOverview({
-        todayOrder: todayCount,
-        pendingOrder: pendingCount,
-        ongoingOrder: ongoingCount,
-        totalOrder: data.length,
-      });
+        setOverview({
+          todayOrder: todayCount,
+          pendingOrder: pendingCount,
+          ongoingOrder: ongoingCount,
+          totalOrder: data.length,
+        });
+      } catch (error) {
+        console.error("Error fetching all orders:", error);
+      }
     };
 
-    getOrders();
+    getAllOrders();
   }, []);
 
   const handleCardClick = (status: string) => {
@@ -109,24 +109,24 @@ const AdminDashboard: React.FC = () => {
         <div className="client-table">
           <div className="table-header">
             <div>ID</div>
-            <div>Name</div>
-            <div>Orders</div>
+            <div>User ID</div>
+            <div>Service ID</div>
             <div>Date</div>
             <div>Address</div>
             <div>Value</div>
             <div>Payment Status</div>
             <div>Order Status</div>
           </div>
-          {orders.map((order: any, index) => (
+          {orders.map((order, index) => (
             <div key={index} className="table-row">
-              <div>{order.id}</div>
-              <div>{order.name}</div>
-              <div>{order.orders}</div>
-              <div>{order.date}</div>
+              <div>{order.orderId}</div>
+              <div>{order.userId}</div>
+              <div>{order.serviceId}</div>
+              <div>{new Date(order.createdAt).toLocaleDateString()}</div>
               <div>{order.address}</div>
-              <div>{order.value.toLocaleString()} VND</div>
+              <div>{order.totalCost.toLocaleString()} VND</div>
               <div>{order.paymentStatus}</div>
-              <div>{order.orderStatus}</div>
+              <div>{order.status}</div>
             </div>
           ))}
         </div>

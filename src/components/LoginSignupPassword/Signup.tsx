@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios"; // Import Axios for HTTP requests
 import PhoneInput from "react-phone-input-2";
@@ -6,6 +6,7 @@ import "react-phone-input-2/lib/style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Signup.css";
+import { DotLottie } from '@lottiefiles/dotlottie-web'; // Import DotLottie
 
 const Signup: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -19,6 +20,8 @@ const Signup: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  const canvasRef = useRef<HTMLCanvasElement>(null); // Thêm ref cho canvas
 
   const validateEmail = (email: string): boolean => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -77,6 +80,23 @@ const Signup: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  // useEffect to handle loading animation
+  useEffect(() => {
+    if (isLoading && canvasRef.current) {
+      const dotLottie = new DotLottie({
+        autoplay: true,
+        loop: true,
+        canvas: canvasRef.current,
+        src: "https://lottie.host/d558d016-47eb-4dee-841d-4c414066909e/neo2e3YEP5.lottie",
+        speed: 2.5,
+      });
+
+      return () => {
+        dotLottie.destroy(); // Dọn dẹp khi component unmount
+      };
+    }
+  }, [isLoading]);
 
   return (
     <div className="new-password-container">
@@ -167,6 +187,13 @@ const Signup: React.FC = () => {
           {isLoading ? "Submitting..." : "Sign Up"}
         </button>
       </div>
+
+      {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
+      {isLoading && (
+        <div id="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <canvas ref={canvasRef} id="dotlottie-canvas" style={{ width: '300px', height: '300px' }}></canvas>
+        </div>
+      )}
     </div>
   );
 };

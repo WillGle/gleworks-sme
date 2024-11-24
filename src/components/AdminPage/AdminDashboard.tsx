@@ -4,18 +4,9 @@ import "./AdminDashboard.css";
 
 // Fetch orders from the backend
 const fetchOrders = async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch orders");
-  }
-  return response.json();
-};
-
-// Fetch all orders from the backend
-const fetchAllOrders = async () => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/all`);
   if (!response.ok) {
-    throw new Error("Failed to fetch all orders");
+    throw new Error("Failed to fetch orders");
   }
   return response.json();
 };
@@ -33,21 +24,28 @@ const AdminDashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    // Fetch all orders and update overview data
-    const getAllOrders = async () => {
+    // Fetch orders and update overview data
+    const getOrders = async () => {
       try {
-        const data = await fetchAllOrders();
+        const data = await fetchOrders();
         setOrders(data);
+        console.log(data);
 
         // Calculate order counts based on statuses
         const todayCount = data.filter(
-          (order) => new Date(order.createdAt).toDateString() === new Date().toDateString()
+          (order: { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }) => {
+            const orderDate = new Date(order.createdAt);
+            console.log(orderDate);
+            return orderDate.toDateString() === new Date().toDateString();
+          }
         ).length;
+
         const pendingCount = data.filter(
-          (order) => order.status === "Pending"
+          (order: { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }) => order.status === "Pending"
         ).length;
+
         const ongoingCount = data.filter(
-          (order) => order.status === "Ongoing"
+          (order: { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }) => order.status === "Ongoing"
         ).length;
 
         setOverview({
@@ -57,11 +55,11 @@ const AdminDashboard: React.FC = () => {
           totalOrder: data.length,
         });
       } catch (error) {
-        console.error("Error fetching all orders:", error);
+        console.error("Error fetching orders:", error);
       }
     };
 
-    getAllOrders();
+    getOrders();
   }, []);
 
   const handleCardClick = (status: string) => {

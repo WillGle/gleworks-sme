@@ -30,22 +30,87 @@ const OrderDetail: React.FC = () => {
         const data = await response.json();
         console.log("Fetched Order Data:", data);
         setOrderData(data);
-        console.log("Order Data State:", orderData);
+        // Lưu dữ liệu vào sessionStorage
+        sessionStorage.setItem(`order_${orderId}`, JSON.stringify(data));
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
     };
 
-    fetchOrderDetails();
+    // Kiểm tra sessionStorage để lấy dữ liệu đã lưu
+    const savedOrderData = sessionStorage.getItem(`order_${orderId}`);
+    if (savedOrderData) {
+      setOrderData(JSON.parse(savedOrderData));
+    } else {
+      fetchOrderDetails();
+    }
   }, [orderId]);
 
   // Handlers for updating the dropdown values
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setOrderData((prev: any) => ({
-      ...prev,
-      [name]: value,
-    }));
+  
+    setOrderData((prev: any) => {
+      const updatedOrderData = prev.map((item: any, index: number) => {
+        if (index === 0) {
+          return {
+            ...item,
+            Order: {
+              ...item.Order,
+              [name]: value, // Cập nhật trường status hoặc paymentStatus
+            },
+          };
+        }
+        return item; // Giữ nguyên các phần tử khác
+      });
+  
+      // Lưu vào sessionStorage
+      sessionStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrderData));
+      return updatedOrderData;
+    });
+  };
+  
+
+  const handleSubmit = async () => {
+    if (!orderData) return;
+
+    try {
+      const response = await fetch(`http://localhost:3000/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: orderData[0].Order.status,
+          paymentStatus: orderData[0].Order.paymentStatus,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update order status");
+      }
+
+      const updatedOrder = await response.json();
+      console.log("Updated Order:", updatedOrder);
+      // Cập nhật lại orderData với dữ liệu mới
+      setOrderData((prev: any) => {
+        const newOrderData = [...prev];
+        newOrderData[0] = {
+          ...newOrderData[0],
+          Order: {
+            ...newOrderData[0].Order,
+            status: updatedOrder.status, // Cập nhật trạng thái
+            paymentStatus: updatedOrder.paymentStatus, // Cập nhật trạng thái thanh toán
+          },
+        };
+        return newOrderData;
+      });
+
+      // Xóa dữ liệu trong sessionStorage
+      sessionStorage.removeItem(`order_${orderId}`);
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
   };
 
   if (!orderData) {
@@ -63,7 +128,7 @@ const OrderDetail: React.FC = () => {
           <div className="status-form-group">
             <label>Order Status</label>
             <select
-              name="orderStatus"
+              name="status" // Đặt tên cho trường status
               value={orderData[0].Order?.status || ''}
               onChange={handleStatusChange}
             >
@@ -77,7 +142,7 @@ const OrderDetail: React.FC = () => {
           <div className="status-form-group">
             <label>Payment Status</label>
             <select
-              name="paymentStatus"
+              name="paymentStatus" // Đặt tên cho trường paymentStatus
               value={orderData[0]?.Order?.paymentStatus || ''}
               onChange={handleStatusChange}
             >
@@ -89,7 +154,7 @@ const OrderDetail: React.FC = () => {
             </select>
           </div>
           <div className="button-status-form">
-            <button type="submit" className="submit-btn">
+            <button type="button" className="submit-btn" onClick={handleSubmit}>
               Submit
             </button>
           </div>

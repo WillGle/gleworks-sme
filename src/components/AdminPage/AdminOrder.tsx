@@ -28,6 +28,7 @@ interface Order {
 
 const AdminOrder: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [orders, setOrders] = useState<Order[]>([]); // State để lưu trữ tất cả đơn hàng
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const navigate = useNavigate(); // Use navigate for routing
 
@@ -51,7 +52,8 @@ const AdminOrder: React.FC = () => {
           service: order.Service, // Lấy thông tin dịch vụ từ đối tượng Service
         }));
 
-        setFilteredOrders(transformedOrders); // Cập nhật state với dữ liệu nhận được
+        setOrders(transformedOrders); // Cập nhật state với dữ liệu nhận được
+        setFilteredOrders(transformedOrders); // Cập nhật filteredOrders với dữ liệu ban đầu
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -65,7 +67,7 @@ const AdminOrder: React.FC = () => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filtered = filteredOrders.filter(
+    const filtered = orders.filter( // Sử dụng orders thay vì filteredOrders
       (order) =>
         order.orderId.toString().toLowerCase().includes(term) ||
         (order.user && order.user.firstName.toLowerCase().includes(term)) || // Kiểm tra user trước khi truy cập
@@ -77,20 +79,26 @@ const AdminOrder: React.FC = () => {
   };
 
   const handleFilterByPaymentStatus = (status: string) => {
-    const filtered = filteredOrders.filter(
+    const filtered = orders.filter( // Sử dụng orders thay vì filteredOrders
       (order) => order.paymentStatus === status
     );
     setFilteredOrders(filtered);
   };
 
   const handleFilterByOrderStatus = (status: string) => {
-    const filtered = filteredOrders.filter((order) => order.status === status);
+    const filtered = orders.filter((order) => order.status === status);
     setFilteredOrders(filtered);
   };
 
   // Navigate to order detail page
   const handleRowClick = (orderId: string) => {
     navigate(`order-detail/${orderId}`); // Pass orderId to the route
+  };
+
+  // Reset filter and show all orders
+  const handleReset = () => {
+    setFilteredOrders(orders); // Đặt lại filteredOrders về danh sách gốc
+    setSearchTerm(""); // Xóa từ khóa tìm kiếm
   };
 
   return (
@@ -112,7 +120,7 @@ const AdminOrder: React.FC = () => {
       <div className="filter-container">
         <div className="filter-group">
           <h3>Orders</h3>
-          <button onClick={() => setFilteredOrders([])}>Reset</button>
+          <button onClick={handleReset}>Reset</button> {/* Sử dụng handleReset */}
         </div>
 
         <div className="filter-group">
@@ -149,7 +157,7 @@ const AdminOrder: React.FC = () => {
           <div className="table-header">
             <div>ID</div>
             <div>Client Name</div>
-            <div>Service</div>
+            <div>Order</div>
             <div>Date</div>
             <div>Address</div>
             <div>Value</div>

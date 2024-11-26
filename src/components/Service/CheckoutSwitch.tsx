@@ -6,6 +6,12 @@ const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<any>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const [orderDate, setOrderDate] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [showQRCodePopup, setShowQRCodePopup] = useState<boolean>(false);
+  const [fullAddress, setFullAddress] = useState<string>("");
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -27,6 +33,9 @@ const Checkout: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setUserInfo(data);
+          setPhone(data.phoneNumber || "");
+          setAddress(data.address || "");
+          setCity(data.city || "");
         } else {
           console.error("Failed to fetch user info:", response.statusText);
         }
@@ -41,14 +50,41 @@ const Checkout: React.FC = () => {
     if (savedOrderData) {
       setOrderData(JSON.parse(savedOrderData));
     }
+
+    const currentDate = new Date();
+    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
+    setOrderDate(formattedDate);
   }, []);
+
+  useEffect(() => {
+    const combinedAddress = `${address}${city ? `, ${city}` : ""}`;
+    setFullAddress(combinedAddress);
+  }, [address, city]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setUserInfo((prevUserInfo: any) => ({
-      ...prevUserInfo,
-      [name]: value,
-    }));
+    if (name === "phone") {
+      setPhone(value);
+    } else if (name === "address") {
+      setAddress(value);
+    } else if (name === "city") {
+      setCity(value);
+    } else {
+      setUserInfo((prevUserInfo: any) => ({
+        ...prevUserInfo,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleFullAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFullAddress(value);
+
+    // Tách giá trị thành address và city
+    const [newAddress, newCity] = value.split(',').map(part => part.trim());
+    setAddress(newAddress || "");
+    setCity(newCity || "");
   };
 
   const handleProceed = async () => {
@@ -58,12 +94,16 @@ const Checkout: React.FC = () => {
     }
 
     const orderPayload = {
-      userId: userInfo.id, // Assuming userInfo contains the user's ID
-      serviceId: 1, // Assuming you have this in orderData
-      totalCost: orderData.total, // Total cost from orderData
-      status: "Pending", // Default status
-      paymentStatus: "Pending", // Default payment status
+      userId: userInfo.id,
+      serviceId: 1,
+      totalCost: orderData.total,
+      status: "Pending",
+      paymentStatus: "Pending",
+      address: `${address}${city ? `, ${city}` : ""}`,
+      telephone: phone,
     };
+
+    console.log("Order Payload:", orderPayload);
 
     try {
       const response = await fetch("http://localhost:3000/orders/", {
@@ -82,22 +122,76 @@ const Checkout: React.FC = () => {
       console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
-      // Clear session storage
-      sessionStorage.clear(); // This will remove all items from session storage
+      const orderDetailPayload = {
+        orderId: createdOrder.orderId,
+        fieldName: "Switches",
+        fieldValue: orderData.switchName,
+      };
 
-      // Optionally, you can navigate to another page or perform additional actions here
-      navigate("/service/switch-modding");
+      const detailResponse = await fetch("http://localhost:3000/order-details/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderDetailPayload),
+      });
+
+      if (!detailResponse.ok) {
+        throw new Error("Failed to save order details");
+      }
+
+      const additionalDetails = [
+        { fieldName: "Amount", fieldValue: orderData.amount.toString() },
+        { 
+          fieldName: "Switch Modding Preference", 
+          fieldValue: Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).length > 0
+            ? Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).join(", ") 
+            : null
+        },
+        { fieldName: "My Spring Preference", fieldValue: orderData.springPreference },
+        { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
+      ];
+
+      for (const detail of additionalDetails) {
+        const detailPayload = {
+          orderId: createdOrder.orderId,
+          fieldName: detail.fieldName,
+          fieldValue: detail.fieldValue,
+        };
+
+        const detailResponse = await fetch("http://localhost:3000/order-details/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(detailPayload),
+        });
+
+        if (!detailResponse.ok) {
+          throw new Error(`Failed to save ${detail.fieldName}`);
+        }
+      }
+
+      sessionStorage.clear();
+
+    //   navigate("/service/switch-modding");
+
+      setShowQRCodePopup(true);
     } catch (error) {
       console.error("Error saving order:", error);
       alert("Failed to save order. Please try again.");
     }
   };
 
+  const handleCloseQRCodePopup = () => {
+    alert("Your payment will be processed later.");
+    navigate("/user/my-orders");
+  };
+
   return (
     <div className="checkout-container">
       <h1>Checkout</h1>
 
-      {/* Editable Customer Information */}
       <div className="customer-info">
         <h3>Customer Information</h3>
         {userInfo ? (
@@ -132,7 +226,7 @@ const Checkout: React.FC = () => {
                 type="tel"
                 name="phone"
                 className="input-field"
-                value={userInfo.phoneNumber}
+                value={phone}
                 onChange={handleInputChange}
               />
             </div>
@@ -141,12 +235,24 @@ const Checkout: React.FC = () => {
               <label>Address</label>
               <input
                 type="text"
-                name="address"
+                name="fullAddress"
                 className="input-field"
-                value={userInfo.address}
-                onChange={handleInputChange}
+                value={fullAddress}
+                onChange={handleFullAddressChange}
               />
             </div>
+
+            <div className="form-group">
+              <label>Order Date</label>
+              <input
+                type="text"
+                name="orderDate"
+                className="input-field"
+                value={orderDate}
+                readOnly
+              />
+            </div>
+
           </>
         ) : (
           <p>Loading user information...</p>
@@ -155,7 +261,6 @@ const Checkout: React.FC = () => {
 
       <hr />
 
-      {/* Non-editable Order Details */}
       <div className="order-details">
         <div className="form-group">
           <label>Switches</label>
@@ -185,13 +290,11 @@ const Checkout: React.FC = () => {
 
       <hr />
 
-      {/* Total Section */}
       <div className="checkout-total-section">
         <h2>TOTAL</h2>
         <p>{orderData ? orderData.total.toLocaleString() : "Loading..."} VND</p>
       </div>
 
-      {/* Buttons */}
       <div className="button-group">
         <button
           type="button"
@@ -208,9 +311,18 @@ const Checkout: React.FC = () => {
           Proceed
         </button>
       </div>
+
+      {/* QR Code Popup */}
+      {showQRCodePopup && (
+        <div className="qr-popup">
+          <div className="qr-popup-content">
+            <img src="https://i.imgur.com/TRhD6Kv.png" alt="QR Code" style={{ width: '256px', height: '256px' }} />
+            <button onClick={handleCloseQRCodePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Checkout;
-

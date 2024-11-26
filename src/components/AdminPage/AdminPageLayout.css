@@ -18,7 +18,7 @@
   /* Main content area */
   .user-content {
     flex: 1; /* Fill remaining space */
-    padding: 20px;
+    padding: 40px;
     overflow-y: auto; /* Scroll if content exceeds height */
     background: #ffffff;
   }

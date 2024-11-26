@@ -1,82 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./AdminOrder.css";
 
-const mockOrders = [
-  {
-    id: "000001",
-    orderType: "Keyboard build",
-    date: "20/11/2024",
-    address: "ABC Street",
-    value: "350,000 VND",
-    paymentStatus: "Pending",
-    orderStatus: "Pending",
-  },
-  {
-    id: "000002",
-    orderType: "Keyboard build",
-    date: "20/11/2024",
-    address: "ABC Street",
-    value: "500,000 VND",
-    paymentStatus: "Canceled",
-    orderStatus: "Canceled",
-  },
-  {
-    id: "000003",
-    orderType: "Keyboard build",
-    date: "20/11/2024",
-    address: "ABC Street",
-    value: "450,000 VND",
-    paymentStatus: "Paid",
-    orderStatus: "Finished",
-  },
-  {
-    id: "000004",
-    orderType: "Keyboard build",
-    date: "20/11/2024",
-    address: "ABC Street",
-    value: "600,000 VND",
-    paymentStatus: "Paid",
-    orderStatus: "Ongoing",
-  },
-  {
-    id: "000005",
-    orderType: "Keyboard build",
-    date: "20/11/2024",
-    address: "ABC Street",
-    value: "250,000 VND",
-    paymentStatus: "Pending",
-    orderStatus: "Paused",
-  },
-];
+// Định nghĩa interface Service
+interface Service {
+  id: number;
+  name: string;
+}
 
-const AdminDashboard: React.FC = () => {
+// Định nghĩa interface User
+interface User {
+  firstName: string;
+  lastName: string;
+}
+
+// Định nghĩa interface Order
+interface Order {
+  orderId: string;
+  user?: User; // Đối tượng user có thể không tồn tại
+  service?: Service; // Đối tượng service có thể không tồn tại
+  createdAt: string;
+  address: string;
+  totalCost: number;
+  paymentStatus: string;
+  status: string;
+}
+
+const AdminOrder: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredOrders, setFilteredOrders] = useState(mockOrders);
+  const [orders, setOrders] = useState<Order[]>([]); // State để lưu trữ tất cả đơn hàng
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const navigate = useNavigate(); // Use navigate for routing
+
+  // Fetch dữ liệu từ API
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/all`);
+        const data: Order[] = await response.json();
+        console.log(data); // Kiểm tra cấu trúc dữ liệu trả về
+
+        // Ánh xạ dữ liệu để phù hợp với cấu trúc frontend
+        const transformedOrders = data.map((order: any) => ({
+          ...order,
+          createdAt: order.createdAt || order.created_at,
+          totalCost: order.totalCost || order.total_cost,
+          paymentStatus: order.paymentStatus || order.payment_status,
+          status: order.status || order.order_status,
+          address: order.address || order.address,
+          user: order.User, // Lấy thông tin người dùng từ đối tượng User
+          service: order.Service, // Lấy thông tin dịch vụ từ đối tượng Service
+        }));
+
+        setOrders(transformedOrders); // Cập nhật state với dữ liệu nhận được
+        setFilteredOrders(transformedOrders); // Cập nhật filteredOrders với dữ liệu ban đầu
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []); // Chạy một lần khi component mount
 
   // Filter handler
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filtered = mockOrders.filter(
+    const filtered = orders.filter( // Sử dụng orders thay vì filteredOrders
       (order) =>
-        order.id.toLowerCase().includes(term) ||
-        order.orderType.toLowerCase().includes(term) ||
+        order.orderId.toString().toLowerCase().includes(term) ||
+        (order.user && order.user.firstName.toLowerCase().includes(term)) || // Kiểm tra user trước khi truy cập
+        (order.user && order.user.lastName.toLowerCase().includes(term)) || // Kiểm tra user trước khi truy cập
+        (order.service && order.service.name.toLowerCase().includes(term)) || // Kiểm tra service trước khi truy cập
         order.address.toLowerCase().includes(term)
     );
     setFilteredOrders(filtered);
   };
 
   const handleFilterByPaymentStatus = (status: string) => {
-    const filtered = mockOrders.filter(
+    const filtered = orders.filter( // Sử dụng orders thay vì filteredOrders
       (order) => order.paymentStatus === status
     );
     setFilteredOrders(filtered);
   };
 
   const handleFilterByOrderStatus = (status: string) => {
-    const filtered = mockOrders.filter((order) => order.orderStatus === status);
+    const filtered = orders.filter((order) => order.status === status);
     setFilteredOrders(filtered);
+  };
+
+  // Navigate to order detail page
+  const handleRowClick = (orderId: string) => {
+    navigate(`order-detail/${orderId}`); // Pass orderId to the route
+  };
+
+  // Reset filter and show all orders
+  const handleReset = () => {
+    setFilteredOrders(orders); // Đặt lại filteredOrders về danh sách gốc
+    setSearchTerm(""); // Xóa từ khóa tìm kiếm
   };
 
   return (
@@ -98,7 +120,7 @@ const AdminDashboard: React.FC = () => {
       <div className="filter-container">
         <div className="filter-group">
           <h3>Orders</h3>
-          <button onClick={() => setFilteredOrders(mockOrders)}>Reset</button>
+          <button onClick={handleReset}>Reset</button> {/* Sử dụng handleReset */}
         </div>
 
         <div className="filter-group">
@@ -129,36 +151,40 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Order Table */}
-      <div className="order-table">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Orders</th>
-              <th>Date</th>
-              <th>Address</th>
-              <th>Value</th>
-              <th>Payment Status</th>
-              <th>Order Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.orderType}</td>
-                <td>{order.date}</td>
-                <td>{order.address}</td>
-                <td>{order.value}</td>
-                <td>{order.paymentStatus}</td>
-                <td>{order.orderStatus}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="client-section">
+        <h2>Client</h2>
+        <div className="client-table">
+          <div className="table-header">
+            <div>ID</div>
+            <div>Client Name</div>
+            <div>Order</div>
+            <div>Date</div>
+            <div>Address</div>
+            <div>Value</div>
+            <div>Payment Status</div>
+            <div>Order Status</div>
+          </div>
+          {filteredOrders.map((order, index) => (
+            <div
+              key={index}
+              className="table-row"
+              onClick={() => handleRowClick(order.orderId)}
+              style={{ cursor: "pointer" }}
+            >
+              <div>{order.orderId}</div>
+              <div>{order.user ? `${order.user.firstName} ${order.user.lastName}` : 'N/A'}</div> {/* Kiểm tra user trước khi truy cập */}
+              <div>{order.service ? order.service.name : 'N/A'}</div> {/* Kiểm tra service trước khi truy cập */}
+              <div>{new Date(order.createdAt).toLocaleDateString()}</div>
+              <div>{order.address}</div>
+              <div>{order.totalCost.toLocaleString()} VND</div>
+              <div>{order.paymentStatus}</div>
+              <div>{order.status}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default AdminOrder;

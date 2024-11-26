@@ -8,6 +8,7 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
+  role: string; // Add role to the User interface
 }
 
 const Header: React.FC = () => {
@@ -18,10 +19,12 @@ const Header: React.FC = () => {
   // Kiểm tra thông tin người dùng trong localStorage khi component được mount
   useEffect(() => {
     const userData = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
     if (userData) {
       try {
-        setUser(JSON.parse(userData)); // Chuyển dữ liệu từ localStorage thành object
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser); // Chuyển dữ liệu từ localStorage thành object
       } catch (error) {
         console.error("Failed to parse user data:", error);
       }
@@ -30,6 +33,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user"); // Xóa thông tin người dùng khỏi localStorage
+    sessionStorage.clear(); // Xóa toàn bộ sessionStorage
     localStorage.removeItem("token"); // Remove the token from local storage
     setUser(null); // Reset state user
     navigate("/login"); // Redirect to login page
@@ -58,8 +62,8 @@ const Header: React.FC = () => {
           <FaSearch className="icon" />
           {user ? (
             <>
-              {/* Hiển thị thông tin người dùng với liên kết đến trang user */}
-              <Link to="/user" className="user-info">
+              {/* Hiển thị thông tin người dùng với liên kết đến trang user hoặc admin */}
+              <Link to={user.role === "admin" ? "/admin" : "/user"} className="user-info">
                 {user.firstName} {user.lastName}
               </Link>
               {/* Nút Logout */}

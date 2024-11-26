@@ -56,9 +56,14 @@ const Login: React.FC = () => {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userId", user.id); // Save user ID to localStorage
       localStorage.setItem("token", user.token); // Save token to localStorage
+      localStorage.setItem("role", user.role); // Lưu role vào localStorage
 
-      // Navigate to the home page
-      navigate("/home");
+      // Navigate to the appropriate page based on user role
+      if (user.role === 'admin') {
+        navigate("/admin/dashboard"); // Chuyển hướng đến trang admin dashboard
+      } else {
+        navigate("/home"); // Chuyển hướng đến trang chính
+      }
     } catch (error) {
       console.error("Login error:", error);
       setErrorMessage("Invalid email or password. Please try again.");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Switch.css";
+import "./BuildAndSwitch.css";
 
 const Switch: React.FC = () => {
   const navigate = useNavigate();
@@ -40,16 +40,19 @@ const Switch: React.FC = () => {
         setServiceOptions(data.options); // Set the options in state
 
         // Initialize moddingPreferences based on fetched options
-        const moddingPreferences = data.options.reduce((acc: any, option: any) => {
+        const moddingPreferences = data.options.reduce(
+          (acc: any, option: any) => {
             acc[option.optionName.toLowerCase()] = false; // Chỉ chuyển thành chữ thường
             return acc;
-          }, {});
-          
+          },
+          {}
+        );
 
         // Retrieve saved form data from session storage
         const savedData = sessionStorage.getItem("switchModdingData");
         if (savedData) {
           const parsedData = JSON.parse(savedData);
+          console.log("Saved data from session storage:", parsedData); // In ra dữ liệu đã lưu
           setFormData((prev) => ({
             ...prev,
             moddingPreferences: {
@@ -120,6 +123,16 @@ const Switch: React.FC = () => {
         springPreference: value as string,
       }));
     } else {
+      // Kiểm tra nếu trường là "amount"
+      if (name === "amount") {
+        // Kiểm tra xem giá trị nhập vào có phải là số không
+        const numericValue = parseInt(value);
+        // Chỉ hiển thị thông báo nếu giá trị không phải là số và không phải là chuỗi rỗng
+        if (value !== "" && (isNaN(numericValue) || numericValue < 0)) {
+          alert("Amount must be a positive number."); // Thông báo nếu không phải số hoặc số âm
+          return; // Không cập nhật state nếu giá trị không hợp lệ
+        }
+      }
       setFormData((prev) => ({
         ...prev,
         [name]: value,
@@ -158,12 +171,15 @@ const Switch: React.FC = () => {
     };
 
     // Save data to session storage
-    sessionStorage.setItem("switchModdingData", JSON.stringify(switchModdingData));
+    sessionStorage.setItem(
+      "switchModdingData",
+      JSON.stringify(switchModdingData)
+    );
 
     alert("Order saved to session storage!");
 
     // Điều hướng đến trang checkout cho switch modding
-    navigate("/service/switch-modding/checkout");
+    navigate("/service/checkout-switch");
   };
 
   return (
@@ -227,7 +243,7 @@ const Switch: React.FC = () => {
 
         {/* My Spring Preference Section */}
         <div className="form-group">
-          <label>My Spring Preference Ư(ea) (if you use mine)</label>
+          <label>My Spring Preference (ea) (if you use mine)</label>
           <div className="form-group-note">
             Can select only one option. Unit: each
           </div>

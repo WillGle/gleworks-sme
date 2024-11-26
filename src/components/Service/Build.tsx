@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./Build.css";
+import { useNavigate } from "react-router-dom";
+import "./BuildAndSwitch.css";
 
 // Define the type for the options
 type Option = {
@@ -9,6 +10,7 @@ type Option = {
 };
 
 const Build: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<{
     keyboardKitName: string;
     switchesName: string;
@@ -50,15 +52,21 @@ const Build: React.FC = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/service-options/2`); // Adjust the ID as needed
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/service-options/2`
+        ); // Adjust the ID as needed
         if (!response.ok) {
           throw new Error("Failed to fetch prices");
         }
         const data = await response.json();
-        
+
         // Organize the data into the expected structure
-        const desolderingOptions = data.options.filter((option: Option) => option.optionGroup === "Desoldering");
-        const assemblyOptions = data.options.filter((option: Option) => option.optionGroup === "Assembly");
+        const desolderingOptions = data.options.filter(
+          (option: Option) => option.optionGroup === "Desoldering"
+        );
+        const assemblyOptions = data.options.filter(
+          (option: Option) => option.optionGroup === "Assembly"
+        );
 
         setPrices({
           desoldering: desolderingOptions.reduce((acc: any, option: any) => {
@@ -78,10 +86,20 @@ const Build: React.FC = () => {
     fetchPrices();
   }, []);
 
+  // Load data from sessionStorage when the component mounts
+  useEffect(() => {
+    const savedData = sessionStorage.getItem("buildData");
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+  }, []);
+
   // Calculate total cost
   useEffect(() => {
     const desolderingCost =
-      prices.desoldering[formData.desoldering as keyof typeof prices.desoldering] || 0;
+      prices.desoldering[
+        formData.desoldering as keyof typeof prices.desoldering
+      ] || 0;
     const assemblyCost =
       prices.assembly[formData.assembly as keyof typeof prices.assembly] || 0;
 
@@ -143,8 +161,31 @@ const Build: React.FC = () => {
       return;
     }
 
-    alert("Form submitted successfully!");
-    console.log("Form Data:", formData);
+    // Prepare data for session storage
+    const buildData = {
+      keyboardKitName: formData.keyboardKitName,
+      switchesName: formData.switchesName,
+      layout: formData.layout,
+      withSwitches: formData.withSwitches,
+      switchQuantity: parseInt(formData.switchQuantity),
+      stabilizerName: formData.stabilizerName,
+      plateChoice: formData.plateChoice,
+      providingKeycap: formData.providingKeycap,
+      desoldering: formData.desoldering,
+      assembly: formData.assembly,
+      additionalNotes: formData.additionalNotes,
+      termsAccepted: formData.termsAccepted,
+      total: total, // Include the total cost
+    };
+
+    // Save data to session storage
+    sessionStorage.setItem("buildData", JSON.stringify(buildData));
+
+    alert("Build data saved to session storage!");
+    console.log("Build Data:", buildData);
+
+    // Navigate to checkout
+    navigate("/service/checkout-build");
   };
 
   return (
@@ -266,19 +307,21 @@ const Build: React.FC = () => {
         <div className="form-group">
           <label>Desoldering (Required)</label>
           <div className="radio-group">
-            {Object.entries(prices.desoldering).map(([key, value]: [string, number]) => (
-              <label key={key}>
-                <input
-                  type="radio"
-                  name="desoldering"
-                  value={key}
-                  checked={formData.desoldering === key}
-                  onChange={handleInputChange}
-                  required
-                />
-                {key} ({value.toLocaleString()} VND)
-              </label>
-            ))}
+            {Object.entries(prices.desoldering).map(
+              ([key, value]: [string, number]) => (
+                <label key={key}>
+                  <input
+                    type="radio"
+                    name="desoldering"
+                    value={key}
+                    checked={formData.desoldering === key}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  {key} ({value.toLocaleString()} VND)
+                </label>
+              )
+            )}
           </div>
         </div>
 
@@ -312,7 +355,15 @@ const Build: React.FC = () => {
             ))}
           </div>
         </div>
-
+        <div className="form-group">
+          <label>Additional Notes</label>
+          <textarea
+            name="additionalNotes"
+            value={formData.additionalNotes}
+            onChange={handleInputChange}
+            className="input-field additional-notes"
+          />
+        </div>
         <div className="form-group terms-group">
           <label>
             <input

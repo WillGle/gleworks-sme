@@ -19,7 +19,6 @@ const Header: React.FC = () => {
   // Kiểm tra thông tin người dùng trong localStorage khi component được mount
   useEffect(() => {
     const userData = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
 
     if (userData) {
       try {
@@ -63,7 +62,10 @@ const Header: React.FC = () => {
           {user ? (
             <>
               {/* Hiển thị thông tin người dùng với liên kết đến trang user hoặc admin */}
-              <Link to={user.role === "admin" ? "/admin" : "/user"} className="user-info">
+              <Link
+                to={user.role === "admin" ? "/admin" : "/user"}
+                className="user-info"
+              >
                 {user.firstName} {user.lastName}
               </Link>
               {/* Nút Logout */}

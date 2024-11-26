@@ -153,11 +153,6 @@ const Signup: React.FC = () => {
           <div className="success-message">{successMessage}</div>
         )}
 
-        <div className="toggle-action">
-          Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>Log in here</span>
-        </div>
-
         <button
           type="button"
           className="confirm-button"
@@ -166,6 +161,11 @@ const Signup: React.FC = () => {
         >
           {isLoading ? "Submitting..." : "Sign Up"}
         </button>
+
+        <div className="toggle-action">
+          Already have an account?{" "}
+          <span onClick={() => navigate("/login")}>Log in here</span>
+        </div>
       </div>
     </div>
   );

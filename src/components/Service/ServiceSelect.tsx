@@ -11,7 +11,9 @@ const Service: React.FC = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/services`);  // Use the API URL from .env
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/services`
+        ); // Use the API URL from .env
         const data = await response.json();
         setServices(data);
       } catch (error) {
@@ -56,7 +58,11 @@ const Service: React.FC = () => {
           <div
             key={service.id}
             className="service-card"
-            onClick={() => navigate(`/service/${service.name.toLowerCase().replace(/\s+/g, '-')}`)}
+            onClick={() =>
+              navigate(
+                `/service/${service.name.toLowerCase().replace(/\s+/g, "-")}`
+              )
+            }
           >
             <h3>{service.name} Service</h3>
             <p>{service.description}</p>
@@ -77,8 +83,18 @@ const Service: React.FC = () => {
         </p>
         <p>
           All parts, like stabilizers, films etc are also to be provided if
-          needed. Prices <strong>do not</strong> include return shipping and/or
-          duties.
+          needed for personal reference. Prices <strong>do not</strong> include
+          return shipping and/or duties.
+        </p>
+        <p>
+          The unit of measurement used in Switch Modding service form is 1
+          (piece/item). Example: 1 switch, 1 LED, 1 socket.
+        </p>
+        <p>
+          Orders for Lube will be completed within <strong>1-2 days</strong>.
+          Build orders will be completed within <strong>4 days</strong> and will
+          be kept for an <strong>additional 2 days</strong> for quality checks
+          to ensure no issues arise upon delivery to the customer.
         </p>
 
         {/* FAQ Section */}

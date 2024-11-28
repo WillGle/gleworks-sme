@@ -47,7 +47,7 @@ const Login: React.FC = () => {
       });
 
       const user = response.data; // Response data from the server
-      console.log("Login successful:", user);
+    //   console.log("Login successful:", user);
 
       // Clear previous user data from localStorage
       localStorage.removeItem("user");

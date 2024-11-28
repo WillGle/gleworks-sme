@@ -182,7 +182,7 @@ const Build: React.FC = () => {
     sessionStorage.setItem("buildData", JSON.stringify(buildData));
 
     // alert("Build data saved to session storage!");
-    console.log("Build Data:", buildData);
+    // console.log("Build Data:", buildData);
 
     // Navigate to checkout
     navigate("/service/checkout-build");

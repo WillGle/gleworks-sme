@@ -64,7 +64,7 @@ const Header: React.FC = () => {
                 to={user.role === "admin" ? "/admin" : "/user"}
                 className="user-info"
               >
-                Hi, {user.firstName} {user.lastName} {/* làm thành button*/}
+                Hi, {user.lastName} {user.firstName}  {/* làm thành button*/}
               </Link>
               {/* Chữ Logout */}
               <span className="logout-text" onClick={handleLogout} style={{ cursor: 'pointer', color: 'black' }}>

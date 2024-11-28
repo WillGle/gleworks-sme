@@ -38,7 +38,7 @@ const AdminOrder: React.FC = () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
         const data: Order[] = await response.json();
-        console.log(data); // Kiểm tra cấu trúc dữ liệu trả về
+        // console.log(data); // Kiểm tra cấu trúc dữ liệu trả về
 
         // Ánh xạ dữ liệu để phù hợp với cấu trúc frontend
         const transformedOrders = data.map((order: any) => ({
@@ -172,7 +172,7 @@ const AdminOrder: React.FC = () => {
               style={{ cursor: "pointer" }}
             >
               <div>{order.orderId}</div>
-              <div>{order.user ? `${order.user.firstName} ${order.user.lastName}` : 'N/A'}</div> {/* Kiểm tra user trước khi truy cập */}
+              <div>{order.user ? `${order.user.lastName} ${order.user.firstName}` : 'N/A'}</div> {/* Kiểm tra user trước khi truy cập */}
               <div>{order.service ? order.service.name : 'N/A'}</div> {/* Kiểm tra service trước khi truy cập */}
               <div>{new Date(order.createdAt).toLocaleDateString()}</div>
               <div>{order.address}</div>

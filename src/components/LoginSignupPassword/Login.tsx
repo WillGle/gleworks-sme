@@ -116,12 +116,15 @@ const Login: React.FC = () => {
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
+
         <div className="toggle-action">
-          New here? <span onClick={() => navigate("/signup")}>Sign Up</span>
-        </div>
-        <div className="toggle-action">
-          Forgot Password?{" "}
-          <span onClick={() => navigate("/lost-password")}>Reset Here</span>
+          <div>
+            New here? <span onClick={() => navigate("/signup")}>Sign Up</span>
+          </div>
+          <div>
+            Forgot Password?{" "}
+            <span onClick={() => navigate("/lost-password")}>Reset Here</span>
+          </div>
         </div>
       </div>
     </div>

@@ -14,7 +14,17 @@ const fetchOrders = async () => {
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<
-    { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }[]
+    {
+      orderId: number;
+      status: string;
+      userId: number;
+      serviceId: number;
+      totalCost: number;
+      paymentStatus: string;
+      address: string;
+      telephone: string;
+      createdAt: string;
+    }[]
   >([]);
   const [overview, setOverview] = useState({
     todayOrder: 0,
@@ -33,7 +43,17 @@ const AdminDashboard: React.FC = () => {
 
         // Calculate order counts based on statuses
         const todayCount = data.filter(
-          (order: { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }) => {
+          (order: {
+            orderId: number;
+            status: string;
+            userId: number;
+            serviceId: number;
+            totalCost: number;
+            paymentStatus: string;
+            address: string;
+            telephone: string;
+            createdAt: string;
+          }) => {
             const orderDate = new Date(order.createdAt);
             console.log(orderDate);
             return orderDate.toDateString() === new Date().toDateString();
@@ -41,11 +61,31 @@ const AdminDashboard: React.FC = () => {
         ).length;
 
         const pendingCount = data.filter(
-          (order: { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }) => order.status === "Pending"
+          (order: {
+            orderId: number;
+            status: string;
+            userId: number;
+            serviceId: number;
+            totalCost: number;
+            paymentStatus: string;
+            address: string;
+            telephone: string;
+            createdAt: string;
+          }) => order.status === "Pending"
         ).length;
 
         const ongoingCount = data.filter(
-          (order: { orderId: number; status: string; userId: number; serviceId: number; totalCost: number; paymentStatus: string; address: string; telephone: string; createdAt: string }) => order.status === "Ongoing"
+          (order: {
+            orderId: number;
+            status: string;
+            userId: number;
+            serviceId: number;
+            totalCost: number;
+            paymentStatus: string;
+            address: string;
+            telephone: string;
+            createdAt: string;
+          }) => order.status === "Ongoing"
         ).length;
 
         setOverview({
@@ -103,7 +143,7 @@ const AdminDashboard: React.FC = () => {
 
       {/* Client Table Section */}
       <div className="client-section">
-        <h2>Client</h2>
+        <h2>Orders</h2>
         <div className="client-table">
           <div className="table-header">
             <div>ID</div>

@@ -12,7 +12,7 @@ import NewPass from "./components/LoginSignupPassword/NewPass";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Landing from "./components/Landing/Landing";
-import About from "./components/About/About";
+// import About from "./components/About (save for later)/About";
 // import Blog from "./components/Blog (dev later)/Blog";
 import Archive from "./components/Archive/Archive";
 import Service from "./components/Service/ServiceSelect";
@@ -46,16 +46,37 @@ function AppLayout() {
         {/* Redirect from "/" to "/home" */}
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Landing />} />
-        <Route path="/about" element={<About />} />
+        {/* <Route path="/about" element={<About />} /> */}
         {/* <Route path="/blog" element={<Blog />} /> */}
         <Route path="/archive" element={<Archive />} />
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />
         <Route path="/service/keyboard-building" element={<Build />} />
-        <Route path="/service/checkout-build" element={<ProtectedRoute><CheckoutBuild /></ProtectedRoute>} />
-        <Route path="/service/checkout-switch" element={<ProtectedRoute><CheckoutSwitch /></ProtectedRoute>} />
+        <Route
+          path="/service/checkout-build"
+          element={
+            <ProtectedRoute>
+              <CheckoutBuild />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/service/checkout-switch"
+          element={
+            <ProtectedRoute>
+              <CheckoutSwitch />
+            </ProtectedRoute>
+          }
+        />
         {/* Delegate all /user sub-routes to UserPageLayout */}
-        <Route path="/user/*" element={<ProtectedRoute><UserPageLayout /></ProtectedRoute>} />
+        <Route
+          path="/user/*"
+          element={
+            <ProtectedRoute>
+              <UserPageLayout />
+            </ProtectedRoute>
+          }
+        />
         {/* Delegate all /admin sub-routes to AdminPageLayout */}
         <Route path="/admin/*" element={<AdminPageLayout />} />
         <Route path="/login" element={<Login />} />

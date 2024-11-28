@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-import "./NewPass.css";
+import "./LoginSignUpLostPassNewPass.css";
 
 const NewPass: React.FC = () => {
   const [password, setPassword] = useState<string>("");
@@ -68,7 +68,7 @@ const NewPass: React.FC = () => {
     };
 
   return (
-    <div className="new-password-container">
+    <div className="same-style-container">
       <div className="header">
         <h1>Reset Password</h1>
         <p>Please enter your new password</p>

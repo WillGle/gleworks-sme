@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios"; // Import Axios for making API requests
 import { DotLottie } from "@lottiefiles/dotlottie-web"; // Import DotLottie
-import "./LostPass.css";
+import "./LoginSignUpLostPassNewPass.css";
 
 const LostPass: React.FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL; // Use the API URL from environment variables
@@ -68,7 +68,7 @@ const LostPass: React.FC = () => {
   }, [isLoading]);
 
   return (
-    <div className="new-password-container">
+    <div className="same-style-container">
       {/* Loading animation */}
       {isLoading && (
         <div id="loading">
@@ -106,17 +106,14 @@ const LostPass: React.FC = () => {
         )}
 
         {/* Reset password button */}
-        <div className="button-group">
-          <button
-            type="button"
-            className="confirm-button"
-            onClick={handlePasswordReset}
-            disabled={isLoading}
-          >
-            {isLoading ? "Sending..." : "Send Reset Link"}
-          </button>
-        </div>
-
+        <button
+          type="button"
+          className="confirm-button"
+          onClick={handlePasswordReset}
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : "Send Reset Link"}
+        </button>
         {/* Navigation links */}
         <div className="toggle-action">
           Already have an account?{" "}

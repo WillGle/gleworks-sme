@@ -67,7 +67,47 @@
   .logo a:hover {
     text-decoration: none;
   }
+
+/* Header Icons */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* User Info */
+  .user-info {
+    display: inline-block;
+    padding: 5px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #97b1cb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
   
+  .user-info:hover {
+    background-color: #97b1cb;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-info:active {
+    background-color: #868686;
+    box-shadow: none;
+  }
+  
+  .user-info:focus {
+    outline: 2px solid#97b1cb;
+    outline-offset: 2px;
+  }
+
+  /* Logout Btn */
+
   /* Responsive Adjustments */
   @media (max-width: 768px) {
     .header-main {
@@ -79,6 +119,7 @@
       width: 100%;
       justify-content: space-between;
       margin-top: 20px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
   

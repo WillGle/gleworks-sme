@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios"; // Import Axios for HTTP requests
-import "./Login.css";
+import "./LoginSignUpLostPassNewPass.css";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>(""); // State for email
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
       localStorage.setItem("role", user.role); // Lưu role vào localStorage
 
       // Navigate to the appropriate page based on user role
-      if (user.role === 'admin') {
+      if (user.role === "admin") {
         navigate("/admin/dashboard"); // Chuyển hướng đến trang admin dashboard
       } else {
         navigate("/home"); // Chuyển hướng đến trang chính
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="new-password-container">
+    <div className="same-style-container">
       <div className="header">
         <h1>Login</h1>
       </div>

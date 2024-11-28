@@ -1,11 +1,6 @@
 import React from "react";
 import "./Footer.css";
-import {
-  FaArrowRight,
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-} from "react-icons/fa";
+import { FaArrowRight, FaFacebook, FaInstagram } from "react-icons/fa";
 
 // Footer component representing the bottom section of the application
 const Footer: React.FC = () => {

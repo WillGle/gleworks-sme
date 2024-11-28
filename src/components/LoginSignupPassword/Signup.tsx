@@ -5,8 +5,8 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./Signup.css";
-import { DotLottie } from '@lottiefiles/dotlottie-web'; // Import DotLottie
+import "./LoginSignUpLostPassNewPass.css";
+import { DotLottie } from "@lottiefiles/dotlottie-web"; // Import DotLottie
 
 const Signup: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -99,7 +99,7 @@ const Signup: React.FC = () => {
   }, [isLoading]);
 
   return (
-    <div className="new-password-container">
+    <div className="same-style-container">
       <div className="header">
         <h1>Sign Up</h1>
       </div>
@@ -190,8 +190,19 @@ const Signup: React.FC = () => {
 
       {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
       {isLoading && (
-        <div id="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <canvas ref={canvasRef} id="dotlottie-canvas" style={{ width: '300px', height: '300px' }}></canvas>
+        <div
+          id="loading"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <canvas
+            ref={canvasRef}
+            id="dotlottie-canvas"
+            style={{ width: "300px", height: "300px" }}
+          ></canvas>
         </div>
       )}
     </div>

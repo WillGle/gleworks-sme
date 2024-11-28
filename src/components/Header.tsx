@@ -50,13 +50,13 @@ const Header: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="navigation">
-          <Link to="/about">About</Link>
+          {/* <Link to="/about">About</Link> */}
           <Link to="/service">Service</Link>
           <Link to="/archive">Archive</Link>
         </nav>
 
         {/* Icon Links */}
-        <div className="icons">
+        <div className="header-icons">
           {user ? (
             <>
               {/* Hiển thị thông tin người dùng với liên kết đến trang user hoặc admin */}
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
                 Hi, {user.firstName} {user.lastName} {/* làm thành button*/}
               </Link>
               {/* Chữ Logout */}
-              <span className="logout-text" onClick={handleLogout} style={{ cursor: 'pointer', color: 'black' }}>
+              <span className="logout-button" onClick={handleLogout}>
                 Logout
               </span>
             </>

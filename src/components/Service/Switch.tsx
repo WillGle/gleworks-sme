@@ -52,7 +52,7 @@ const Switch: React.FC = () => {
         const savedData = sessionStorage.getItem("switchModdingData");
         if (savedData) {
           const parsedData = JSON.parse(savedData);
-          console.log("Saved data from session storage:", parsedData); // In ra dữ liệu đã lưu
+        //   console.log("Saved data from session storage:", parsedData); // In ra dữ liệu đã lưu
           setFormData((prev) => ({
             ...prev,
             moddingPreferences: {

@@ -4,7 +4,7 @@ import "./AdminDashboard.css";
 
 // Fetch orders from the backend
 const fetchOrders = async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/all`);
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
   if (!response.ok) {
     throw new Error("Failed to fetch orders");
   }
@@ -39,7 +39,7 @@ const AdminDashboard: React.FC = () => {
       try {
         const data = await fetchOrders();
         setOrders(data);
-        console.log(data);
+        // console.log(data);
 
         // Calculate order counts based on statuses
         const todayCount = data.filter(
@@ -55,7 +55,7 @@ const AdminDashboard: React.FC = () => {
             createdAt: string;
           }) => {
             const orderDate = new Date(order.createdAt);
-            console.log(orderDate);
+            // console.log(orderDate);
             return orderDate.toDateString() === new Date().toDateString();
           }
         ).length;

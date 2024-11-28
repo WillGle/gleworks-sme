@@ -19,7 +19,7 @@ const OrderDetail: React.FC = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       if (!orderId) {
-        console.error("Order ID is undefined");
+        // console.error("Order ID is undefined");
         return; // Ngừng thực hiện nếu orderId không hợp lệ
       }
       try {
@@ -28,7 +28,7 @@ const OrderDetail: React.FC = () => {
           throw new Error("Failed to fetch order details");
         }
         const data = await response.json();
-        console.log("Fetched Order Data:", data);
+        // console.log("Fetched Order Data:", data);
         setOrderData(data);
         // Lưu dữ liệu vào sessionStorage
         sessionStorage.setItem(`order_${orderId}`, JSON.stringify(data));
@@ -91,7 +91,7 @@ const OrderDetail: React.FC = () => {
       }
 
       const updatedOrder = await response.json();
-      console.log("Updated Order:", updatedOrder);
+    //   console.log("Updated Order:", updatedOrder);
       // Cập nhật lại orderData với dữ liệu mới
       setOrderData((prev: any) => {
         const newOrderData = [...prev];
@@ -117,7 +117,7 @@ const OrderDetail: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  console.log("Current Order Data:", orderData);
+//   console.log("Current Order Data:", orderData);
 
   return (
     <div className="order-detail-container">

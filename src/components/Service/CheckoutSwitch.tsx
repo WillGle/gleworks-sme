@@ -103,7 +103,7 @@ const Checkout: React.FC = () => {
       telephone: phone,
     };
 
-    console.log("Order Payload:", orderPayload);
+    // console.log("Order Payload:", orderPayload);
 
     try {
       const response = await fetch("http://localhost:3000/orders/", {
@@ -119,7 +119,7 @@ const Checkout: React.FC = () => {
       }
 
       const createdOrder = await response.json();
-      console.log("Created Order:", createdOrder);
+    //   console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
       const orderDetailPayload = {
@@ -202,7 +202,7 @@ const Checkout: React.FC = () => {
                 type="text"
                 name="customer"
                 className="input-field"
-                value={`${userInfo.firstName} ${userInfo.lastName}`}
+                value={`${userInfo.lastName} ${userInfo.firstName} `}
                 onChange={handleInputChange}
                 readOnly
               />

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Landing.css";
+import image1 from "../../assets/landing.jpg";
 
 // Landing component representing the landing page
 const Landing: React.FC = () => {
@@ -19,7 +20,11 @@ const Landing: React.FC = () => {
           </Link>
         </div>
         <div className="hero-image">
-          <div className="image-placeholder">Picture</div>
+          <img
+            src={image1}
+            alt="A beautiful custom keyboard"
+            className="hero-image"
+          />
         </div>
       </section>
 

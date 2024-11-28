@@ -46,11 +46,16 @@
   }
   
   .hero-image {
-    width: 50%;
+    width: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+.hero-image img {
+    width: 100%; /* Set the image width to 80% of its actual size */
+    height: auto; /* Maintain the aspect ratio */
+}
   
   .image-placeholder {
     width: 100%;

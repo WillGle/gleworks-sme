@@ -23,12 +23,15 @@ const Checkout: React.FC = () => {
 
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch(`http://localhost:3000/auth/user/${userId}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3000/auth/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
@@ -52,7 +55,13 @@ const Checkout: React.FC = () => {
     }
 
     const currentDate = new Date();
-    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
+    const formattedDate = `${String(currentDate.getDate()).padStart(
+      2,
+      "0"
+    )}/${String(currentDate.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${currentDate.getFullYear()}`;
     setOrderDate(formattedDate);
   }, []);
 
@@ -77,12 +86,14 @@ const Checkout: React.FC = () => {
     }
   };
 
-  const handleFullAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFullAddressChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = event.target.value;
     setFullAddress(value);
 
     // Tách giá trị thành address và city
-    const [newAddress, newCity] = value.split(',').map(part => part.trim());
+    const [newAddress, newCity] = value.split(",").map((part) => part.trim());
     setAddress(newAddress || "");
     setCity(newCity || "");
   };
@@ -119,7 +130,7 @@ const Checkout: React.FC = () => {
       }
 
       const createdOrder = await response.json();
-    //   console.log("Created Order:", createdOrder);
+      //   console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
       const orderDetailPayload = {
@@ -128,13 +139,16 @@ const Checkout: React.FC = () => {
         fieldValue: orderData.switchName,
       };
 
-      const detailResponse = await fetch("http://localhost:3000/order-details/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderDetailPayload),
-      });
+      const detailResponse = await fetch(
+        "http://localhost:3000/order-details/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetailPayload),
+        }
+      );
 
       if (!detailResponse.ok) {
         throw new Error("Failed to save order details");
@@ -142,14 +156,25 @@ const Checkout: React.FC = () => {
 
       const additionalDetails = [
         { fieldName: "Amount", fieldValue: orderData.amount.toString() },
-        { 
-          fieldName: "Switch Modding Preference", 
-          fieldValue: Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).length > 0
-            ? Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).join(", ") 
-            : null
+        {
+          fieldName: "Switch Modding Preference",
+          fieldValue:
+            Object.keys(orderData.moddingPreferences).filter(
+              (key) => orderData.moddingPreferences[key]
+            ).length > 0
+              ? Object.keys(orderData.moddingPreferences)
+                  .filter((key) => orderData.moddingPreferences[key])
+                  .join(", ")
+              : null,
         },
-        { fieldName: "My Spring Preference", fieldValue: orderData.springPreference },
-        { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
+        {
+          fieldName: "My Spring Preference",
+          fieldValue: orderData.springPreference,
+        },
+        {
+          fieldName: "Additional Notes",
+          fieldValue: orderData.additionalNotes,
+        },
       ];
 
       for (const detail of additionalDetails) {
@@ -159,13 +184,16 @@ const Checkout: React.FC = () => {
           fieldValue: detail.fieldValue,
         };
 
-        const detailResponse = await fetch("http://localhost:3000/order-details/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(detailPayload),
-        });
+        const detailResponse = await fetch(
+          "http://localhost:3000/order-details/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(detailPayload),
+          }
+        );
 
         if (!detailResponse.ok) {
           throw new Error(`Failed to save ${detail.fieldName}`);
@@ -174,7 +202,7 @@ const Checkout: React.FC = () => {
 
       sessionStorage.clear();
 
-    //   navigate("/service/switch-modding");
+      //   navigate("/service/switch-modding");
 
       setShowQRCodePopup(true);
     } catch (error) {
@@ -252,7 +280,6 @@ const Checkout: React.FC = () => {
                 readOnly
               />
             </div>
-
           </>
         ) : (
           <p>Loading user information...</p>
@@ -274,7 +301,13 @@ const Checkout: React.FC = () => {
 
         <div className="form-group">
           <label>Switch Modding Preference</label>
-          <p>{orderData ? Object.keys(orderData.moddingPreferences).filter(key => orderData.moddingPreferences[key]).join(", ") : "Loading..."}</p>
+          <p>
+            {orderData
+              ? Object.keys(orderData.moddingPreferences)
+                  .filter((key) => orderData.moddingPreferences[key])
+                  .join(", ")
+              : "Loading..."}
+          </p>
         </div>
 
         <div className="form-group">
@@ -295,7 +328,7 @@ const Checkout: React.FC = () => {
         <p>{orderData ? orderData.total.toLocaleString() : "Loading..."} VND</p>
       </div>
 
-      <div className="button-group">
+      <div className="checkout-button-group">
         <button
           type="button"
           className="return-button"
@@ -316,7 +349,11 @@ const Checkout: React.FC = () => {
       {showQRCodePopup && (
         <div className="qr-popup">
           <div className="qr-popup-content">
-            <img src="https://i.imgur.com/TRhD6Kv.png" alt="QR Code" style={{ width: '256px', height: '256px' }} />
+            <img
+              src="https://i.imgur.com/TRhD6Kv.png"
+              alt="QR Code"
+              style={{ width: "256px", height: "256px" }}
+            />
             <button onClick={handleCloseQRCodePopup}>Close</button>
           </div>
         </div>

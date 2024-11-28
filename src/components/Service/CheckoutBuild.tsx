@@ -23,12 +23,15 @@ const CheckoutBuild: React.FC = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:3000/auth/user/${userId}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `http://localhost:3000/auth/user/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
@@ -53,7 +56,13 @@ const CheckoutBuild: React.FC = () => {
 
     // Set order date to current date in DD/MM/YYYY format
     const currentDate = new Date();
-    const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
+    const formattedDate = `${String(currentDate.getDate()).padStart(
+      2,
+      "0"
+    )}/${String(currentDate.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${currentDate.getFullYear()}`;
     setOrderDate(formattedDate);
   }, []);
 
@@ -78,11 +87,13 @@ const CheckoutBuild: React.FC = () => {
     }
   };
 
-  const handleFullAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFullAddressChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = event.target.value;
     setFullAddress(value);
 
-    const [newAddress, newCity] = value.split(',').map(part => part.trim());
+    const [newAddress, newCity] = value.split(",").map((part) => part.trim());
     setAddress(newAddress || "");
     setCity(newCity || "");
   };
@@ -119,7 +130,7 @@ const CheckoutBuild: React.FC = () => {
       }
 
       const createdOrder = await response.json();
-    //   console.log("Created Order:", createdOrder);
+      //   console.log("Created Order:", createdOrder);
       alert("Order created successfully!");
 
       const orderDetailPayload = {
@@ -128,13 +139,16 @@ const CheckoutBuild: React.FC = () => {
         fieldValue: orderData.keyboardKitName,
       };
 
-      const detailResponse = await fetch("http://localhost:3000/order-details/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderDetailPayload),
-      });
+      const detailResponse = await fetch(
+        "http://localhost:3000/order-details/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetailPayload),
+        }
+      );
 
       if (!detailResponse.ok) {
         throw new Error("Failed to save order details");
@@ -148,9 +162,15 @@ const CheckoutBuild: React.FC = () => {
         { fieldName: "Switch Quantity", fieldValue: orderData.switchQuantity },
         { fieldName: "Plate Choice", fieldValue: orderData.plateChoice },
         { fieldName: "Desoldering", fieldValue: orderData.desoldering },
-        { fieldName: "Are You Providing Keycap?", fieldValue: orderData.providingKeycap },
+        {
+          fieldName: "Are You Providing Keycap?",
+          fieldValue: orderData.providingKeycap,
+        },
         { fieldName: "Assembly", fieldValue: orderData.assembly },
-        { fieldName: "Additional Notes", fieldValue: orderData.additionalNotes },
+        {
+          fieldName: "Additional Notes",
+          fieldValue: orderData.additionalNotes,
+        },
       ];
 
       for (const detail of additionalDetails) {
@@ -160,13 +180,16 @@ const CheckoutBuild: React.FC = () => {
           fieldValue: detail.fieldValue,
         };
 
-        const detailResponse = await fetch("http://localhost:3000/order-details/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(detailPayload),
-        });
+        const detailResponse = await fetch(
+          "http://localhost:3000/order-details/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(detailPayload),
+          }
+        );
 
         if (!detailResponse.ok) {
           throw new Error(`Failed to save ${detail.fieldName}`);
@@ -327,7 +350,7 @@ const CheckoutBuild: React.FC = () => {
       </div>
 
       {/* Buttons */}
-      <div className="button-group">
+      <div className="checkou-button-group">
         <button
           type="button"
           className="return-button"
@@ -348,7 +371,11 @@ const CheckoutBuild: React.FC = () => {
       {showQRCodePopup && (
         <div className="qr-popup">
           <div className="qr-popup-content">
-            <img src="https://i.imgur.com/TRhD6Kv.png" alt="QR Code" style={{ width: '256px', height: '256px' }} />
+            <img
+              src="https://i.imgur.com/TRhD6Kv.png"
+              alt="QR Code"
+              style={{ width: "256px", height: "256px" }}
+            />
             <button onClick={handleCloseQRCodePopup}>Close</button>
           </div>
         </div>

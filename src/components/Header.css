@@ -50,6 +50,24 @@
     color: #000;
   }
   
+  .user-info {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .user-info:hover {
+    text-decoration: underline;
+  }
+  
+  .logo a {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .logo a:hover {
+    text-decoration: none;
+  }
+  
   /* Responsive Adjustments */
   @media (max-width: 768px) {
     .header-main {

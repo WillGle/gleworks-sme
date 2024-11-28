@@ -9,11 +9,9 @@ const Landing: React.FC = () => {
     <div className="landing">
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Masterpiece comes with immaculate craftsmanship</h1>
+          <h1>Simplifying service management for small businesses</h1>
           <p>
-            Step into custom keyboard world, where creativity knows no bounds,
-            and every mechanical keyboard transcends mere functionality to
-            become a work of art.
+          GleWork is an integrated service website that enables customers to interact quickly and efficiently through their browsers. It also optimizes small business operational processes, helping reduce management costs and prevent financial losses.
           </p>
           <Link to="/about" className="learn-more-button">
             Learn More

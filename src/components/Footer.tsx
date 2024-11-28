@@ -34,7 +34,6 @@ const Footer: React.FC = () => {
           <p>cuongsayyay@gmail.com</p>
           <div className="social-icons">
             <FaFacebook />
-            <FaTwitter />
             <FaInstagram />
           </div>
         </div>

@@ -14,7 +14,7 @@
   .archive-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+
   }
   
   .archive-item {
@@ -22,8 +22,7 @@
   }
   
   .image-container {
-    position: relative;
-    overflow: hidden;
+    display: flex;
   }
   
   .image-container img {
@@ -32,9 +31,9 @@
     transition: transform 0.3s ease;
   }
   
-  .image-container:hover img {
+  /* .image-container:hover img {
     transform: scale(1.1);
-  }
+  } */
   
   .description-overlay {
     position: absolute;

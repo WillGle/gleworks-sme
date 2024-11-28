@@ -52,9 +52,9 @@ const Archive: React.FC = () => {
           <div key={item.id} className="archive-item">
             <div className="image-container">
               <img src={item.image} alt={`Item ${item.id}`} />
-              <div className="description-overlay">
+              {/* <div className="description-overlay">
                 <p>{item.description}</p>
-              </div>
+              </div> */}
             </div>
           </div>
         ))}

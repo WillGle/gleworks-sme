@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
-import { FaSearch, FaUser, FaShoppingBag } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 
 // Interface định nghĩa kiểu dữ liệu của người dùng
 interface User {
@@ -58,7 +58,6 @@ const Header: React.FC = () => {
 
         {/* Icon Links */}
         <div className="icons">
-          <FaSearch className="icon" />
           {user ? (
             <>
               {/* Hiển thị thông tin người dùng với liên kết đến trang user hoặc admin */}
@@ -66,7 +65,7 @@ const Header: React.FC = () => {
                 to={user.role === "admin" ? "/admin" : "/user"}
                 className="user-info"
               >
-                {user.firstName} {user.lastName}
+                Hi, {user.firstName} {user.lastName} {/* làm thành button*/}
               </Link>
               {/* Nút Logout */}
               <button onClick={handleLogout}>Logout</button>
@@ -76,7 +75,6 @@ const Header: React.FC = () => {
               <FaUser className="icon" />
             </Link>
           )}
-          <FaShoppingBag className="icon" />
         </div>
       </div>
     </header>

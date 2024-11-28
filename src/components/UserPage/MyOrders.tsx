@@ -44,7 +44,7 @@ const MyOrders: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         // Map API data to fit frontend structure
         const transformedOrders = data.map((order: any) => ({

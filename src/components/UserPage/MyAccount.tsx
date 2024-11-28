@@ -57,7 +57,7 @@ const MyAccount: React.FC = () => {
 
         if (response.ok) {
           const userData = await response.json();
-          console.log("User Data:", userData); // Debugging line
+        //   console.log("User Data:", userData); // Debugging line
           
           // Access the user ID correctly
           const userId = userData.user.id; // Adjusted to access the user ID
@@ -79,7 +79,7 @@ const MyAccount: React.FC = () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
-    console.log("Fetched User ID:", userId); // Debugging line
+    // console.log("Fetched User ID:", userId); // Debugging line
 
     if (token && userId) {
       try {

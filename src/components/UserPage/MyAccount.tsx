@@ -126,7 +126,7 @@ const MyAccount: React.FC = () => {
       const token = localStorage.getItem("token"); // Get token from localStorage
       // Send a PUT request to update user information
       const response = await fetch(
-        `${apiUrl}/users/update/${formData.id}`, // Use user ID for the update
+        `${apiUrl}/users/${formData.id}`, // Use user ID for the update
         {
           method: "PUT",
           headers: {

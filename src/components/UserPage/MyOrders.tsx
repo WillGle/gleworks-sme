@@ -30,7 +30,7 @@ const MyOrders: React.FC = () => {
 
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/orders?userId=${userId}`,
+          `${import.meta.env.VITE_API_URL}/orders/user/${userId}`,
           {
             method: "GET",
             headers: {

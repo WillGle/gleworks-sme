@@ -36,7 +36,7 @@ const AdminOrder: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/all`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
         const data: Order[] = await response.json();
         console.log(data); // Kiểm tra cấu trúc dữ liệu trả về
 

@@ -176,7 +176,7 @@ const Switch: React.FC = () => {
       JSON.stringify(switchModdingData)
     );
 
-    alert("Order saved to session storage!");
+    // alert("Order saved to session storage!");
 
     // Điều hướng đến trang checkout cho switch modding
     navigate("/service/checkout-switch");

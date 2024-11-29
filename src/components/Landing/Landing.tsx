@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./Landing.css";
 
 import image1 from "../../assets/landing.jpg";

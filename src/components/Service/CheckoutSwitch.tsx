@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Checkout.css";
+import qr from "../../assets/qr.jpg";
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
@@ -352,11 +353,17 @@ const Checkout: React.FC = () => {
         <div className="qr-popup">
           <div className="qr-popup-content">
             <img
-              src="https://i.imgur.com/TRhD6Kv.png"
+              src={qr}
               alt="QR Code"
               style={{ width: "256px", height: "256px" }}
             />
-            <button onClick={handleCloseQRCodePopup}>Close</button>
+            <button
+              type="button"
+              className="close-qr-popup"
+              onClick={handleCloseQRCodePopup}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

@@ -1,92 +1,126 @@
 .support-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.support-header {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.support-info h2 {
+  font-weight: bold;
+  font-size: 22px;
+  margin: 10px 0;
+}
+
+.support-info p {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #555;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.support-form {
+  margin-top: 20px;
+}
+
+.support-form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f3f3f3;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #1e90ff; /* Change border color when focused */
+  outline: none;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f3f3f3;
+  resize: none; /* Disable resizing */
+}
+
+.form-textarea:focus {
+  border-color: #1e90ff;
+  outline: none;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  align-self: flex-start; /* Align the button to the left */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #555;
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+.submit-button:active {
+  background-color: #222;
+  transform: scale(1); /* Reset scaling when clicked */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .support-container {
+    padding: 15px;
   }
-  
-  .support-header {
-    text-align: left;
-    margin-bottom: 20px;
-  }
-  
-  
+
   .support-info h2 {
-    font-weight: bold;
-    font-size: 22px;
-    margin: 10px 0;
+    font-size: 20px;
   }
-  
-  .support-info p {
-    font-size: 16px;
-    margin: 5px 0;
-    color: #555;
-  }
-  
-  .divider {
-    border: none;
-    border-top: 1px solid #ccc;
-    margin: 20px 0;
-  }
-  
-  .support-form {
-    margin-top: 20px;
-  }
-  
-  .support-form h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #f3f3f3;
-  }
-  
+
   .form-row {
-    display: flex;
-    gap: 15px;
+    flex-direction: column; /* Stack inputs vertically on smaller screens */
+    gap: 10px;
   }
-  
-  .form-row .form-input {
-    flex: 1;
+
+  .form-input {
+    font-size: 14px;
+    padding: 8px;
   }
-  
-  .form-textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #f3f3f3;
-  }
-  
+
   .submit-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #333;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-    align-self: flex-start;
+    width: 100%; /* Make button full-width on smaller screens */
+    text-align: center;
   }
-  
-  .submit-button:hover {
-    background-color: #555;
-  }
-  
+}

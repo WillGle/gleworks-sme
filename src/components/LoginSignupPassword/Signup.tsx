@@ -99,112 +99,114 @@ const Signup: React.FC = () => {
   }, [isLoading]);
 
   return (
-    <div className="same-style-container">
-      <div className="header">
-        <h1>Sign Up</h1>
-      </div>
-      <div className="form-container">
-        <div className="input-group">
-          <label htmlFor="firstName">First Name</label>
-          <input
-            id="firstName"
-            type="text"
-            placeholder="Enter your first name"
-            value={firstName}
-            onChange={handleInputChange(setFirstName)}
-          />
+    <div className="style-bg">
+      <div className="same-style-container">
+        <div className="header">
+          <h1>Sign Up</h1>
         </div>
-        <div className="input-group">
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            id="lastName"
-            type="text"
-            placeholder="Enter your last name"
-            value={lastName}
-            onChange={handleInputChange(setLastName)}
-          />
+        <div className="form-container">
+          <div className="input-group">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              placeholder="Enter your first name"
+              value={firstName}
+              onChange={handleInputChange(setFirstName)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              placeholder="Enter your last name"
+              value={lastName}
+              onChange={handleInputChange(setLastName)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="dateOfBirth">Date of Birth</label>
+            <DatePicker
+              id="dateOfBirth"
+              selected={dob}
+              onChange={(date: Date | null) => setDob(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Select your date of birth"
+              className="input"
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="phoneNumber">Phone Number</label>
+            <PhoneInput
+              country={"vn"}
+              value={phone}
+              onChange={setPhone}
+              inputClass="input"
+              containerClass="phone-input-container"
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrorMessage("");
+              }}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={handleInputChange(setPassword)}
+            />
+          </div>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+
+          <button
+            type="button"
+            className="confirm-button"
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? "Submitting..." : "Sign Up"}
+          </button>
+
+          <div className="toggle-action">
+            Already have an account?{" "}
+            <span onClick={() => navigate("/login")}>Log in here</span>
+          </div>
         </div>
-        <div className="input-group">
-          <label htmlFor="dateOfBirth">Date of Birth</label>
-          <DatePicker
-            id="dateOfBirth"
-            selected={dob}
-            onChange={(date: Date | null) => setDob(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Select your date of birth"
-            className="input"
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="phoneNumber">Phone Number</label>
-          <PhoneInput
-            country={"vn"}
-            value={phone}
-            onChange={setPhone}
-            inputClass="input"
-            containerClass="phone-input-container"
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setErrorMessage("");
+
+        {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
+        {isLoading && (
+          <div
+            id="loading"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
-        </div>
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={handleInputChange(setPassword)}
-          />
-        </div>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-        {successMessage && (
-          <div className="success-message">{successMessage}</div>
+          >
+            <canvas
+              ref={canvasRef}
+              id="dotlottie-canvas"
+              style={{ width: "300px", height: "300px" }}
+            ></canvas>
+          </div>
         )}
-
-        <button
-          type="button"
-          className="confirm-button"
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >
-          {isLoading ? "Submitting..." : "Sign Up"}
-        </button>
-
-        <div className="toggle-action">
-          Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>Log in here</span>
-        </div>
       </div>
-
-      {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
-      {isLoading && (
-        <div
-          id="loading"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <canvas
-            ref={canvasRef}
-            id="dotlottie-canvas"
-            style={{ width: "300px", height: "300px" }}
-          ></canvas>
-        </div>
-      )}
     </div>
   );
 };

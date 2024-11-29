@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 /* Header CSS Styles */
 .topHeader {
     background-color: #f5f5f5;
@@ -14,11 +16,30 @@
   }
   
   .logo {
-    font-size: 24px;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0; /* Hoặc điều chỉnh phù hợp */
     color: #000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
   }
+
+  .logo a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  
+  .logo strong {
+    font-size: inherit; /* Sử dụng kích thước từ cha */
+    font-weight: inherit; /* Sử dụng độ đậm từ cha */
+  }
+  
   
   .navigation {
     display: flex;
@@ -34,6 +55,7 @@
   
   .navigation a:hover {
     color: #000;
+    text-decoration: underline;
   }
   
   .icons {
@@ -44,10 +66,11 @@
   .icon {
     font-size: 20px;
     cursor: pointer;
+    color:  #1e57d2;
   }
   
   .icon:hover {
-    color: #000;
+    color:  #174aa8;
   }
   
   .user-info {

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Landing.css";
 
 import image1 from "../../assets/landing.jpg";
+import about from "../../assets/about.jpg";
 
 // Landing component representing the landing page
 const Landing: React.FC = () => {
@@ -16,9 +17,9 @@ const Landing: React.FC = () => {
             and every mechanical keyboard transcends mere functionality to
             become a work of art.
           </p>
-          <Link to="/about" className="learn-more-button">
+          {/* <Link to="/about" className="learn-more-button">
             Learn More
-          </Link>
+          </Link> */}
         </div>
         <div className="hero-image">
           <img
@@ -31,11 +32,7 @@ const Landing: React.FC = () => {
 
       <section className="about-section">
         <div className="about-image">
-          <img
-            src={image1}
-            alt="A beautiful custom keyboard"
-            className="about-image"
-          />
+          <img src={about} alt="Chí-Cường Nguyễn" className="about-image" />
         </div>
         <div className="about-content">
           <h1>Chí-Cường Nguyễn</h1>

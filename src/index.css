@@ -1,0 +1,14 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    min-height: 100vh; /* Chiều cao toàn màn hình */
+    margin: 0;
+    background-color: #d5ddf1; /* Màu nền trang */
+}

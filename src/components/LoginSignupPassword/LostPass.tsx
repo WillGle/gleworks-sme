@@ -68,56 +68,58 @@ const LostPass: React.FC = () => {
   }, [isLoading]);
 
   return (
-    <div className="same-style-container">
-      {/* Loading animation */}
-      {isLoading && (
-        <div id="loading">
-          <canvas
-            ref={canvasRef}
-            style={{ width: "300px", height: "300px" }}
-          ></canvas>
-        </div>
-      )}
-
-      <div className="header">
-        <h1>Forgot Password</h1>
-        <p>Enter your email address to reset your password</p>
-      </div>
-
-      <div className="form-container">
-        {/* Email input */}
-        <div className="input-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        {/* Error message */}
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-
-        {/* Success message */}
-        {successMessage && (
-          <div className="success-message">{successMessage}</div>
+    <div className="style-bg">
+      <div className="same-style-container">
+        {/* Loading animation */}
+        {isLoading && (
+          <div id="loading">
+            <canvas
+              ref={canvasRef}
+              style={{ width: "300px", height: "300px" }}
+            ></canvas>
+          </div>
         )}
 
-        {/* Reset password button */}
-        <button
-          type="button"
-          className="confirm-button"
-          onClick={handlePasswordReset}
-          disabled={isLoading}
-        >
-          {isLoading ? "Sending..." : "Send Reset Link"}
-        </button>
-        {/* Navigation links */}
-        <div className="toggle-action">
-          Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>Log in here</span>
+        <div className="header">
+          <h1>Forgot Password</h1>
+          <p>Enter your email address to reset your password</p>
+        </div>
+
+        <div className="form-container">
+          {/* Email input */}
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          {/* Error message */}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+          {/* Success message */}
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+
+          {/* Reset password button */}
+          <button
+            type="button"
+            className="confirm-button"
+            onClick={handlePasswordReset}
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Send Reset Link"}
+          </button>
+          {/* Navigation links */}
+          <div className="toggle-action">
+            Already have an account?{" "}
+            <span onClick={() => navigate("/login")}>Log in here</span>
+          </div>
         </div>
       </div>
     </div>

@@ -43,9 +43,9 @@ const Header: React.FC = () => {
       <div className="header-main">
         {/* Logo Section */}
         <div className="logo">
-          <Link to="/">
+          <a href="/">
             <strong>GLE.WORK</strong>
-          </Link>
+          </a>
         </div>
 
         {/* Navigation Links */}
@@ -64,7 +64,7 @@ const Header: React.FC = () => {
                 to={user.role === "admin" ? "/admin" : "/user"}
                 className="user-info"
               >
-                Hi, {user.lastName} {user.firstName}  {/* làm thành button*/}
+                Hi, {user.lastName} {user.firstName} {/* làm thành button*/}
               </Link>
               {/* Chữ Logout */}
               <span className="logout-button" onClick={handleLogout}>

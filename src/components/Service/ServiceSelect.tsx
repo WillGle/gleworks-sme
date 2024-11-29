@@ -70,6 +70,8 @@ const Service: React.FC = () => {
         ))}
       </div>
 
+      <hr />
+
       <div className="note-and-faq">
         {/* Notes Section */}
         <div className="note-section">

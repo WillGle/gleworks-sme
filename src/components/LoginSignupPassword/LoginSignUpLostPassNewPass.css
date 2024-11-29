@@ -1,3 +1,15 @@
+/* Thêm ảnh nền cho trang login */
+.style-bg {
+    background-image: url('/src/assets/account.jpg'); /* Đường dẫn ảnh */
+    background-repeat: no-repeat; /* Không lặp ảnh */
+    background-size: cover; /* Ảnh phủ toàn màn hình */
+    background-position: center; /* Căn giữa ảnh */
+    min-height: 100vh; /* Đảm bảo chiều cao tối thiểu */
+    display: flex; /* Căn giữa nội dung */
+    justify-content: center; /* Căn giữa ngang */
+    align-items: center; /* Căn giữa dọc */
+}
+
 /* General container styles for responsiveness */
 .same-style-container {
     font-family: Arial, sans-serif;
@@ -268,3 +280,25 @@
         font-size: 10px;
     }
 }
+
+@media (max-width: 768px) {
+    body {
+        padding: 20px; /* Thêm khoảng trống cho màn hình nhỏ */
+    }
+
+    .same-style-container {
+        width: 100%; /* Thẻ sẽ rộng tối đa 100% */
+        padding: 15px; /* Giảm padding để phù hợp hơn */
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px; /* Thêm padding nhỏ hơn */
+    }
+
+    .same-style-container {
+        padding: 10px;
+    }
+}
+

@@ -8,21 +8,26 @@
   /* Shortcut Services */
   .service-shortcuts {
     display: flex;
-    gap: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    gap: 20px; /* Khoảng cách giữa các thẻ */
+    flex-wrap: wrap; /* Đảm bảo không tràn ra ngoài màn hình */
+    justify-content: center; /* Căn giữa các thẻ */
+    margin-top: 60px;
+    margin-bottom: 60px;
   }
+  
   
   .service-card {
     flex: 1;
-    padding: 20px;
+    padding: 10px 15px; /* Giảm padding để tạo cảm giác gọn */
     background-color: #f9f9f9;
-    border-radius: 8px;
+    border-radius: 4px; /* Giảm để vuông hơn */
     text-align: center;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
     transition: transform 0.2s, box-shadow 0.2s;
+    height: 200px;
   }
+  
   
   .service-card:hover {
     transform: translateY(-5px);

@@ -47,7 +47,7 @@ const Login: React.FC = () => {
       });
 
       const user = response.data; // Response data from the server
-    //   console.log("Login successful:", user);
+      //   console.log("Login successful:", user);
 
       // Clear previous user data from localStorage
       localStorage.removeItem("user");
@@ -73,57 +73,68 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="same-style-container">
-      <div className="header">
-        <h1>Login</h1>
-      </div>
-      <div className="form-container">
-        <div className="input-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setErrorMessage("");
-            }}
-          />
+    <div className="style-bg">
+      <div className="same-style-container">
+        <div className="header">
+          <h1>Login</h1>
         </div>
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setErrorMessage("");
-            }}
-          />
-        </div>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-        {successMessage && (
-          <div className="success-message">{successMessage}</div>
-        )}
-        <button
-          type="button"
-          className="confirm-button"
-          onClick={handleLogin}
-          disabled={isLoading}
-        >
-          {isLoading ? "Logging in..." : "Login"}
-        </button>
-
-        <div className="toggle-action">
-          <div>
-            New here? <span onClick={() => navigate("/signup")}>Sign Up</span>
+        <div className="form-container">
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrorMessage("");
+              }}
+            />
           </div>
-          <div>
-            Forgot Password?{" "}
-            <span onClick={() => navigate("/lost-password")}>Reset Here</span>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorMessage("");
+              }}
+            />
+          </div>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+
+          <div className="button-group">
+            <button
+              type="button"
+              className="cancel-button"
+              onClick={() => navigate("/home")}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              className="confirm-button"
+              onClick={handleLogin}
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging in..." : "Login"}
+            </button>
+          </div>
+          <div className="toggle-action">
+            <div>
+              New here? <span onClick={() => navigate("/signup")}>Sign Up</span>
+            </div>
+            <div>
+              Forgot Password?{" "}
+              <span onClick={() => navigate("/lost-password")}>Reset Here</span>
+            </div>
           </div>
         </div>
       </div>

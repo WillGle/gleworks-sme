@@ -63,6 +63,12 @@
   color: #333333;
 }
 
+.form-group p {
+  font-size: 14px;
+  color: #666;
+  margin: unset;
+}
+
 .form-group-note {
   font-size: 12px;
   font-style: italic;

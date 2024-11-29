@@ -70,32 +70,34 @@ const Service: React.FC = () => {
         ))}
       </div>
 
-      {/* Notes Section */}
-      <div className="service-notes">
-        <h1>
-          Commission Status: <span style={{ color: "green" }}>Open</span>
-        </h1>
-        <h2>Notes:</h2>
-        <p>
-          Remember that all materials, with the exception of lubricant, solder
-          and dielectric grease, must be provided by the owner unless discussed
-          otherwise.
-        </p>
-        <p>
-          All parts, like stabilizers, films etc are also to be provided if
-          needed for personal reference. Prices <strong>do not</strong> include
-          return shipping and/or duties.
-        </p>
-        <p>
-          The unit of measurement used in Switch Modding service form is 1
-          (piece/item). Example: 1 switch, 1 LED, 1 socket.
-        </p>
-        <p>
-          Orders for Lube will be completed within <strong>1-2 days</strong>.
-          Build orders will be completed within <strong>4 days</strong> and will
-          be kept for an <strong>additional 2 days</strong> for quality checks
-          to ensure no issues arise upon delivery to the customer.
-        </p>
+      <div className="note-and-faq">
+        {/* Notes Section */}
+        <div className="note-section">
+          <h1>
+            Commission Status: <span style={{ color: "green" }}>Open</span>
+          </h1>
+          <h2>Notes:</h2>
+          <p>
+            Remember that all materials, with the exception of lubricant, solder
+            and dielectric grease, must be provided by the owner unless
+            discussed otherwise.
+          </p>
+          <p>
+            All parts, like stabilizers, films etc are also to be provided if
+            needed for personal reference. Prices <strong>do not</strong>{" "}
+            include return shipping and/or duties.
+          </p>
+          <p>
+            The unit of measurement used in Switch Modding service form is 1
+            (piece/item). Example: 1 switch, 1 LED, 1 socket.
+          </p>
+          <p>
+            Orders for Lube will be completed within <strong>1-2 days</strong>.
+            Build orders will be completed within <strong>4 days</strong> and
+            will be kept for an <strong>additional 2 days</strong> for quality
+            checks to ensure no issues arise upon delivery to the customer.
+          </p>
+        </div>
 
         {/* FAQ Section */}
         <div className="faq-section">

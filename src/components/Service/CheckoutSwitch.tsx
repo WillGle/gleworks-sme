@@ -218,13 +218,14 @@ const Checkout: React.FC = () => {
 
   return (
     <div className="checkout-container">
-      <h1>Checkout</h1>
+      <h1>Checkout - Switch Modding</h1>
 
+      {/* Editable Customer Information */}
       <div className="customer-info">
         <h3>Customer Information</h3>
         {userInfo ? (
           <>
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Customer</label>
               <input
                 type="text"
@@ -236,7 +237,7 @@ const Checkout: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Email</label>
               <input
                 type="email"
@@ -248,7 +249,7 @@ const Checkout: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Phone</label>
               <input
                 type="tel"
@@ -259,7 +260,7 @@ const Checkout: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Address</label>
               <input
                 type="text"
@@ -270,7 +271,7 @@ const Checkout: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Order Date</label>
               <input
                 type="text"
@@ -288,18 +289,19 @@ const Checkout: React.FC = () => {
 
       <hr />
 
+      {/* Non-editable Order Details */}
       <div className="order-details">
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Switches</label>
           <p>{orderData ? orderData.switchName : "Loading..."}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Amount</label>
           <p>{orderData ? orderData.amount : "Loading..."}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Switch Modding Preference</label>
           <p>
             {orderData
@@ -310,12 +312,12 @@ const Checkout: React.FC = () => {
           </p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>My Spring Preference</label>
           <p>{orderData ? orderData.springPreference : "Loading..."}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Additional Notes</label>
           <p>{orderData ? orderData.additionalNotes : "Loading..."}</p>
         </div>

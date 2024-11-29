@@ -364,6 +364,36 @@ const Build: React.FC = () => {
             className="input-field additional-notes"
           />
         </div>
+
+        {/* Terms and Submit Section */}
+        <div className="form-group">
+          <label>Terms</label>
+          <p>
+            Please check this box if you agree to all the notes in Service page.
+            This is not a guarantee, this a building proposal, Gleammy reserves
+            the right to decline builds. Gleammy will contact you regarding the
+            next steps.
+          </p>
+          <p>
+            By accepting this, you take responsibility for testing your keyboard
+            beforehand and accept that an additional will take place test upon
+            receiving it. Gleammy does not take fault if there are damages
+            during shipping or any missing items. You are also responsible for
+            any problems that arise after the keyboard is complete and confirmed
+            working. Please note that not all boards will and/or be
+            streamed/recorded. Once the package is in the possession of the mail
+            system, Gleammy is not responsible for any problems that may arise.
+          </p>
+          <p>
+            Please ensure the keyboard is shipped in one package neatly and
+            please refrain from sending us individual parts from different
+            stores to avoid mail confusion. Gleammy also holds the right to
+            refuse and return builds that are unsanitary and will be shipped
+            back at your expense. If you agree to the terms, please check the
+            box and continue.
+          </p>
+        </div>
+
         <div className="form-group terms-group">
           <label>
             <input
@@ -372,7 +402,7 @@ const Build: React.FC = () => {
               checked={formData.termsAccepted}
               onChange={handleInputChange}
               required
-            />
+            />{" "}
             I agree to the terms.
           </label>
         </div>

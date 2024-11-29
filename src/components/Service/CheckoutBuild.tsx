@@ -213,14 +213,14 @@ const CheckoutBuild: React.FC = () => {
 
   return (
     <div className="checkout-container">
-      <h1>Checkout - Build Service</h1>
+      <h1>Checkout - Keyboard Build Service</h1>
 
       {/* Editable Customer Information */}
       <div className="customer-info">
         <h3>Customer Information</h3>
         {userInfo ? (
           <>
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Customer</label>
               <input
                 type="text"
@@ -232,7 +232,7 @@ const CheckoutBuild: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Email</label>
               <input
                 type="email"
@@ -244,7 +244,7 @@ const CheckoutBuild: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Phone</label>
               <input
                 type="tel"
@@ -255,7 +255,7 @@ const CheckoutBuild: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Address</label>
               <input
                 type="text"
@@ -265,7 +265,7 @@ const CheckoutBuild: React.FC = () => {
                 onChange={handleFullAddressChange}
               />
             </div>
-            <div className="form-group">
+            <div className="checkout-form-group">
               <label>Order Date</label>
               <input
                 type="text"
@@ -285,59 +285,59 @@ const CheckoutBuild: React.FC = () => {
 
       {/* Non-editable Order Details */}
       <div className="order-details">
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Keyboard Kit Name</label>
-          <span>{orderData?.keyboardKitName}</span>
+          <p>{orderData?.keyboardKitName}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Switches</label>
-          <span>{orderData?.switchesName}</span>
+          <p>{orderData?.switchesName}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Layout</label>
-          <span>{orderData?.layout}</span>
+          <p>{orderData?.layout}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>With Switches</label>
-          <span>{orderData?.withSwitches}</span>
+          <p>{orderData?.withSwitches}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Stabilizer Name</label>
-          <span>{orderData?.stabilizerName}</span>
+          <p>{orderData?.stabilizerName}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Switch Quantity</label>
-          <span>{orderData?.switchQuantity}</span>
+          <p>{orderData?.switchQuantity}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Plate Choice</label>
-          <span>{orderData?.plateChoice}</span>
+          <p>{orderData?.plateChoice}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Desoldering</label>
-          <span>{orderData?.desoldering}</span>
+          <p>{orderData?.desoldering}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Are You Providing Keycap?</label>
-          <span>{orderData?.providingKeycap}</span>
+          <p>{orderData?.providingKeycap}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Assembly</label>
-          <span>{orderData?.assembly}</span>
+          <p>{orderData?.assembly}</p>
         </div>
 
-        <div className="form-group">
+        <div className="checkout-form-group">
           <label>Additional Notes</label>
-          <span>{orderData?.additionalNotes}</span>
+          <p>{orderData?.additionalNotes}</p>
         </div>
       </div>
 
@@ -350,7 +350,7 @@ const CheckoutBuild: React.FC = () => {
       </div>
 
       {/* Buttons */}
-      <div className="checkou-button-group">
+      <div className="checkout-button-group">
         <button
           type="button"
           className="return-button"

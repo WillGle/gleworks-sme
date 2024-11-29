@@ -23,17 +23,19 @@
     margin-bottom: 30px;
   }
   
-  .form-group {
+  .checkout-form-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
   }
   
-  .form-group label {
+  .checkout-form-group label {
+    display: flex;
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
     color: #555;
+    align-items: center;
   }
   
 .order-form-group {

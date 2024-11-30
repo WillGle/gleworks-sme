@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
         <div className="footer-section">
           <div className="logo">GLE.WORK</div>
           <p>Ho Chi Minh, Vietnam</p>
-          <p>cuongsayyay@gmail.com</p>
+          <p>glework.sp@gmail.com</p>
           <div className="social-icons">
             <FaFacebook />
             <FaInstagram />

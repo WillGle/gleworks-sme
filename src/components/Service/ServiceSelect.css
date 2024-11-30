@@ -27,6 +27,8 @@
   height: 200px;
   max-width: 100%;
   margin-bottom: 15px; /* Mobile-specific spacing */
+  display: grid;
+  align-content: center;
 }
 
 .service-card:hover {

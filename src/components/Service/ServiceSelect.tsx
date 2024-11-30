@@ -34,7 +34,7 @@ const Service: React.FC = () => {
     {
       question: "Can you source my parts for me?",
       answer:
-        "I can source parts for you, but this will be an additional cost. Let’s discuss this further.",
+        "I can! But it will be limited to what’s in stock. Payment for this will also need to be made up front.",
     },
     {
       question: "Can I ship parts from vendors to you?",
@@ -43,7 +43,8 @@ const Service: React.FC = () => {
     },
     {
       question: "Do I get photos of my board included?",
-      answer: "Yes, photos of the finished build will be provided.",
+      answer:
+        "I typically try take fancy photos of everything, but it’s not a guarantee and any additional media wanted by the owner needs to be discussed. So please add that in the notes!",
     },
     {
       question: "I have more questions about a build!",

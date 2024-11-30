@@ -51,14 +51,14 @@ const MyAccount: React.FC = () => {
         const response = await fetch(`${apiUrl}/auth/auth-check`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.ok) {
           const userData = await response.json();
-        //   console.log("User Data:", userData); // Debugging line
-          
+          //   console.log("User Data:", userData); // Debugging line
+
           // Access the user ID correctly
           const userId = userData.user.id; // Adjusted to access the user ID
           localStorage.setItem("userId", userId); // Store user ID in local storage
@@ -86,7 +86,7 @@ const MyAccount: React.FC = () => {
         const response = await fetch(`${apiUrl}/auth/user/${userId}`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -131,7 +131,7 @@ const MyAccount: React.FC = () => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Use token for authorization
+            Authorization: `Bearer ${token}`, // Use token for authorization
           },
           body: JSON.stringify(formData),
         }
@@ -182,6 +182,7 @@ const MyAccount: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            readOnly
           />
         </div>
         <div className="account-form-group">

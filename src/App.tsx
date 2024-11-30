@@ -21,9 +21,10 @@ import Build from "./components/Service/Build";
 import CheckoutBuild from "./components/Service/CheckoutBuild";
 import CheckoutSwitch from "./components/Service/CheckoutSwitch";
 import UserPageLayout from "./components/UserPage/UserPageLayout";
-import AdminPageLayout from "./components/AdminPage/AdminPageLayout";
-import Policies from "./components/Policies/Policies";
+import AdminPageLayout from "./components/UserPage/AdminPageLayout";
+import Policies from "./components/Policies/PrivacyPolicy";
 import NotFound from "./components/NotFound";
+import NotAuth from "./components/NotAuthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
@@ -76,13 +77,20 @@ function AppLayout() {
             </ProtectedRoute>
           }
         />
-        {/* Delegate all /admin sub-routes to AdminPageLayout */}
-        <Route path="/admin/*" element={<AdminPageLayout />} />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute>
+              <AdminPageLayout />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />
         <Route path="/user/new-password" element={<NewPass />} />
         <Route path="/policies/" element={<Policies />} />
+        <Route path="/not-authorized" element={<NotAuth />} />
         <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
       </Routes>
       {!hideHeaderFooter && <Footer />}

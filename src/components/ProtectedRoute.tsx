@@ -1,20 +1,31 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const token = localStorage.getItem("token"); // Kiểm tra token trong localStorage
-  const role = localStorage.getItem("role"); // Lấy role từ localStorage
+  const token = localStorage.getItem("token"); // Check token in localStorage
+  const role = localStorage.getItem("role"); // Get role from localStorage
+  const location = useLocation();
 
-  if (!token || role !== 'user') {
-    // Nếu không có token hoặc role không phải là 'user', chuyển hướng đến trang đăng nhập
+  if (!token) {
+    // If no token, redirect to login
     return <Navigate to="/login" />;
   }
 
-  return <>{children}</>; // Nếu có token và role là 'user', hiển thị nội dung con
+  if (location.pathname.startsWith("/admin") && role !== "admin") {
+    // If accessing admin route and role is not admin, redirect to not authorized page
+    return <Navigate to="/not-authorized" />;
+  }
+
+  if (location.pathname.startsWith("/user") && role !== "user") {
+    // If accessing user route and role is not user, redirect to not authorized page
+    return <Navigate to="/not-authorized" />;
+  }
+
+  return <>{children}</>; // If token and role are valid, render children
 };
 
 export default ProtectedRoute;

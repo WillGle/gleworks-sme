@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import "./OrderDetail.css";
+import "./AdminOrderDetail.css";
 
 const paymentStatusOptions = ["Paid", "Pending", "Canceled"];
 const orderStatusOptions = [
@@ -23,7 +23,9 @@ const OrderDetail: React.FC = () => {
         return; // Ngừng thực hiện nếu orderId không hợp lệ
       }
       try {
-        const response = await fetch(`http://localhost:3000/order-details/${orderId}`);
+        const response = await fetch(
+          `http://localhost:3000/order-details/${orderId}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch order details");
         }
@@ -49,7 +51,7 @@ const OrderDetail: React.FC = () => {
   // Handlers for updating the dropdown values
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-  
+
     setOrderData((prev: any) => {
       const updatedOrderData = prev.map((item: any, index: number) => {
         if (index === 0) {
@@ -63,35 +65,40 @@ const OrderDetail: React.FC = () => {
         }
         return item; // Giữ nguyên các phần tử khác
       });
-  
+
       // Lưu vào sessionStorage
-      sessionStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrderData));
+      sessionStorage.setItem(
+        `order_${orderId}`,
+        JSON.stringify(updatedOrderData)
+      );
       return updatedOrderData;
     });
   };
-  
 
   const handleSubmit = async () => {
     if (!orderData) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/orders/${orderId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          status: orderData[0].Order.status,
-          paymentStatus: orderData[0].Order.paymentStatus,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/orders/${orderId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: orderData[0].Order.status,
+            paymentStatus: orderData[0].Order.paymentStatus,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update order status");
       }
 
       const updatedOrder = await response.json();
-    //   console.log("Updated Order:", updatedOrder);
+      //   console.log("Updated Order:", updatedOrder);
       // Cập nhật lại orderData với dữ liệu mới
       setOrderData((prev: any) => {
         const newOrderData = [...prev];
@@ -117,7 +124,7 @@ const OrderDetail: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-//   console.log("Current Order Data:", orderData);
+  //   console.log("Current Order Data:", orderData);
 
   return (
     <div className="order-detail-container">
@@ -129,7 +136,7 @@ const OrderDetail: React.FC = () => {
             <label>Order Status</label>
             <select
               name="status" // Đặt tên cho trường status
-              value={orderData[0].Order?.status || ''}
+              value={orderData[0].Order?.status || ""}
               onChange={handleStatusChange}
             >
               {orderStatusOptions.map((status) => (
@@ -143,7 +150,7 @@ const OrderDetail: React.FC = () => {
             <label>Payment Status</label>
             <select
               name="paymentStatus" // Đặt tên cho trường paymentStatus
-              value={orderData[0]?.Order?.paymentStatus || ''}
+              value={orderData[0]?.Order?.paymentStatus || ""}
               onChange={handleStatusChange}
             >
               {paymentStatusOptions.map((status) => (
@@ -165,30 +172,32 @@ const OrderDetail: React.FC = () => {
       <div className="customer-info">
         <div className="order-form-group">
           <label>Order ID</label>
-          <p>{orderData[0]?.orderId || 'N/A'}</p>
+          <p>{orderData[0]?.orderId || "N/A"}</p>
         </div>
         <div className="order-form-group">
           <label>Customer</label>
-          <p>{`${orderData[0]?.Order?.User?.firstName || 'N/A'} ${orderData[0]?.Order?.User?.lastName || 'N/A'}`}</p>
+          <p>{`${orderData[0]?.Order?.User?.firstName || "N/A"} ${
+            orderData[0]?.Order?.User?.lastName || "N/A"
+          }`}</p>
         </div>
         <div className="order-form-group">
           <label>Mail</label>
-          <p>{orderData[0]?.Order?.User?.email || 'N/A'}</p>
+          <p>{orderData[0]?.Order?.User?.email || "N/A"}</p>
         </div>
         <div className="order-form-group">
           <label>Tel</label>
-          <p>{orderData[0]?.Order?.telephone || 'N/A'}</p>
+          <p>{orderData[0]?.Order?.telephone || "N/A"}</p>
         </div>
         <div className="order-form-group">
           <label>Address</label>
-          <p>{orderData[0]?.Order?.address || 'N/A'}</p>
+          <p>{orderData[0]?.Order?.address || "N/A"}</p>
         </div>
         <div className="order-form-group">
           <label>Order Date</label>
           <p>
-            {orderData[0]?.Order?.createdAt 
-              ? new Date(orderData[0].Order.createdAt).toLocaleDateString() 
-              : 'N/A'}
+            {orderData[0]?.Order?.createdAt
+              ? new Date(orderData[0].Order.createdAt).toLocaleDateString()
+              : "N/A"}
           </p>
         </div>
       </div>
@@ -197,18 +206,25 @@ const OrderDetail: React.FC = () => {
 
       {/* Order Information */}
       <div className="order-info">
-        {Array.isArray(orderData) && orderData.map((field: { id: string; fieldName: string; fieldValue: string }) => (
-          <div className="order-form-group" key={field.id}>
-            <label>{field.fieldName}</label>
-            <p>{field.fieldValue || 'N/A'}</p>
-          </div>
-        ))}
+        {Array.isArray(orderData) &&
+          orderData.map(
+            (field: { id: string; fieldName: string; fieldValue: string }) => (
+              <div className="order-form-group" key={field.id}>
+                <label>{field.fieldName}</label>
+                <p>{field.fieldValue || "N/A"}</p>
+              </div>
+            )
+          )}
       </div>
 
       {/* Total Section */}
       <div className="admin-order-total-section">
         <h2>Total</h2>
-        <p>{orderData[0]?.Order?.totalCost ? `${orderData[0].Order.totalCost.toLocaleString()} VND` : "N/A"}</p>
+        <p>
+          {orderData[0]?.Order?.totalCost
+            ? `${orderData[0].Order.totalCost.toLocaleString()} VND`
+            : "N/A"}
+        </p>
       </div>
     </div>
   );

@@ -34,9 +34,7 @@ const Header: React.FC = () => {
       <div className="header-main">
         {/* Logo Section */}
         <div className="logo">
-          <a href="/">
-            <strong>GLE.WORK</strong>
-          </a>
+          <a href="/">GLE.WORK</a>
         </div>
 
         {/* Navigation Links */}

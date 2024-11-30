@@ -4,7 +4,7 @@ import SidePanel from "./AdminSidePanel";
 import "./AdminPageLayout.css";
 import AdminDashboard from "./AdminDashboard";
 import AdminOrder from "./AdminOrder";
-import OrderDetail from "./OrderDetail";
+import OrderDetail from "./AdminOrderDetail";
 // import UserList from "./UserList";
 
 const UserPageLayout: React.FC = () => {
@@ -18,7 +18,10 @@ const UserPageLayout: React.FC = () => {
         <Routes>
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="my-orders" element={<AdminOrder />} />
-          <Route path="my-orders/order-detail/:orderId" element={<OrderDetail />} />
+          <Route
+            path="my-orders/order-detail/:orderId"
+            element={<OrderDetail />}
+          />
           {/*<Route path="user-list" element={<UserList />} /> */}
         </Routes>
       </div>

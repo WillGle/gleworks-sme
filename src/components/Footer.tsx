@@ -14,18 +14,15 @@ const Footer: React.FC = () => {
           <div className="email-signup">
             <input type="email" placeholder="Email" />
             <button>
-              <FaArrowRight />
+              <FaArrowRight /> {/*Xử lý gửi mail */}
             </button>
           </div>
         </div>
 
         {/* Company Information Section */}
         <div className="footer-section">
-          <h3>GLE.WORK</h3>
-          <p>
-            ABC Street, Ward X<br />
-            Ho Chi Minh, Vietnam
-          </p>
+          <div className="logo">GLE.WORK</div>
+          <p>Ho Chi Minh, Vietnam</p>
           <p>cuongsayyay@gmail.com</p>
           <div className="social-icons">
             <FaFacebook />

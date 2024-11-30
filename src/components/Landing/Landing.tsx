@@ -20,19 +20,15 @@ const Landing: React.FC = () => {
             Learn More
           </Link> */}
         </div>
-        <div className="hero-image">
-          <img
-            src={image1}
-            alt="A beautiful custom keyboard"
-            className="hero-image"
-          />
-        </div>
+        <img
+          src={image1}
+          alt="A beautiful custom keyboard"
+          className="hero-image"
+        />
       </section>
 
       <section className="about-section">
-        <div className="about-image">
-          <img src={about} alt="Chí-Cường Nguyễn" className="about-image" />
-        </div>
+        <img src={about} alt="Chí-Cường Nguyễn" className="about-image" />
         <div className="about-content">
           <h1>Chí-Cường Nguyễn</h1>
           <h2>

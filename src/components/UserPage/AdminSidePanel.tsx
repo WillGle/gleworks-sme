@@ -42,16 +42,16 @@ const SidePanel: React.FC = () => {
       <nav>
         <ul className="nav-list">
           <li>
-            <Link to="/user/my-account">My Account</Link>
+            <Link to="/admin/dashboard">Dashboard</Link>
           </li>
           <li>
-            <Link to="/user/my-orders">My Orders</Link>
+            <Link to="/admin/my-orders">My Orders</Link>
           </li>
           <li>
-            <Link to="/user/support">Support</Link>
+            <Link to="/admin/user-list">Users</Link>
           </li>
           <li>
-            <Link to="/user/new-password">Change Password</Link>
+            <Link to="/new-password">Change Password</Link>
           </li>
         </ul>
       </nav>

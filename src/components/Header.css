@@ -50,7 +50,6 @@
   
   .navigation a {
     font-size: 18px;
-    /* font-weight: bold; */
     color: #777;
     text-transform: uppercase;
     position: relative;
@@ -60,6 +59,11 @@
     padding: 5px 0; /* Để đảm bảo khoảng cách đều */
   }
 
+  .navigation a:hover {
+    color: #174aa8;
+    text-decoration: none;
+  }
+
   .navigation a::after {
     content: "";
     position: absolute;
@@ -67,7 +71,7 @@
     left: 0;
     width: 0%;
     height: 2px; /* Độ dày của underline */
-    background-color: #505050; /* Màu sắc của underline */
+    background-color: #174aa8; /* Màu sắc của underline */
     transition: width 0.3s ease-in-out; /* Hiệu ứng chuyển động */
   }
   
@@ -91,15 +95,6 @@
   .icon:hover {
     color:  #174aa8;
   }
-  
-  .user-info {
-    text-decoration: none;
-    color: black;
-  }
-  
-  .user-info:hover {
-    text-decoration: underline;
-  }
 
 /* Header Icons */
 .header-icons {
@@ -114,8 +109,8 @@
     padding: 5px 15px;
     font-size: 16px;
     font-weight: bold;
-    color: #ffffff;
-    background-color: #97b1cb;
+    color: #f5f5f7;
+    background-color: #174aa8;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -125,21 +120,23 @@
   }
   
   .user-info:hover {
-    background-color: #97b1cb;
+    background-color: #174aa8;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    outline: 2px solid#174aa8;
+    outline-offset: 2px;
+    transition: outline 0.3s ease;
   }
+
+  .user-info:active {
+    background-color: #174aa8;
+    box-shadow: none;
+  }
+
   
   .user-info:active {
     background-color: #868686;
     box-shadow: none;
   }
-  
-  .user-info:focus {
-    outline: 2px solid#97b1cb;
-    outline-offset: 2px;
-  }
-
-  /* Logout Btn */
 
   /* Responsive Adjustments */
   @media (max-width: 768px) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import { FaUser } from "react-icons/fa";
 
@@ -14,7 +14,6 @@ interface User {
 const Header: React.FC = () => {
   // State lưu thông tin người dùng
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
 
   // Kiểm tra thông tin người dùng trong localStorage khi component được mount
   useEffect(() => {
@@ -29,14 +28,6 @@ const Header: React.FC = () => {
       }
     }
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("user"); // Xóa thông tin người dùng khỏi localStorage
-    sessionStorage.clear(); // Xóa toàn bộ sessionStorage
-    localStorage.removeItem("token"); // Remove the token from local storage
-    setUser(null); // Reset state user
-    navigate("/login"); // Redirect to login page
-  };
 
   return (
     <header className="topHeader">
@@ -67,9 +58,6 @@ const Header: React.FC = () => {
                 Hi, {user.lastName} {user.firstName} {/* làm thành button*/}
               </Link>
               {/* Thêm nút logout */}
-              <span className="logout-button" onClick={handleLogout}>
-                Logout
-              </span>
             </>
           ) : (
             <Link to="/login">

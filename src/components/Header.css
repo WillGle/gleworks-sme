@@ -2,7 +2,7 @@
 
 /* Header CSS Styles */
 .topHeader {
-    background-color: rgb(42, 44, 45);
+    background-color: #f5f5f5;
     padding: 20px;
     font-family: Arial, sans-serif;
   }
@@ -21,7 +21,7 @@
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0; /* Hoặc điều chỉnh phù hợp */
-    color: #000;
+    color: #f5f5f5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
@@ -31,7 +31,7 @@
 
   .logo a {
     text-decoration: none;
-    color: inherit;
+    color: #f5f5f5;
   }
   
   
@@ -47,16 +47,34 @@
   }
   
   .navigation a {
-    text-decoration: none;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
     color: #777;
     text-transform: uppercase;
+
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: #505050;
+    padding: 5px 0; /* Để đảm bảo khoảng cách đều */
+  }
+
+  .navigation a::after {
+    content: "";
+    position: absolute;
+    bottom: 0; /* Dòng underline nằm dưới chữ */
+    left: 0;
+    width: 0%;
+    height: 2px; /* Độ dày của underline */
+    background-color: #505050; /* Màu sắc của underline */
+    transition: width 0.3s ease-in-out; /* Hiệu ứng chuyển động */
   }
   
-  .navigation a:hover {
-    color: #000;
-    text-decoration: underline;
+  .navigation a:hover::after {
+    width: 100%; /* Khi hover, underline chạy hết chiều rộng của chữ */
   }
+
+
   
   .icons {
     display: flex;

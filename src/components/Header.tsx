@@ -66,7 +66,7 @@ const Header: React.FC = () => {
               >
                 Hi, {user.lastName} {user.firstName} {/* làm thành button*/}
               </Link>
-              {/* Chữ Logout */}
+              {/* Thêm nút logout */}
               <span className="logout-button" onClick={handleLogout}>
                 Logout
               </span>

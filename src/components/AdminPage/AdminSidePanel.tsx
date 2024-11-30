@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./AdminSidePanel.css";
+import "../AllSidePanel.css";
 
 const SidePanel: React.FC = () => {
   return (
-    <div className="admin-side-panel">
+    <div className="side-panel">
       <nav>
         <ul className="nav-list">
           <li>

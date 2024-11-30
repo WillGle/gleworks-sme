@@ -190,6 +190,16 @@
     max-width: 480px;
 }
 
+/* Success message */
+.success-message {
+    color: #5cb85c;
+    font-size: 14px;
+    margin: 10px;
+    text-align: center; /* Align to center for smaller screens */
+    width: 100%;
+    max-width: 480px;
+}
+
 /* Loading spinner */
 #loading {
     position: fixed;

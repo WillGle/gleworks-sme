@@ -72,7 +72,6 @@
     align-items: center;
     padding: 50px 0;
     flex-direction: row;
-    gap: 20px;
   }
 
   .about-content {
@@ -83,7 +82,7 @@
     font-size: 36px;
     font-weight: bold;
     margin: unset;
-    text-align: right;
+    text-align: left;
   }
 
   .about-content h2 {
@@ -91,7 +90,7 @@
     line-height: 1.6;
     color: #555;
     margin-bottom: 30px;
-    text-align: right;
+    text-align: left;
     margin: unset;
   }
 

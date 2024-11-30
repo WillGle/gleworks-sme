@@ -48,7 +48,7 @@ const SidePanel: React.FC = () => {
             <Link to="/admin/my-orders">My Orders</Link>
           </li>
           <li>
-            <Link to="/admin/user-list">Users</Link>
+            <Link to="/admin/user-list">Users Management</Link>
           </li>
           <li>
             <Link to="/new-password">Change Password</Link>

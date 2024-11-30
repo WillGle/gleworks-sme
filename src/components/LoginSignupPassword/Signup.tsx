@@ -110,7 +110,7 @@ const Signup: React.FC = () => {
             <input
               id="firstName"
               type="text"
-              placeholder="Enter your first name"
+              placeholder="Enter your First name"
               value={firstName}
               onChange={handleInputChange(setFirstName)}
             />
@@ -120,7 +120,7 @@ const Signup: React.FC = () => {
             <input
               id="lastName"
               type="text"
-              placeholder="Enter your last name"
+              placeholder="Enter your Last name"
               value={lastName}
               onChange={handleInputChange(setLastName)}
             />
@@ -132,7 +132,7 @@ const Signup: React.FC = () => {
               selected={dob}
               onChange={(date: Date | null) => setDob(date)}
               dateFormat="dd/MM/yyyy"
-              placeholderText="Select your date of birth"
+              placeholderText="Your Date of Birth (DD-MM-YYYY)"
               className="input"
             />
           </div>
@@ -142,6 +142,7 @@ const Signup: React.FC = () => {
               country={"vn"}
               value={phone}
               onChange={setPhone}
+              placeholder="Enter your phone number"
               inputClass="input"
               containerClass="phone-input-container"
             />
@@ -151,7 +152,7 @@ const Signup: React.FC = () => {
             <input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Enter your Email"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);

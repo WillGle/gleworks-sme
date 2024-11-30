@@ -162,6 +162,7 @@ const MyAccount: React.FC = () => {
           <input
             type="text"
             name="firstName"
+            placeholder="Your First Name"
             value={formData.firstName}
             onChange={handleChange}
           />
@@ -171,6 +172,7 @@ const MyAccount: React.FC = () => {
           <input
             type="text"
             name="lastName"
+            placeholder="Your Last Name"
             value={formData.lastName}
             onChange={handleChange}
           />
@@ -180,6 +182,7 @@ const MyAccount: React.FC = () => {
           <input
             type="email"
             name="email"
+            placeholder="Your Email Address"
             value={formData.email}
             onChange={handleChange}
             readOnly
@@ -190,6 +193,7 @@ const MyAccount: React.FC = () => {
           <input
             type="text"
             name="phoneNumber"
+            placeholder="Your Phone Number"
             value={formData.phoneNumber}
             onChange={handleChange}
           />
@@ -199,6 +203,7 @@ const MyAccount: React.FC = () => {
           <input
             type="date"
             name="dateOfBirth"
+            placeholder="Your Date of Birth (DD-MM-YYYY)"
             value={formData.dateOfBirth}
             onChange={handleChange}
           />
@@ -208,6 +213,7 @@ const MyAccount: React.FC = () => {
           <input
             type="text"
             name="address"
+            placeholder="Your Default Address"
             value={formData.address}
             onChange={handleChange}
           />
@@ -217,6 +223,7 @@ const MyAccount: React.FC = () => {
           <input
             type="text"
             name="city"
+            placeholder="Your City"
             value={formData.city}
             onChange={handleChange}
           />

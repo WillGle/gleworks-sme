@@ -99,7 +99,7 @@ const Service: React.FC = () => {
           </p>
           <p>
             The unit of measurement used in Switch Modding service form is 1
-            (piece/item). Example: 1 switch, 1 LED, 1 socket.
+            (piece/item). <br /> Example: 1 switch, 1 LED, 1 socket.
           </p>
           <p>
             Orders for Lube will be completed within <strong>1-2 days</strong>.

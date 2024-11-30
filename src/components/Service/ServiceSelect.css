@@ -1,117 +1,146 @@
+/* Main Container Styling */
 .service-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
-  }
-  
-  /* Shortcut Services */
-  .service-shortcuts {
-    display: flex;
-    gap: 20px; /* Khoảng cách giữa các thẻ */
-    flex-wrap: wrap; /* Đảm bảo không tràn ra ngoài màn hình */
-    justify-content: center; /* Căn giữa các thẻ */
-    margin-top: 60px;
-    margin-bottom: 60px;
-  }
-  
-  
-  .service-card {
-    flex: 1;
-    padding: 10px 15px; /* Giảm padding để tạo cảm giác gọn */
-    background-color: #f9f9f9;
-    border-radius: 4px; /* Giảm để vuông hơn */
-    text-align: center;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
-    transition: transform 0.2s, box-shadow 0.2s;
-    height: 200px;
-  }
-  
-  
-  .service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  .service-card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  
-  .service-card p {
-    font-size: 14px;
-    color: #666;
-  }
-  
-  /* note and faq */
+}
+
+/* Shortcut Services Section */
+.service-shortcuts {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Prevent overflow */
+  justify-content: center; /* Center align cards */
+  margin: 60px 0; /* Combined top and bottom margins */
+}
+
+.service-card {
+  flex: 1;
+  padding: 10px 15px; /* Compact padding for neat appearance */
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 200px;
+  max-width: 100%;
+  margin-bottom: 15px; /* Mobile-specific spacing */
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.service-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.service-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Notes and FAQ Section */
+.note-and-faq {
+  display: flex;
+  flex-direction: row; /* Default layout for larger screens */
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.note-section,
+.faq-section {
+  margin: 20px 0; /* Unified margin for both sections */
+  padding: 0 10px; /* Add padding for smaller screens */
+}
+
+/* Notes Section */
+.note-section {
+  flex: 1; /* Takes up 50% */
+}
+
+.note-section h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.note-section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.note-section p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* FAQ Section */
+.faq-section {
+  flex: 1; /* Takes up 50% */
+}
+
+.faq-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.faq-question:hover {
+  color: #007bff;
+  background-color: #e1e1e1;
+}
+
+.faq-answer {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+}
+
+.faq-item.active .faq-question {
+  color: #007bff;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 767px) {
   .note-and-faq {
-    display: flex;
-    flex-direction: row; /* Hoặc column tùy thuộc vào thiết kế */
-    gap: 20px;
-    justify-content: center; /* Căn giữa nội dung bên trong */
-    align-items: flex-start; /* Điều chỉnh nếu cần căn giữa chiều dọc */
-    width: 100%; /* Đảm bảo chiều rộng đầy đủ */
-    max-width: 1200px; /* Giới hạn chiều rộng để không quá lớn */
-    margin: 0 auto; /* Căn giữa phần tử .note-and-faq */
-  }
-  .note-section, .faq-section {
-      margin-top: 20px;
-    }
-
-  /* Notes Section */
-  .note-section {
-      flex: 1; /* Phần tỷ lệ chiếm 50% */
-    }
-
-  .note-section h1 {
-    font-size: 30px;
-    margin-bottom: 10px;
-    font-weight: bold;
+    flex-direction: column; /* Stack sections vertically */
   }
 
-  .note-section h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+  .service-card {
+    max-width: 100%; /* Full width on smaller screens */
   }
-  
-  .note-section p {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .note-and-faq {
+    flex-direction: row; /* Row layout for larger screens */
   }
-  
-  /* FAQ Section */
-  .faq-section {
-    flex: 1; /* Phần tỷ lệ chiếm 50% */
-  }
-  
-  .faq-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-  }
-  
-  .faq-item:last-child {
-    border-bottom: none;
-  }
-  
-  .faq-question {
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  
-  .faq-question:hover {
-    color: #007bff;
-  }
-  
-  .faq-answer {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .faq-item.active .faq-question {
-    color: #007bff;
-  }
-  
+}

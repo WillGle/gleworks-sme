@@ -24,28 +24,35 @@ const Service: React.FC = () => {
     fetchServices();
   }, []);
 
-  // Dữ liệu FAQ (Frequently Asked Questions)
+  // FAQ data
   const faqData = [
+    {
+      question: "What is the purpose of this service",
+      answer:
+        "We tailor your keyboard to enhances typing performance, customizes keyboard feel, and saves time for enthusiasts who want professional, high-quality modifications without the hassle.",
+    },
     {
       question: "Can you source my parts for me?",
       answer:
-        "I can! But it will be limited to what's in stock. Payment for this will also need to be made up front.",
-    },
-    {
-      question: "How quick is this process?",
-      answer: "This depends on the complexity of the build.",
+        "I can source parts for you, but this will be an additional cost. Let’s discuss this further.",
     },
     {
       question: "Can I ship parts from vendors to you?",
-      answer: "Yes, you can ship parts directly from vendors to my address.",
+      answer:
+        "At this time, I take it on a case by case basis. I would prefer if you shipped the package as a single unit to avoid confusion with packages and excess duties. Let’s discuss this further.",
     },
     {
       question: "Do I get photos of my board included?",
       answer: "Yes, photos of the finished build will be provided.",
     },
+    {
+      question: "I have more questions about a build!",
+      answer:
+        "If you’re looking to get a custom build, let’s discuss it further via my social.",
+    },
   ];
 
-  // Hàm toggle trạng thái dropdown
+  // Toggle the dropdown state
   const toggleNote = (index: number) => {
     setActiveNote(activeNote === index ? null : index);
   };

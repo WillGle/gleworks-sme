@@ -1,28 +1,18 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./AllSidePanel.css";
-import { useEffect, useState } from "react";
-
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string; // Add role to the User interface
-}
+import { useEffect } from "react";
 
 const SidePanel: React.FC = () => {
-  // State lưu thông tin người dùng
-  const [, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
-  // Kiểm tra thông tin người dùng trong localStorage khi component được mount
+  // Check user information in localStorage when the component mounts
   useEffect(() => {
     const userData = localStorage.getItem("user");
 
     if (userData) {
       try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser); // Chuyển dữ liệu từ localStorage thành object
+        JSON.parse(userData); // Just parse it if needed, no need to store it
       } catch (error) {
         console.error("Failed to parse user data:", error);
       }
@@ -30,10 +20,9 @@ const SidePanel: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user"); // Xóa thông tin người dùng khỏi localStorage
-    sessionStorage.clear(); // Xóa toàn bộ sessionStorage
+    localStorage.removeItem("user"); // Remove user information from localStorage
+    sessionStorage.clear(); // Clear all sessionStorage
     localStorage.removeItem("token"); // Remove the token from local storage
-    setUser(null); // Reset state user
     navigate("/login"); // Redirect to login page
   };
 

@@ -88,7 +88,22 @@ function AppLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/lost-password" element={<LostPass />} />
-        <Route path="/user/new-password" element={<NewPass />} />
+        <Route
+          path="/user/new-password"
+          element={
+            <ProtectedRoute>
+              <NewPass />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/new-password"
+          element={
+            <ProtectedRoute>
+              <NewPass />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/policies/" element={<Policies />} />
         <Route path="/not-authorized" element={<NotAuth />} />
         <Route path="*" element={<NotFound />} /> {/* Catch-all route */}

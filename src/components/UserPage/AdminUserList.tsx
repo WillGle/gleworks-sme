@@ -126,7 +126,7 @@ const AdminUserList: React.FC = () => {
       </div>
 
       <div className="user-table">
-        <div className="table-header">
+        <div className="user-table-header">
           <div>ID</div>
           <div>Full Name</div>
           <div>Email</div>
@@ -138,7 +138,7 @@ const AdminUserList: React.FC = () => {
         {filteredUsers.map((user, index) => (
           <div
             key={index}
-            className="table-row"
+            className="user-table-row"
             onClick={() => navigateToUserDetail(user.id)}
             style={{ cursor: "pointer" }}
           >

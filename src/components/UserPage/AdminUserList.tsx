@@ -14,15 +14,16 @@ interface User {
   role: string;
 }
 
-// Add this before the UserList component
+// Utility function to format date
 const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0"); // Đảm bảo ngày có 2 chữ số
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Đảm bảo tháng có 2 chữ số
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
-  };
-const UserList: React.FC = () => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+const AdminUserList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,11 +49,12 @@ const UserList: React.FC = () => {
           setUsers(userData);
           setFilteredUsers(userData);
         } else {
-          setMessage("Failed to fetch users.");
+          const errorResponse = await response.json();
+          setMessage(`Failed to fetch users: ${errorResponse.message}`);
         }
       } catch (error) {
         console.error("Error fetching users:", error);
-        setMessage("Error fetching users.");
+        setMessage("An unexpected error occurred while fetching users.");
       }
     } else {
       setMessage("Token is missing.");
@@ -67,8 +69,11 @@ const UserList: React.FC = () => {
     const filtered = users.filter((user) => {
       return (
         (searchTerm === "" ||
-          `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (filterRole === "" || user.role.toLowerCase().includes(filterRole.toLowerCase())) &&
+          `${user.firstName} ${user.lastName}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())) &&
+        (filterRole === "" ||
+          user.role.toLowerCase().includes(filterRole.toLowerCase())) &&
         (filterCreatedAt === "" || user.createdAt.includes(filterCreatedAt))
       );
     });
@@ -81,12 +86,12 @@ const UserList: React.FC = () => {
 
   // Navigate to user detail page when a user is clicked
   const navigateToUserDetail = (userId: string) => {
-    navigate(`user-detail/${userId}`); // Thêm "user-list/user-detail/" vào đường dẫn
+    navigate(`user-detail/${userId}`);
   };
 
   return (
     <div className="user-list-container">
-      <h1>Users</h1>
+      <h1>User Management</h1>
 
       {message && <p className="error-message">{message}</p>}
 
@@ -104,7 +109,7 @@ const UserList: React.FC = () => {
           <label>Role:</label>
           <input
             type="text"
-            placeholder="Filter"
+            placeholder="Filter by role"
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
           />
@@ -113,43 +118,41 @@ const UserList: React.FC = () => {
           <label>Created At:</label>
           <input
             type="text"
-            placeholder="Filter"
+            placeholder="Enter date (yyyy-mm-dd)"
             value={filterCreatedAt}
             onChange={(e) => setFilterCreatedAt(e.target.value)}
           />
         </div>
       </div>
 
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Joined</th>
-            <th>Permission</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user, index) => (
-            <tr key={index} onClick={() => navigateToUserDetail(user.id)}> {/* Navigate on click */}
-              <td>
-                <input type="checkbox" />
-              </td>
-              <td>{user.id}</td>
-              <td>{`${user.firstName} ${user.lastName}`}</td>
-              <td>{user.email}</td>
-              <td>{user.address}</td>
-              <td>{formatDate(user.createdAt)}</td>
-              <td>{user.role}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="user-table">
+        <div className="table-header">
+          <div>ID</div>
+          <div>Full Name</div>
+          <div>Email</div>
+          <div>Address</div>
+          <div>Joined</div>
+          <div>Permission</div>
+        </div>
+
+        {filteredUsers.map((user, index) => (
+          <div
+            key={index}
+            className="table-row"
+            onClick={() => navigateToUserDetail(user.id)}
+            style={{ cursor: "pointer" }}
+          >
+            <div>{user.id}</div>
+            <div>{`${user.firstName} ${user.lastName}`}</div>
+            <div>{user.email}</div>
+            <div>{user.address || "N/A"}</div>
+            <div>{formatDate(user.createdAt)}</div>
+            <div>{user.role}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default UserList;
+export default AdminUserList;

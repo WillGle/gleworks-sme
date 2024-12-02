@@ -154,7 +154,9 @@ const AdminUserDetail: React.FC = () => {
 
   return (
     <div className="my-account">
-      <h1>My Account</h1>
+      <h1>
+        {formData.firstName} {formData.lastName}'s Account
+      </h1>
       <p>Manage profile information for account security</p>
       <div className="account-form-container">
         <div className="account-form-group">

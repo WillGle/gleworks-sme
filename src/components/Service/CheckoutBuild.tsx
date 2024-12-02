@@ -25,7 +25,7 @@ const CheckoutBuild: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/auth/user/${userId}`,
+          `http://localhost:3000/users/${userId}`,
           {
             method: "GET",
             headers: {

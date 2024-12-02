@@ -6,14 +6,10 @@ interface User {
   id: string;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
   email: string;
-  dateOfBirth: string;
   address: string;
-  city: string;
-  fullName: string; // Assuming fullName is a concatenation of firstName and lastName
-  permission: string; // Assuming permission is a string
-  joined: string; // Assuming joined is a date string
+  joined: string; // This will be createdAt
+  permission: string; // This will be role
 }
 
 const AdminUserList: React.FC = () => {
@@ -65,11 +61,8 @@ const AdminUserList: React.FC = () => {
   const filteredUsers = users.filter((user) => {
     return (
       (searchTerm === "" ||
-        user.fullName.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (filterPermission === "" ||
-        user.permission
-          .toLowerCase()
-          .includes(filterPermission.toLowerCase())) &&
+        `${user.lastName} ${user.firstName}`.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (filterPermission === "" || user.permission.toLowerCase().includes(filterPermission.toLowerCase())) &&
       (filterJoined === "" || user.joined.includes(filterJoined))
     );
   });
@@ -114,9 +107,11 @@ const AdminUserList: React.FC = () => {
       <div className="user-list">
         {filteredUsers.map((user) => (
           <div key={user.id} className="user-item">
-            <p>{user.fullName}</p>
-            <p>{user.permission}</p>
-            <p>{user.joined}</p>
+            <p>{`${user.lastName} ${user.firstName}`}</p> {/* Full name */}
+            <p>{user.email}</p>
+            <p>{user.address}</p>
+            <p>{user.joined}</p> {/* createdAt */}
+            <p>{user.permission}</p> {/* role */}
           </div>
         ))}
       </div>

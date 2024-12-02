@@ -79,11 +79,11 @@ const MyAccount: React.FC = () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
-    // console.log("Fetched User ID:", userId); // Debugging line
+    console.log("Fetched User ID:", userId); // Debugging line
 
     if (token && userId) {
       try {
-        const response = await fetch(`${apiUrl}/auth/user/${userId}`, {
+        const response = await fetch(`${apiUrl}/users/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

@@ -23,6 +23,10 @@ const UserPageLayout: React.FC = () => {
             element={<OrderDetail />}
           />
           <Route path="user-list" element={<AdminUserList />} />
+          {/* <Route
+            path="user-list/user-detail/:userId"
+            element={<UserDetail />}
+          /> */}
         </Routes>
       </div>
     </div>

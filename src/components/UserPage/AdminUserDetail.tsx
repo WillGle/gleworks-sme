@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate, useParams } from "react-router-dom"; // Import useNavigate for redirection and useParams for URL params
 import "./AdminUserDetail.css"; // Add your styles
 // API URL imported from environment variables
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -16,6 +16,8 @@ interface User {
 }
 
 const AdminUserDetail: React.FC = () => {
+  const { userId } = useParams(); // Lấy userId từ URL params
+
   // State for form data
   const [formData, setFormData] = useState<User>({
     id: "",
@@ -32,56 +34,21 @@ const AdminUserDetail: React.FC = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
 
-  // Fetch user ID and user data on component mount
+  // Fetch user data on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       // Redirect to login if token is not found
       navigate("/login");
     } else {
-      fetchUserId(); // Fetch user ID if authenticated
+      fetchUserData(); // Gọi trực tiếp fetchUserData
     }
   }, []);
 
-  const fetchUserId = async () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      try {
-        const response = await fetch(`${apiUrl}/auth/auth-check`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-          //   console.log("User Data:", userData); // Debugging line
-
-          // Access the user ID correctly
-          const userId = userData.user.id; // Adjusted to access the user ID
-          localStorage.setItem("userId", userId); // Store user ID in local storage
-          fetchUserData(); // Fetch user data after storing user ID
-        } else {
-          setMessage("Failed to fetch user ID.");
-        }
-      } catch (error) {
-        console.error("Error fetching user ID:", error);
-        setMessage("Error fetching user ID.");
-      }
-    } else {
-      setMessage("Token is missing.");
-    }
-  };
-
   const fetchUserData = async () => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-
-    // console.log("Fetched User ID:", userId); // Debugging line
-
-    if (token && userId) {
+    
+    if (token && userId) { // Sử dụng userId từ params
       try {
         const response = await fetch(`${apiUrl}/users/${userId}`, {
           method: "GET",

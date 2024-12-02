@@ -6,7 +6,7 @@ import AdminDashboard from "./AdminDashboard";
 import AdminOrder from "./AdminOrder";
 import OrderDetail from "./AdminOrderDetail";
 import AdminUserList from "./AdminUserList";
-
+import UserDetail from "./AdminUserDetail"
 const UserPageLayout: React.FC = () => {
   return (
     <div className="user-layout">
@@ -23,10 +23,10 @@ const UserPageLayout: React.FC = () => {
             element={<OrderDetail />}
           />
           <Route path="user-list" element={<AdminUserList />} />
-          {/* <Route
+          <Route
             path="user-list/user-detail/:userId"
             element={<UserDetail />}
-          /> */}
+          />
         </Routes>
       </div>
     </div>

@@ -83,7 +83,7 @@ const AdminUserDetail: React.FC = () => {
 
     if (token && userId) {
       try {
-        const response = await fetch(`${apiUrl}/auth/user/${userId}`, {
+        const response = await fetch(`${apiUrl}/users/${userId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

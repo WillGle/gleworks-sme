@@ -1,68 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import "./AdminUserList.css";
 
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  email: string;
-  dateOfBirth: string;
-  address: string;
-  city: string;
-  fullName: string; // Assuming fullName is a concatenation of firstName and lastName
-  permission: string; // Assuming permission is a string
-  joined: string; // Assuming joined is a date string
-}
+const mockUsers = [
+  {
+    id: "xxxxxx",
+    fullName: "Will Kenason",
+    email: "will.kenason@example.com",
+    address: "ABC Street",
+    joined: "01/01/2023",
+    permission: "Admin",
+  },
+  {
+    id: "xxxxxx",
+    fullName: "John Smiths",
+    email: "john.smith@example.com",
+    address: "ABC Street",
+    joined: "02/01/2023",
+    permission: "User",
+  },
+  // Add more mock users as needed
+];
 
-const AdminUserList: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+const UserList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPermission, setFilterPermission] = useState("");
   const [filterJoined, setFilterJoined] = useState("");
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("An unknown error occurred");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUsers();
-  }, [navigate]);
-
-  const filteredUsers = users.filter((user) => {
+  const filteredUsers = mockUsers.filter((user) => {
     return (
       (searchTerm === "" ||
         user.fullName.toLowerCase().includes(searchTerm.toLowerCase())) &&
@@ -73,9 +37,6 @@ const AdminUserList: React.FC = () => {
       (filterJoined === "" || user.joined.includes(filterJoined))
     );
   });
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="user-list-container">
@@ -92,10 +53,10 @@ const AdminUserList: React.FC = () => {
           />
         </div>
         <div className="filter-item">
-          <label>Permission:</label>
+          <label>Permissions:</label>
           <input
             type="text"
-            placeholder="Filter by permission"
+            placeholder="Filter"
             value={filterPermission}
             onChange={(e) => setFilterPermission(e.target.value)}
           />
@@ -104,24 +65,43 @@ const AdminUserList: React.FC = () => {
           <label>Joined:</label>
           <input
             type="text"
-            placeholder="Filter by joined date"
+            placeholder="Filter"
             value={filterJoined}
             onChange={(e) => setFilterJoined(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="user-list">
-        {filteredUsers.map((user) => (
-          <div key={user.id} className="user-item">
-            <p>{user.fullName}</p>
-            <p>{user.permission}</p>
-            <p>{user.joined}</p>
-          </div>
-        ))}
-      </div>
+      <table className="user-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Joined</th>
+            <th>Permission</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredUsers.map((user, index) => (
+            <tr key={index}>
+              <td>
+                <input type="checkbox" />
+              </td>
+              <td>{user.id}</td>
+              <td>{user.fullName}</td>
+              <td>{user.email}</td>
+              <td>{user.address}</td>
+              <td>{user.joined}</td>
+              <td>{user.permission}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default AdminUserList;
+export default UserList;

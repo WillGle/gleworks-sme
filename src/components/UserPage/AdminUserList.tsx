@@ -118,7 +118,7 @@ const AdminUserList: React.FC = () => {
           <label>Created At:</label>
           <input
             type="text"
-            placeholder="Enter date (yyyy-mm-dd)"
+            placeholder="Enter date (dd-mm-yyyy)"
             value={filterCreatedAt}
             onChange={(e) => setFilterCreatedAt(e.target.value)}
           />

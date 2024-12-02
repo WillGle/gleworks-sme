@@ -44,7 +44,7 @@ const NewPass: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await Axios.post(`http://localhost:3000/auth/reset-password/${user.id}`, {
+      await Axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password/${user.id}`, {
         newPassword: password,
       });
       setSuccessMessage("Your password has been updated successfully!");

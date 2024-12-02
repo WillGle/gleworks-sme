@@ -1,0 +1,127 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./AdminUserList.css";
+
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  dateOfBirth: string;
+  address: string;
+  city: string;
+  fullName: string; // Assuming fullName is a concatenation of firstName and lastName
+  permission: string; // Assuming permission is a string
+  joined: string; // Assuming joined is a date string
+}
+
+const AdminUserList: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterPermission, setFilterPermission] = useState("");
+  const [filterJoined, setFilterJoined] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
+  }, [navigate]);
+
+  const filteredUsers = users.filter((user) => {
+    return (
+      (searchTerm === "" ||
+        user.fullName.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (filterPermission === "" ||
+        user.permission
+          .toLowerCase()
+          .includes(filterPermission.toLowerCase())) &&
+      (filterJoined === "" || user.joined.includes(filterJoined))
+    );
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="user-list-container">
+      <h1>Users</h1>
+
+      <div className="filters">
+        <div className="filter-item">
+          <label>User:</label>
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div className="filter-item">
+          <label>Permission:</label>
+          <input
+            type="text"
+            placeholder="Filter by permission"
+            value={filterPermission}
+            onChange={(e) => setFilterPermission(e.target.value)}
+          />
+        </div>
+        <div className="filter-item">
+          <label>Joined:</label>
+          <input
+            type="text"
+            placeholder="Filter by joined date"
+            value={filterJoined}
+            onChange={(e) => setFilterJoined(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="user-list">
+        {filteredUsers.map((user) => (
+          <div key={user.id} className="user-item">
+            <p>{user.fullName}</p>
+            <p>{user.permission}</p>
+            <p>{user.joined}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default AdminUserList;

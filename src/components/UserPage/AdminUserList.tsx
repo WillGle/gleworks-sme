@@ -20,7 +20,7 @@ const formatDate = (dateString: string): string => {
     const day = String(date.getDate()).padStart(2, "0"); // Đảm bảo ngày có 2 chữ số
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Đảm bảo tháng có 2 chữ số
     const year = date.getFullYear();
-    return `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
+    return `${day}/${month}/${year}`; // Định dạng dd-mm-yyyy
   };
 const UserList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -139,7 +139,7 @@ const UserList: React.FC = () => {
                 <input type="checkbox" />
               </td>
               <td>{user.id}</td>
-              <td>{`${user.firstName} ${user.lastName}`}</td>
+              <td>{`${user.lastName} ${user.firstName}`}</td>
               <td>{user.email}</td>
               <td>{user.address}</td>
               <td>{formatDate(user.createdAt)}</td>

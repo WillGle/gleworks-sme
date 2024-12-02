@@ -24,7 +24,7 @@ const OrderDetail: React.FC = () => {
       }
       try {
         const response = await fetch(
-          `http://localhost:3000/order-details/${orderId}`
+          `${import.meta.env.VITE_API_URL}/order-details/${orderId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch order details");
@@ -80,7 +80,7 @@ const OrderDetail: React.FC = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/orders/${orderId}/status`,
+        `${import.meta.env.VITE_API_URL}/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: {

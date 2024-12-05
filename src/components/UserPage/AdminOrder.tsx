@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import apiService from "../apiService";
 import "./AdminOrder.css";
 
 // Định nghĩa interface Service
@@ -37,16 +36,29 @@ const AdminOrder: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const data: Order[] = await apiService.get("orders");
-        setOrders(data);
-        setFilteredOrders(data);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
+        const data: Order[] = await response.json();
+        // console.log(data); // Kiểm tra cấu trúc dữ liệu trả về
+        // Ánh xạ dữ liệu để phù hợp với cấu trúc frontend
+        const transformedOrders = data.map((order: any) => ({
+          ...order,
+          createdAt: order.createdAt || order.created_at,
+          totalCost: order.totalCost || order.total_cost,
+          paymentStatus: order.paymentStatus || order.payment_status,
+          status: order.status || order.order_status,
+          address: order.address || order.address,
+          user: order.User, // Lấy thông tin người dùng từ đối tượng User
+          service: order.Service, // Lấy thông tin dịch vụ từ đối tượng Service
+        }));
+        setOrders(transformedOrders); // Cập nhật state với dữ liệu nhận được
+        setFilteredOrders(transformedOrders); // Cập nhật filteredOrders với dữ liệu ban đầu
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
-  }, []);
+  }, []); // Chạy một lần khi component mount
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value.toLowerCase();
@@ -73,7 +85,7 @@ const AdminOrder: React.FC = () => {
   };
 
   const handleRowClick = (orderId: string) => {
-    navigate(`/admin/orders/${orderId}`);
+    navigate(`order-detail/${orderId}`);
   };
 
   const handleReset = () => {

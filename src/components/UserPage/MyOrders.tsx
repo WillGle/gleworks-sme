@@ -44,7 +44,6 @@ const MyOrders: React.FC = () => {
         }
 
         const data = await response.json();
-        // console.log(data);
 
         // Map API data to fit frontend structure
         const transformedOrders = data.map((order: any) => ({
@@ -53,8 +52,8 @@ const MyOrders: React.FC = () => {
           totalCost: order.totalCost || order.total_cost,
           paymentStatus: order.paymentStatus || order.payment_status,
           status: order.status || order.order_status,
-          address: order.address || order.address, // Đảm bảo lấy địa chỉ từ order
-          telephone: order.telephone || order.telephone, // Lấy số điện thoại nếu cần
+          address: order.address || order.address,
+          telephone: order.telephone || order.telephone,
         }));
 
         setOrders(transformedOrders);
@@ -89,7 +88,10 @@ const MyOrders: React.FC = () => {
           <div>Order Status</div>
         </div>
         {orders
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
           .map((order, index) => (
             <div
               className="table-row"
@@ -102,9 +104,7 @@ const MyOrders: React.FC = () => {
                   ? new Date(order.createdAt).toLocaleDateString()
                   : "N/A"}
               </div>
-              <div>
-                {order.address || "N/A"}
-              </div>
+              <div>{order.address || "N/A"}</div>
               <div>
                 {order.totalCost
                   ? order.totalCost.toLocaleString() + " VND"

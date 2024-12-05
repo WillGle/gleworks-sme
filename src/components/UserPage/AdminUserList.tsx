@@ -12,6 +12,7 @@ interface User {
   address: string;
   createdAt: string;
   role: string;
+  isConfirmed: number;
 }
 
 // Utility function to format date
@@ -89,6 +90,11 @@ const AdminUserList: React.FC = () => {
     navigate(`user-detail/${userId}`);
   };
 
+  // Email confirmation
+  const checkUserConfirm = (isConfirmed: number) => {
+    return isConfirmed === 1 ? "Yes" : "No";
+  };
+
   return (
     <div className="user-list-container">
       <h1>User Management</h1>
@@ -133,6 +139,7 @@ const AdminUserList: React.FC = () => {
           <div>Address</div>
           <div>Joined</div>
           <div>Permission</div>
+          <div>Validate</div>
         </div>
 
         {filteredUsers.map((user, index) => (
@@ -148,6 +155,7 @@ const AdminUserList: React.FC = () => {
             <div>{user.address || "N/A"}</div>
             <div>{formatDate(user.createdAt)}</div>
             <div>{user.role}</div>
+            <div>{checkUserConfirm(user.isConfirmed)}</div>
           </div>
         ))}
       </div>

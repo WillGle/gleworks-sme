@@ -1,15 +1,14 @@
-/* General layout for the user page */
 .user-layout {
   display: flex;
   height: 100vh; /* Full viewport height */
   font-family: Arial, sans-serif;
-  overflow: hidden; /* Prevent overflow issues */
+  overflow: hidden;
 }
 
 /* Main content area */
 .user-content {
   flex: 1; /* Fill remaining space */
   padding: 20px;
-  overflow-y: auto; /* Scroll if content exceeds height */
+  overflow-y: auto;
   background: #ffffff;
 }

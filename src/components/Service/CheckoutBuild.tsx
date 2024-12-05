@@ -25,7 +25,7 @@ const CheckoutBuild: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/users/${userId}`,
+          `${import.meta.env.VITE_API_URL}/users/${userId}`,
           {
             method: "GET",
             headers: {
@@ -118,7 +118,7 @@ const CheckoutBuild: React.FC = () => {
     // console.log("Order Payload:", orderPayload);
 
     try {
-      const response = await fetch("http://localhost:3000/orders/", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +141,7 @@ const CheckoutBuild: React.FC = () => {
       };
 
       const detailResponse = await fetch(
-        "http://localhost:3000/order-details/",
+        `${import.meta.env.VITE_API_URL}/order-details/`,
         {
           method: "POST",
           headers: {
@@ -182,7 +182,7 @@ const CheckoutBuild: React.FC = () => {
         };
 
         const detailResponse = await fetch(
-          "http://localhost:3000/order-details/",
+          `${import.meta.env.VITE_API_URL}/order-details/`,
           {
             method: "POST",
             headers: {

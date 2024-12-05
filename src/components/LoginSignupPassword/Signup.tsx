@@ -46,6 +46,11 @@ const Signup: React.FC = () => {
       return false;
     }
 
+    if (password.length < 8 || !/[!@#$%^&*%]/.test(password)) {
+      setErrorMessage("Password must be at least 8 characters and contain at least 1 special character (@, $, #, *, !, %, &).");
+      return false;
+    }
+
     return true;
   };
 

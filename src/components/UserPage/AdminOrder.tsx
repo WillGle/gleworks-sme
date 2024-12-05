@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import apiService from "../apiService";
 import "./AdminOrder.css";
 
 // Định nghĩa interface Service
@@ -36,38 +37,23 @@ const AdminOrder: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
-        const data: Order[] = await response.json();
-        // console.log(data); // Kiểm tra cấu trúc dữ liệu trả về
-
-        // Ánh xạ dữ liệu để phù hợp với cấu trúc frontend
-        const transformedOrders = data.map((order: any) => ({
-          ...order,
-          createdAt: order.createdAt || order.created_at,
-          totalCost: order.totalCost || order.total_cost,
-          paymentStatus: order.paymentStatus || order.payment_status,
-          status: order.status || order.order_status,
-          address: order.address || order.address,
-          user: order.User, // Lấy thông tin người dùng từ đối tượng User
-          service: order.Service, // Lấy thông tin dịch vụ từ đối tượng Service
-        }));
-
-        setOrders(transformedOrders); // Cập nhật state với dữ liệu nhận được
-        setFilteredOrders(transformedOrders); // Cập nhật filteredOrders với dữ liệu ban đầu
+        const data: Order[] = await apiService.get("orders");
+        setOrders(data);
+        setFilteredOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
-  }, []); // Chạy một lần khi component mount
+  }, []);
 
-  // Filter handler
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filtered = orders.filter( // Sử dụng orders thay vì filteredOrders
+    const filtered = orders.filter(
+      // Sử dụng orders thay vì filteredOrders
       (order) =>
         order.orderId.toString().toLowerCase().includes(term) ||
         (order.user && order.user.firstName.toLowerCase().includes(term)) || // Kiểm tra user trước khi truy cập
@@ -79,50 +65,43 @@ const AdminOrder: React.FC = () => {
   };
 
   const handleFilterByPaymentStatus = (status: string) => {
-    const filtered = orders.filter( // Sử dụng orders thay vì filteredOrders
-      (order) => order.paymentStatus === status
-    );
-    setFilteredOrders(filtered);
+    setFilteredOrders(orders.filter((order) => order.paymentStatus === status));
   };
 
   const handleFilterByOrderStatus = (status: string) => {
-    const filtered = orders.filter((order) => order.status === status);
-    setFilteredOrders(filtered);
+    setFilteredOrders(orders.filter((order) => order.status === status));
   };
 
-  // Navigate to order detail page
   const handleRowClick = (orderId: string) => {
-    navigate(`order-detail/${orderId}`); // Pass orderId to the route
+    navigate(`/admin/orders/${orderId}`);
   };
 
-  // Reset filter and show all orders
   const handleReset = () => {
-    setFilteredOrders(orders); // Đặt lại filteredOrders về danh sách gốc
-    setSearchTerm(""); // Xóa từ khóa tìm kiếm
+    setSearchTerm("");
+    setFilteredOrders(orders);
   };
+
+  if (!orders.length) return <div>Loading...</div>;
 
   return (
     <div className="admin-dashboard">
       <h1>My Orders</h1>
 
-      {/* Search Bar */}
       <div className="search-container">
+        <h3>Search: </h3>
         <input
           type="text"
-          placeholder="Search"
+          placeholder="Search by user info"
           value={searchTerm}
           onChange={handleSearch}
           className="search-input"
         />
+        <button className="reset-filter-btn" onClick={handleReset}>
+          Reset
+        </button>{" "}
       </div>
 
-      {/* Filter Section */}
       <div className="filter-container">
-        <div className="filter-group">
-          <h3>Orders</h3>
-          <button onClick={handleReset}>Reset</button> {/* Sử dụng handleReset */}
-        </div>
-
         <div className="filter-group">
           <h3>Payment Status</h3>
           {["Paid", "Pending", "Canceled"].map((status) => (
@@ -172,8 +151,14 @@ const AdminOrder: React.FC = () => {
               style={{ cursor: "pointer" }}
             >
               <div>{order.orderId}</div>
-              <div>{order.user ? `${order.user.lastName} ${order.user.firstName}` : 'N/A'}</div> {/* Kiểm tra user trước khi truy cập */}
-              <div>{order.service ? order.service.name : 'N/A'}</div> {/* Kiểm tra service trước khi truy cập */}
+              <div>
+                {order.user
+                  ? `${order.user.lastName} ${order.user.firstName}`
+                  : "N/A"}
+              </div>{" "}
+              {/* Kiểm tra user trước khi truy cập */}
+              <div>{order.service ? order.service.name : "N/A"}</div>{" "}
+              {/* Kiểm tra service trước khi truy cập */}
               <div>{new Date(order.createdAt).toLocaleDateString()}</div>
               <div>{order.address}</div>
               <div>{order.totalCost.toLocaleString()} VND</div>

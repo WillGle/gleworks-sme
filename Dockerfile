@@ -1,5 +1,5 @@
-# Use a specific Node.js version
-FROM node:14
+# Stage 1: Build the React application
+FROM node:18 AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -10,15 +10,20 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of the application source code
 COPY . .
 
-# Set environment variables
-ENV PORT=3000
-ENV NODE_ENV=production
+# Build the application for production
+RUN npm run build
 
-# Expose the application port
-EXPOSE 3000
+# Stage 2: Serve the application with Nginx
+FROM nginx:alpine
 
-# Start the application
-CMD ["npm", "start"]
+# Copy the build output to Nginx's html directory
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]

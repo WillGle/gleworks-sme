@@ -1,4 +1,13 @@
-# React + TypeScript + Vite
+# How to run this
+
+For GleWork_client
+1.npm run dev
+
+1.Open MySQL WorkBench, then run "create database glework;"
+2.Open packet.json, change database name & database passwork in "env_developement" to the corresponde system
+3."pm2 start process.json --env development"
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

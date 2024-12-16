@@ -1,9 +1,5 @@
 node_modules
-build
-.git
-.gitignore
-.DS_Store
-.env
-docker-compose.yml
+dist
+.dockerignore
 Dockerfile
-*.log
+.env

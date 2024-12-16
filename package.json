@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "echo \"No tests available\" && exit 0"
+    "test": "vitest"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-web": "^0.36.1",

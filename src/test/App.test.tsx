@@ -2,51 +2,32 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import App from "../App";
 
+const renderWithRouter = (ui: React.ReactElement, { route = "/" } = {}) => {
+  window.history.pushState({}, "Test page", route);
+  return render(ui, { wrapper: BrowserRouter });
+};
+
 test("renders the landing page", () => {
-  render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
+  renderWithRouter(<App />, { route: "/" });
   expect(screen.getByText("GLE.WORK")).toBeInTheDocument();
 });
 
 test("renders the login page", () => {
-  window.history.pushState({}, "Login Page", "/login");
-  render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
+  renderWithRouter(<App />, { route: "/login" });
   expect(screen.getByText("Login")).toBeInTheDocument();
 });
 
 test("renders the signup page", () => {
-  window.history.pushState({}, "Signup Page", "/signup");
-  render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
+  renderWithRouter(<App />, { route: "/signup" });
   expect(screen.getByText("Signup")).toBeInTheDocument();
 });
 
 test("renders the lost password page", () => {
-  window.history.pushState({}, "Lost Password Page", "/lost-password");
-  render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
+  renderWithRouter(<App />, { route: "/lost-password" });
   expect(screen.getByText("Lost Password")).toBeInTheDocument();
 });
 
 test("renders the not found page for unknown routes", () => {
-  window.history.pushState({}, "Unknown Page", "/unknown");
-  render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  );
+  renderWithRouter(<App />, { route: "/unknown" });
   expect(screen.getByText("Page Not Found")).toBeInTheDocument();
 });

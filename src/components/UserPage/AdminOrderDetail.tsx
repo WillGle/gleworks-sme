@@ -136,8 +136,9 @@ const OrderDetail: React.FC = () => {
         <h1>My Orders - Detail</h1>
         <div className="admin-status-selection">
           <div className="status-form-group">
-            <label>Order Status</label>
+            <label htmlFor="order-status-select">Order Status</label>
             <select
+              id="order-status-select"
               name="status"
               value={orderData.status}
               onChange={handleStatusChange}
@@ -150,8 +151,9 @@ const OrderDetail: React.FC = () => {
             </select>
           </div>
           <div className="status-form-group">
-            <label>Payment Status</label>
+            <label htmlFor="payment-status-select">Payment Status</label>
             <select
+              id="payment-status-select"
               name="paymentStatus"
               value={orderData.paymentStatus}
               onChange={handleStatusChange}

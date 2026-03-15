@@ -39,10 +39,40 @@ React + TypeScript + Vite frontend for the Gleammy Workshop service booking and 
   Static image assets used by the site
 - `public/config.js`
   Runtime browser config stub
+- `simpleBEDB`
+  Optional manual-only Express + SQLite backend for local integration testing
 - `docker/entrypoint.sh`
   Helper script for generating `config.js` at container startup
 - `devops/*.md`
   Planning documents, not current implementation truth
+
+## Architecture Overview
+
+### Client Architecture
+- `App.tsx` is the top-level shell. It mounts routing, layout visibility rules, and the global API error toast.
+- `src/components/*` contains page-level UI, route layouts, and public/admin/user flows.
+- `src/api/*` is the only backend boundary:
+  - `client.ts` injects the base URL and auth header
+  - `session.ts` owns browser auth storage
+  - `mappers.ts` normalizes backend payloads before they reach the UI
+  - `auth.ts`, `users.ts`, `services.ts`, and `orders.ts` expose feature-level API calls
+- `src/config.ts` resolves the API URL from runtime config first, then Vite env.
+- `src/test/*` covers route behavior, auth flows, API contracts, session logic, and global API error handling.
+
+### `simpleBEDB` Architecture
+- `simpleBEDB/src/server.js`
+  Express app, route handlers, and request/response shaping for the current frontend contract.
+- `simpleBEDB/src/auth.js`
+  JWT signing plus auth/admin middleware.
+- `simpleBEDB/src/db.js`
+  SQLite bootstrapping, schema creation, and seed data.
+- `simpleBEDB/data/gleworks.sqlite`
+  Local database file created on first run.
+
+Design intent:
+- the frontend stays the main app
+- `simpleBEDB` is only a local support backend
+- it is manual-only and never auto-starts with the client, Docker flow, or Jenkins
 
 ## API Layer
 The API layer is now the main boundary between the UI and the backend.
@@ -106,6 +136,23 @@ npm install
 npm run dev
 ```
 
+Run frontend only:
+```bash
+npm run dev
+```
+
+Run frontend with the local simple backend:
+```bash
+VITE_API_URL=http://localhost:3001 npm run dev
+```
+
+Or edit the runtime stub in `public/config.js`:
+```js
+window.__APP_CONFIG__ = {
+  API_URL: "http://localhost:3001",
+};
+```
+
 Optional local override:
 - `.env.local`
 
@@ -141,6 +188,85 @@ Vitest config lives in:
 ```bash
 npm run build
 npm run preview
+```
+
+## Run and Debug
+
+### Frontend
+Start the Vite dev server:
+```bash
+npm run dev
+```
+
+Run checks:
+```bash
+npm run lint
+npm run type-check
+npm run test:run
+npm run build
+```
+
+Frontend debugging basics:
+- open browser devtools and inspect the `Network` tab for `/auth`, `/users`, `/orders`, and `/services` calls
+- if the app is calling the wrong backend, check `public/config.js` and `src/config.ts`
+- if auth behaves strangely, inspect `localStorage` keys: `user`, `userId`, `token`, `role`
+
+### simpleBEDB
+Install once:
+```bash
+cd simpleBEDB
+npm install
+```
+
+Start manually:
+```bash
+cd simpleBEDB
+npm run dev
+```
+
+Start without watch mode:
+```bash
+cd simpleBEDB
+npm start
+```
+
+### Integration flow
+Run the backend in one terminal:
+```bash
+cd simpleBEDB
+npm run dev
+```
+
+Run the frontend in another terminal:
+```bash
+VITE_API_URL=http://localhost:3001 npm run dev
+```
+
+### API debug commands
+Health check:
+```bash
+curl http://localhost:3001/health
+```
+
+Login and get a token:
+```bash
+curl -X POST http://localhost:3001/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"admin@gle.work","password":"Admin123!"}'
+```
+
+Use the returned token against a protected route:
+```bash
+curl http://localhost:3001/users \
+  -H 'Authorization: Bearer YOUR_TOKEN'
+```
+
+### Database reset
+Delete the local SQLite file and restart the backend:
+```bash
+rm -f simpleBEDB/data/gleworks.sqlite
+cd simpleBEDB
+npm run dev
 ```
 
 ## Aliases
@@ -225,6 +351,8 @@ The frontend expects a REST API with endpoints such as:
 - `GET /order-details/:orderId`
 - `POST /order-details/`
 - `PUT /orders/:orderId/status`
+
+For local development, `simpleBEDB` implements this contract directly.
 
 ## Documentation Notes
 - `README.md` is the source of truth for the current implemented repo state.

@@ -119,6 +119,14 @@ const Build: React.FC = () => {
         [name]: checked,
       }));
     } else {
+      if (name === "switchQuantity") {
+        const numericValue = parseInt(value, 10);
+        if (value !== "" && (isNaN(numericValue) || numericValue <= 0)) {
+          alert("Switch quantity must be a positive number.");
+          return;
+        }
+      }
+
       setFormData((prev) => ({
         ...prev,
         [name]: value,
@@ -282,6 +290,8 @@ const Build: React.FC = () => {
             placeholder="Recommended +5 more than the build need for backup"
             value={formData.switchQuantity}
             onChange={handleInputChange}
+            min="1"
+            step="1"
             required
           />
         </div>

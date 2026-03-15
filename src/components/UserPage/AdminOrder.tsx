@@ -1,6 +1,6 @@
 // Admin order list with quick access to order details.
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { listOrders } from "@api";
 import type { OrderSummary } from "@api/types";
@@ -10,14 +10,16 @@ const AdminOrder: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [orders, setOrders] = useState<OrderSummary[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<OrderSummary[]>([]);
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("");
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const data = await listOrders();
         setOrders(data);
-        setFilteredOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -26,32 +28,69 @@ const AdminOrder: React.FC = () => {
     void fetchOrders();
   }, []);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
+  useEffect(() => {
+    const dashboardStatus = searchParams.get("status");
+    const normalizedSearch = searchTerm.toLowerCase();
+    const isTodayFilter = dashboardStatus === "Today";
 
-    const filtered = orders.filter(
-      (order) =>
-        (order.orderId || order.id || "").toLowerCase().includes(term) ||
-        Boolean(order.user?.firstName.toLowerCase().includes(term)) ||
-        Boolean(order.user?.lastName.toLowerCase().includes(term)) ||
+    const filtered = orders.filter((order) => {
+      const matchesSearch =
+        normalizedSearch === "" ||
+        (order.orderId || order.id || "").toLowerCase().includes(normalizedSearch) ||
+        Boolean(order.user?.firstName.toLowerCase().includes(normalizedSearch)) ||
+        Boolean(order.user?.lastName.toLowerCase().includes(normalizedSearch)) ||
         Boolean(
           (order.serviceName || order.service?.name || "")
             .toLowerCase()
-            .includes(term)
+            .includes(normalizedSearch)
         ) ||
-        order.address.toLowerCase().includes(term)
-    );
+        order.address.toLowerCase().includes(normalizedSearch);
+      const matchesPaymentStatus =
+        paymentStatusFilter === "" ||
+        order.paymentStatus === paymentStatusFilter;
+      const matchesOrderStatus =
+        orderStatusFilter === "" || order.status === orderStatusFilter;
+      const matchesDashboardStatus =
+        !dashboardStatus ||
+        (isTodayFilter
+          ? new Date(order.createdAt).toDateString() ===
+            new Date().toDateString()
+          : order.status === dashboardStatus);
+
+      return (
+        matchesSearch &&
+        matchesPaymentStatus &&
+        matchesOrderStatus &&
+        matchesDashboardStatus
+      );
+    });
 
     setFilteredOrders(filtered);
+  }, [orderStatusFilter, orders, paymentStatusFilter, searchParams, searchTerm]);
+
+  const clearDashboardStatus = () => {
+    if (!searchParams.has("status")) {
+      return;
+    }
+
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.delete("status");
+    setSearchParams(nextSearchParams);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearDashboardStatus();
+    setSearchTerm(e.target.value);
   };
 
   const handleFilterByPaymentStatus = (status: string) => {
-    setFilteredOrders(orders.filter((order) => order.paymentStatus === status));
+    clearDashboardStatus();
+    setPaymentStatusFilter((prev) => (prev === status ? "" : status));
   };
 
   const handleFilterByOrderStatus = (status: string) => {
-    setFilteredOrders(orders.filter((order) => order.status === status));
+    clearDashboardStatus();
+    setOrderStatusFilter((prev) => (prev === status ? "" : status));
   };
 
   const handleRowClick = (orderId: string | undefined) => {
@@ -62,7 +101,9 @@ const AdminOrder: React.FC = () => {
 
   const handleReset = () => {
     setSearchTerm("");
-    setFilteredOrders(orders);
+    setPaymentStatusFilter("");
+    setOrderStatusFilter("");
+    setSearchParams({});
   };
 
   if (!orders.length) return <div>Loading...</div>;

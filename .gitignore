@@ -3,3 +3,6 @@ node_modules
 # build/cache
 /dist/
 /.direnv/
+/coverage/
+*.log
+.DS_Store

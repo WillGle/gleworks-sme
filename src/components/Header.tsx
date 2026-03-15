@@ -12,12 +12,18 @@ const Header: React.FC = () => {
     user?.email ||
     "Account";
 
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "/login";
+  };
+
   return (
     <header className="topHeader">
       <div className="header-main">
         {/* Logo Section */}
         <div className="logo">
-          <a href="/">GLE.WORK</a>
+          <Link to="/">GLE.WORK</Link>
         </div>
 
         {/* Navigation Links */}
@@ -30,16 +36,25 @@ const Header: React.FC = () => {
         {/* Icon Links */}
         <div className="header-icons">
           {user ? (
-            <>
-              {/* Hiển thị thông tin người dùng với liên kết đến trang user hoặc admin */}
+            <div className="user-nav-group">
               <Link
-                to={user.role === "admin" ? "/admin" : "/user"}
+                to={
+                  user.role === "admin"
+                    ? "/admin/dashboard"
+                    : "/user/my-account"
+                }
                 className="user-info"
               >
                 Hi, {userLabel}
               </Link>
-              {/* Thêm nút logout */}
-            </>
+              <button
+                type="button"
+                className="logout-btn"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <Link to="/login">
               <FaUser className="icon" />

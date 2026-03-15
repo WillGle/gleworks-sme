@@ -1,6 +1,6 @@
 // Shared user layout with side navigation and nested routes.
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SidePanel from "./UserSidePanel";
 import "./UserPageLayout.css";
 import MyAccount from "./MyAccount";
@@ -16,6 +16,7 @@ const UserPageLayout: React.FC = () => {
       {/* User Content Section */}
       <div className="user-content">
         <Routes>
+          <Route index element={<Navigate to="my-account" replace />} />
           <Route path="my-account" element={<MyAccount />} />
           <Route path="my-orders" element={<MyOrders />} />
           <Route path="support" element={<Support />} />

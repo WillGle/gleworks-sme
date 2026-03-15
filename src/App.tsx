@@ -38,7 +38,8 @@ function AppLayout() {
     "/login",
     "/signup",
     "/lost-password",
-    "/new-password",
+    "/user/new-password",
+    "/admin/new-password",
   ].some((path) => location.pathname.startsWith(path));
 
   return (

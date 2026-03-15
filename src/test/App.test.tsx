@@ -31,6 +31,17 @@ test('renders the forgot password page', () => {
   expect(screen.getByRole('heading', { name: 'Forgot Password' })).toBeInTheDocument()
 })
 
+test('hides the header and footer on password reset routes', () => {
+  localStorage.setItem('token', 'token-123')
+  localStorage.setItem('role', 'user')
+
+  renderAtRoute('/user/new-password')
+
+  expect(screen.getByRole('heading', { name: 'Reset Password' })).toBeInTheDocument()
+  expect(screen.queryByRole('link', { name: 'Service' })).not.toBeInTheDocument()
+  expect(screen.queryByText('STAY IN THE LOOP')).not.toBeInTheDocument()
+})
+
 test('renders the not found page for unknown routes', () => {
   renderAtRoute('/unknown')
   expect(screen.getByRole('heading', { name: '404 - Page Not Found' })).toBeInTheDocument()

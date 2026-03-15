@@ -1,6 +1,6 @@
 // Shared admin layout with side navigation and nested routes.
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SidePanel from "./AdminSidePanel";
 import "./AdminPageLayout.css";
 import AdminDashboard from "./AdminDashboard";
@@ -17,6 +17,7 @@ const UserPageLayout: React.FC = () => {
       {/* User Content Section */}
       <div className="user-content">
         <Routes>
+          <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="my-orders" element={<AdminOrder />} />
           <Route

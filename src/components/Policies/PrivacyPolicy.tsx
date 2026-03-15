@@ -1,3 +1,4 @@
+// Static privacy policy page.
 import React from "react";
 import "./Policies.css";
 

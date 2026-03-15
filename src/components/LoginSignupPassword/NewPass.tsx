@@ -1,6 +1,7 @@
+// Reset-password form for the currently stored user session.
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios";
+import { getStoredUser, resetPassword } from "@api";
 import "./LoginSignUpLostPassNewPass.css";
 
 const NewPass: React.FC = () => {
@@ -36,17 +37,16 @@ const NewPass: React.FC = () => {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!user || !user.id) {
+    // Reset still depends on the current stored user until backend flow changes.
+    const user = getStoredUser();
+    if (!user?.id) {
       setErrorMessage("User information is missing. Please log in again.");
       return;
     }
 
     setIsLoading(true);
     try {
-      await Axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password/${user.id}`, {
-        newPassword: password,
-      });
+      await resetPassword(user.id, password);
       setSuccessMessage("Your password has been updated successfully!");
       setErrorMessage("");
       setTimeout(() => navigate("/home"), 3000); // Redirect after 3 seconds

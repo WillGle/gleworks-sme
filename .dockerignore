@@ -1,5 +1,13 @@
 node_modules
 dist
-.dockerignore
-Dockerfile
+.direnv
+.git
+.gitignore
 .env
+.env.*
+coverage
+*.log
+devops
+README.md
+azure-pipelines.yml
+build-docker.sh

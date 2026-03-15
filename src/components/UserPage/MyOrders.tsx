@@ -1,76 +1,38 @@
+// User order history list backed by normalized order data.
 import React, { useEffect, useState } from "react";
+
+import { getStoredUser, getUserId, listUserOrders } from "@api";
+import type { OrderSummary } from "@api/types";
 import "./MyOrders.css";
 import OrderDetail from "./OrderDetail";
 
-interface Service {
-  name: string;
-  description: string;
-}
-
-interface Order {
-  createdAt: string; // Ngày tạo đơn hàng
-  totalCost: number; // Tổng giá trị đơn hàng
-  paymentStatus: string; // Trạng thái thanh toán
-  status: string; // Trạng thái đơn hàng
-  address: string; // Địa chỉ
-  telephone: string; // Số điện thoại
-  Service?: Service; // Thông tin dịch vụ
-}
-
 const MyOrders: React.FC = () => {
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<OrderSummary | null>(null);
+  const [orders, setOrders] = useState<OrderSummary[]>([]);
 
-  // Fetch orders from API
   useEffect(() => {
     const fetchOrders = async () => {
-      const userData = JSON.parse(localStorage.getItem("user") || "{}");
-      const token = userData.token;
-      const userId = userData.id;
+      const storedUserId = getUserId() || getStoredUser()?.id;
+      if (!storedUserId) {
+        console.error("Missing user ID.");
+        return;
+      }
 
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/orders/user/${userId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch orders");
-        }
-
-        const data = await response.json();
-
-        // Map API data to fit frontend structure
-        const transformedOrders = data.map((order: any) => ({
-          ...order,
-          createdAt: order.createdAt || order.created_at,
-          totalCost: order.totalCost || order.total_cost,
-          paymentStatus: order.paymentStatus || order.payment_status,
-          status: order.status || order.order_status,
-          address: order.address || order.address,
-          telephone: order.telephone || order.telephone,
-        }));
-
-        setOrders(transformedOrders);
+        const data = await listUserOrders(storedUserId);
+        setOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
-    fetchOrders();
+    void fetchOrders();
   }, []);
 
-  // Handle click to open order details
-  const handleOrderClick = (order: Order) => {
+  const handleOrderClick = (order: OrderSummary) => {
     setSelectedOrder(order);
   };
 
-  // Close popup
   const closePopup = () => {
     setSelectedOrder(null);
   };
@@ -98,7 +60,7 @@ const MyOrders: React.FC = () => {
               key={index}
               onClick={() => handleOrderClick(order)}
             >
-              <div>{order.Service?.name || "N/A"}</div>
+              <div>{order.serviceName || order.service?.name || "N/A"}</div>
               <div>
                 {order.createdAt
                   ? new Date(order.createdAt).toLocaleDateString()
@@ -118,7 +80,8 @@ const MyOrders: React.FC = () => {
       {selectedOrder && (
         <OrderDetail
           order={{
-            order: selectedOrder.Service?.name || "N/A",
+            order:
+              selectedOrder.serviceName || selectedOrder.service?.name || "N/A",
             date: selectedOrder.createdAt
               ? new Date(selectedOrder.createdAt).toLocaleDateString()
               : "N/A",

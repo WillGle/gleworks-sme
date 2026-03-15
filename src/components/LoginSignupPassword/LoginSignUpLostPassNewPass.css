@@ -1,6 +1,6 @@
 /* Thêm ảnh nền cho trang login */
 .style-bg {
-    background-image: url('/src/assets/account.jpg'); /* Đường dẫn ảnh */
+    background-image: url('/src/assets/account.webp'); /* Đường dẫn ảnh */
     background-repeat: no-repeat; /* Không lặp ảnh */
     background-size: cover; /* Ảnh phủ toàn màn hình */
     background-position: center; /* Căn giữa ảnh */
@@ -311,4 +311,3 @@
         padding: 10px;
     }
 }
-

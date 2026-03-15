@@ -1,3 +1,4 @@
+// Shared footer shown on public pages.
 import React from "react";
 import "./Footer.css";
 import { FaArrowRight, FaFacebook, FaInstagram } from "react-icons/fa";

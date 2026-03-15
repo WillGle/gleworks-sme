@@ -1,31 +1,14 @@
+// Admin dashboard summary fed by the normalized orders API.
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./AdminDashboard.css";
 
-// Fetch orders from the backend
-const fetchOrders = async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch orders");
-  }
-  return response.json();
-};
+import { listOrders } from "@api";
+import type { OrderSummary } from "@api/types";
+import "./AdminDashboard.css";
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState<
-    {
-      orderId: number;
-      status: string;
-      userId: number;
-      serviceId: number;
-      totalCost: number;
-      paymentStatus: string;
-      address: string;
-      telephone: string;
-      createdAt: string;
-    }[]
-  >([]);
+  const [orders, setOrders] = useState<OrderSummary[]>([]);
   const [overview, setOverview] = useState({
     todayOrder: 0,
     pendingOrder: 0,
@@ -34,58 +17,23 @@ const AdminDashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    // Fetch orders and update overview data
     const getOrders = async () => {
       try {
-        const data = await fetchOrders();
+        const data = await listOrders();
         setOrders(data);
-        // console.log(data);
 
-        // Calculate order counts based on statuses
         const todayCount = data.filter(
-          (order: {
-            orderId: number;
-            status: string;
-            userId: number;
-            serviceId: number;
-            totalCost: number;
-            paymentStatus: string;
-            address: string;
-            telephone: string;
-            createdAt: string;
-          }) => {
-            const orderDate = new Date(order.createdAt);
-            // console.log(orderDate);
-            return orderDate.toDateString() === new Date().toDateString();
-          }
+          (order) =>
+            new Date(order.createdAt).toDateString() ===
+            new Date().toDateString()
         ).length;
 
         const pendingCount = data.filter(
-          (order: {
-            orderId: number;
-            status: string;
-            userId: number;
-            serviceId: number;
-            totalCost: number;
-            paymentStatus: string;
-            address: string;
-            telephone: string;
-            createdAt: string;
-          }) => order.status === "Pending"
+          (order) => order.status === "Pending"
         ).length;
 
         const ongoingCount = data.filter(
-          (order: {
-            orderId: number;
-            status: string;
-            userId: number;
-            serviceId: number;
-            totalCost: number;
-            paymentStatus: string;
-            address: string;
-            telephone: string;
-            createdAt: string;
-          }) => order.status === "Ongoing"
+          (order) => order.status === "Ongoing"
         ).length;
 
         setOverview({
@@ -99,7 +47,7 @@ const AdminDashboard: React.FC = () => {
       }
     };
 
-    getOrders();
+    void getOrders();
   }, []);
 
   const handleCardClick = (status: string) => {
@@ -108,7 +56,6 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="admin-dashboard-container">
-      {/* Overview Section */}
       <div className="overview-section">
         <h1>Admin Dashboard</h1>
         <h2>Overview</h2>
@@ -141,7 +88,6 @@ const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Client Table Section */}
       <div className="client-section">
         <h2>Orders</h2>
         <div className="client-table">
@@ -157,9 +103,9 @@ const AdminDashboard: React.FC = () => {
           </div>
           {orders.map((order, index) => (
             <div key={index} className="table-row">
-              <div>{order.orderId}</div>
-              <div>{order.userId}</div>
-              <div>{order.serviceId}</div>
+              <div>{order.orderId || order.id || "N/A"}</div>
+              <div>{order.userId || "N/A"}</div>
+              <div>{order.serviceId || "N/A"}</div>
               <div>{new Date(order.createdAt).toLocaleDateString()}</div>
               <div>{order.address}</div>
               <div>{order.totalCost.toLocaleString()} VND</div>

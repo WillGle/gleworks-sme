@@ -1,8 +1,9 @@
+// Public landing page for the main marketing experience.
 import React from "react";
 import "./Landing.css";
 
-import image1 from "../../assets/landing.jpg";
-import about from "../../assets/about.jpg";
+import image1 from "../../assets/landing.webp";
+import about from "../../assets/about.webp";
 
 // Landing component representing the landing page
 const Landing: React.FC = () => {
@@ -28,7 +29,12 @@ const Landing: React.FC = () => {
       </section>
 
       <section className="about-section">
-        <img src={about} alt="Chí-Cường Nguyễn" className="about-image" />
+        <img
+          src={about}
+          alt="Chí-Cường Nguyễn"
+          className="about-image"
+          loading="lazy"
+        />
         <div className="about-content">
           <h1>Chí-Cường Nguyễn</h1>
           <h2>

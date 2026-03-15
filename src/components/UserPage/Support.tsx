@@ -1,3 +1,4 @@
+// Placeholder support page inside the user area.
 import React from "react";
 import "./Support.css";
 

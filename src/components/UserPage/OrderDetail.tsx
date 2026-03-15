@@ -1,3 +1,4 @@
+// Small popup used by the user order list to show one order summary.
 import React from "react";
 import "./OrderDetail.css";
 

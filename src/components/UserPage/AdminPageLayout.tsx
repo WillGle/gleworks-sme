@@ -1,3 +1,4 @@
+// Shared admin layout with side navigation and nested routes.
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import SidePanel from "./AdminSidePanel";

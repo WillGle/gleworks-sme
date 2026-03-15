@@ -1,3 +1,4 @@
+// Placeholder blog page kept for later work.
 import React, { useState } from "react";
 import "./Blog.css";
 

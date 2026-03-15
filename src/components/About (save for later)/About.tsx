@@ -1,3 +1,4 @@
+// Placeholder about page kept for later work.
 import React from "react";
 import "./About.css";
 

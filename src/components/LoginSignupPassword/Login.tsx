@@ -1,6 +1,7 @@
+// Login form that stores the returned session before redirecting by role.
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios"; // Import Axios for HTTP requests
+import { login, setSession } from "@api";
 import "./LoginSignUpLostPassNewPass.css";
 
 const Login: React.FC = () => {
@@ -10,8 +11,6 @@ const Login: React.FC = () => {
   const [successMessage] = useState<string>(""); // State for success message
   const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading indicator
   const navigate = useNavigate(); // Hook to navigate between pages
-  const apiUrl = import.meta.env.VITE_API_URL; // API URL from environment variables
-
   // Function to validate email
   const validateEmail = (email: string): boolean => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -41,28 +40,13 @@ const Login: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await Axios.post(`${apiUrl}/auth/login`, {
-        email,
-        password,
-      });
+      const user = await login(email, password);
+      setSession(user);
 
-      const user = response.data; // Response data from the server
-      //   console.log("Login successful:", user);
-
-      // Clear previous user data from localStorage
-      localStorage.removeItem("user");
-
-      // Save new user data to localStorage
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("userId", user.id); // Save user ID to localStorage
-      localStorage.setItem("token", user.token); // Save token to localStorage
-      localStorage.setItem("role", user.role); // Lưu role vào localStorage
-
-      // Navigate to the appropriate page based on user role
       if (user.role === "admin") {
-        navigate("/admin/dashboard"); // Chuyển hướng đến trang admin dashboard
+        navigate("/admin/dashboard");
       } else {
-        navigate("/home"); // Chuyển hướng đến trang chính
+        navigate("/home");
       }
     } catch (error) {
       console.error("Login error:", error);

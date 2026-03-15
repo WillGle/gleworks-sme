@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+// Admin user list page for browsing registered users.
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { isAuthenticated, listUsers } from "@api";
+import type { UserListItem } from "@api/types";
 import "./AdminUserList.css";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  createdAt: string;
-  role: string;
-  isConfirmed: number;
-}
-
-// Utility function to format date
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
@@ -25,48 +15,35 @@ const formatDate = (dateString: string): string => {
 };
 
 const AdminUserList: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserListItem[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<UserListItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("");
   const [filterCreatedAt, setFilterCreatedAt] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate for navigation
+  const navigate = useNavigate();
 
-  // Fetching users
-  const fetchAllUsers = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      if (!isAuthenticated()) {
+        setMessage("You need to log in.");
+        return;
+      }
+
       try {
-        const response = await fetch(`${apiUrl}/users`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const userData = await response.json();
-          setUsers(userData);
-          setFilteredUsers(userData);
-        } else {
-          const errorResponse = await response.json();
-          setMessage(`Failed to fetch users: ${errorResponse.message}`);
-        }
+        const userData = await listUsers();
+        setUsers(userData);
+        setFilteredUsers(userData);
       } catch (error) {
         console.error("Error fetching users:", error);
         setMessage("An unexpected error occurred while fetching users.");
       }
-    } else {
-      setMessage("Token is missing.");
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchAllUsers();
+    void fetchAllUsers();
   }, []);
 
-  const handleSearchAndFilter = () => {
+  useEffect(() => {
     const filtered = users.filter((user) => {
       return (
         (searchTerm === "" ||
@@ -78,19 +55,14 @@ const AdminUserList: React.FC = () => {
         (filterCreatedAt === "" || user.createdAt.includes(filterCreatedAt))
       );
     });
+
     setFilteredUsers(filtered);
-  };
+  }, [filterCreatedAt, filterRole, searchTerm, users]);
 
-  useEffect(() => {
-    handleSearchAndFilter();
-  }, [searchTerm, filterRole, filterCreatedAt, users]);
-
-  // Navigate to user detail page when a user is clicked
   const navigateToUserDetail = (userId: string) => {
     navigate(`user-detail/${userId}`);
   };
 
-  // Email confirmation
   const checkUserConfirm = (isConfirmed: number) => {
     return isConfirmed === 1 ? "Yes" : "No";
   };

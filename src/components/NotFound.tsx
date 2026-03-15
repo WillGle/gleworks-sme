@@ -1,3 +1,4 @@
+// Catch-all page for unknown routes.
 import React from "react";
 import "./NotFound.css"; // Optional styling
 

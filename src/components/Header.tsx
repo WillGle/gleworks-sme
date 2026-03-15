@@ -1,33 +1,16 @@
-import React, { useEffect, useState } from "react";
+// Shared site header that also reflects the current auth state.
+import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import { FaUser } from "react-icons/fa";
-
-// Interface định nghĩa kiểu dữ liệu của người dùng
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string; // Add role to the User interface
-}
+import { getStoredUser } from "@api";
 
 const Header: React.FC = () => {
-  // State lưu thông tin người dùng
-  const [user, setUser] = useState<User | null>(null);
-
-  // Kiểm tra thông tin người dùng trong localStorage khi component được mount
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-
-    if (userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser); // Chuyển dữ liệu từ localStorage thành object
-      } catch (error) {
-        console.error("Failed to parse user data:", error);
-      }
-    }
-  }, []);
+  const user = getStoredUser();
+  const userLabel =
+    [user?.lastName, user?.firstName].filter(Boolean).join(" ").trim() ||
+    user?.email ||
+    "Account";
 
   return (
     <header className="topHeader">
@@ -53,7 +36,7 @@ const Header: React.FC = () => {
                 to={user.role === "admin" ? "/admin" : "/user"}
                 className="user-info"
               >
-                Hi, {user.lastName} {user.firstName} {/* làm thành button*/}
+                Hi, {userLabel}
               </Link>
               {/* Thêm nút logout */}
             </>

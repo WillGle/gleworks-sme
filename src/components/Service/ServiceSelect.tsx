@@ -1,27 +1,27 @@
+// Entry page for choosing the service flow before checkout.
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { listServices } from "@api";
+import type { ServiceSummary } from "@api/types";
 import "./ServiceSelect.css";
 
 const Service: React.FC = () => {
   const navigate = useNavigate();
   const [activeNote, setActiveNote] = useState<number | null>(null);
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<ServiceSummary[]>([]);
 
   // Fetch services from the API
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/services`
-        ); // Use the API URL from .env
-        const data = await response.json();
+        const data = await listServices();
         setServices(data);
       } catch (error) {
         console.error("Error fetching services:", error);
       }
     };
 
-    fetchServices();
+    void fetchServices();
   }, []);
 
   // FAQ data

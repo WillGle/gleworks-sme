@@ -1,10 +1,11 @@
+// Signup form for creating a new user account.
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios"; // Import Axios for HTTP requests
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { register } from "@api";
 import "./LoginSignUpLostPassNewPass.css";
 import { DotLottie } from "@lottiefiles/dotlottie-web"; // Import DotLottie
 
@@ -19,7 +20,6 @@ const Signup: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const canvasRef = useRef<HTMLCanvasElement>(null); // Thêm ref cho canvas
 
@@ -63,7 +63,7 @@ const Signup: React.FC = () => {
     try {
       const formattedDateOfBirth = dob ? dob.toISOString().split("T")[0] : null;
 
-      await Axios.post(`${apiUrl}/auth/register`, {
+      await register({
         firstName,
         lastName,
         phoneNumber: `+${phone.replace(/^0/, "")}`,

@@ -1,5 +1,8 @@
+// Switch modding flow that collects option choices before checkout.
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getServiceOptions } from "@api";
+import type { ServiceOption } from "@api/types";
 import "./BuildAndSwitch.css";
 
 const Switch: React.FC = () => {
@@ -24,47 +27,37 @@ const Switch: React.FC = () => {
   });
 
   const [total, setTotal] = useState(0);
-  const [serviceOptions, setServiceOptions] = useState<any[]>([]); // State to hold service options
+  const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>([]);
 
-  // Fetch service options when the component mounts
   useEffect(() => {
     const fetchServiceOptions = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/service-options/1`
-        ); // Adjust the ID as needed
-        if (!response.ok) {
-          throw new Error("Failed to fetch service options");
-        }
-        const data = await response.json();
-        setServiceOptions(data.options); // Set the options in state
+        const data = await getServiceOptions(1);
+        setServiceOptions(data.options);
 
-        // Initialize moddingPreferences based on fetched options
-        const moddingPreferences = data.options.reduce(
-          (acc: any, option: any) => {
-            acc[option.optionName.toLowerCase()] = false; // Chỉ chuyển thành chữ thường
+        const moddingPreferences = data.options.reduce<Record<string, boolean>>(
+          (acc, option) => {
+            acc[option.optionName.toLowerCase()] = false;
             return acc;
           },
           {}
         );
 
-        // Retrieve saved form data from session storage
         const savedData = sessionStorage.getItem("switchModdingData");
         if (savedData) {
           const parsedData = JSON.parse(savedData);
-          //   console.log("Saved data from session storage:", parsedData); // In ra dữ liệu đã lưu
           setFormData((prev) => ({
             ...prev,
             moddingPreferences: {
-              ...moddingPreferences, // Use the initialized preferences
-              ...parsedData.moddingPreferences, // Merge with existing preferences
+              ...moddingPreferences,
+              ...parsedData.moddingPreferences,
             },
-            ...parsedData, // Spread the rest of the data
-          })); // Populate formData with saved data
+            ...parsedData,
+          }));
         } else {
           setFormData((prev) => ({
             ...prev,
-            moddingPreferences, // Set initial preferences if no saved data
+            moddingPreferences,
           }));
         }
       } catch (error) {
@@ -72,36 +65,33 @@ const Switch: React.FC = () => {
       }
     };
 
-    fetchServiceOptions();
+    void fetchServiceOptions();
   }, []);
 
   useEffect(() => {
     const amount = parseInt(formData.amount) || 0;
 
-    // Calculate the total based on selected modding preferences
     const moddingTotal = serviceOptions.reduce((total, option) => {
       if (
         formData.moddingPreferences[
           option.optionName.toLowerCase().replace(/\s+/g, "")
         ]
       ) {
-        return total + (option.price || 0); // Add the price of the selected option
+        return total + (option.price || 0);
       }
       return total;
     }, 0);
 
-    // Calculate the total based on the selected spring preference
     const springTotal = serviceOptions.reduce((total, option) => {
       if (formData.springPreference === option.optionName) {
-        return total + (option.price || 0); // Add the price of the selected spring option
+        return total + (option.price || 0);
       }
       return total;
     }, 0);
 
-    // Calculate the final total
     const calculatedTotal = amount * (moddingTotal + springTotal);
     setTotal(calculatedTotal);
-  }, [formData, serviceOptions]); // Add serviceOptions to the dependency array
+  }, [formData, serviceOptions]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -109,13 +99,19 @@ const Switch: React.FC = () => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
 
     if (type === "checkbox") {
+      if (name === "termsAccepted") {
+        setFormData((prev) => ({
+          ...prev,
+          termsAccepted: checked,
+        }));
+        return;
+      }
       setFormData((prev) => ({
         ...prev,
         moddingPreferences: {
           ...prev.moddingPreferences,
           [name]: checked,
         },
-        termsAccepted: checked,
       }));
     } else if (type === "radio") {
       setFormData((prev) => ({
@@ -159,7 +155,6 @@ const Switch: React.FC = () => {
       return;
     }
 
-    // Prepare data for session storage
     const switchModdingData = {
       switchName: formData.switchName,
       amount: parseInt(formData.amount),
@@ -167,18 +162,14 @@ const Switch: React.FC = () => {
       springPreference: formData.springPreference,
       additionalNotes: formData.additionalNotes,
       termsAccepted: formData.termsAccepted,
-      total: total, // Include the total cost
+      total: total,
     };
 
-    // Save data to session storage
     sessionStorage.setItem(
       "switchModdingData",
       JSON.stringify(switchModdingData)
     );
 
-    // alert("Order saved to session storage!");
-
-    // Điều hướng đến trang checkout cho switch modding
     navigate("/service/checkout-switch");
   };
 

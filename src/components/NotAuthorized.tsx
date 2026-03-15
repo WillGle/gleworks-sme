@@ -1,3 +1,4 @@
+// Fallback page for users who fail role checks.
 import React from "react";
 import "./NotAuthorized.css"; // Optional styling
 

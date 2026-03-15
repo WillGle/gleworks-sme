@@ -1,11 +1,11 @@
+// Forgot-password form that triggers the reset flow.
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios"; // Import Axios for making API requests
 import { DotLottie } from "@lottiefiles/dotlottie-web"; // Import DotLottie
+import { forgotPassword } from "@api";
 import "./LoginSignUpLostPassNewPass.css";
 
 const LostPass: React.FC = () => {
-  const apiUrl = import.meta.env.VITE_API_URL; // Use the API URL from environment variables
   const canvasRef = useRef<HTMLCanvasElement | null>(null); // Reference to the canvas
   const [email, setEmail] = useState<string>(""); // State for email input
   const [errorMessage, setErrorMessage] = useState<string>(""); // State for error messages
@@ -37,12 +37,8 @@ const LostPass: React.FC = () => {
     setIsLoading(true); // Show loading animation
 
     try {
-      const response = await Axios.post(`${apiUrl}/auth/forgot-password`, {
-        email,
-      });
-      setSuccessMessage(
-        response.data.message || "Reset link sent successfully!"
-      );
+      const response = await forgotPassword(email);
+      setSuccessMessage(response?.message || "Reset link sent successfully!");
     } catch (error) {
       console.error("Error sending reset link:", error);
       setErrorMessage("Failed to send reset password email. Please try again.");

@@ -1,11 +1,12 @@
+// Gallery-style archive page for completed work.
 import React from "react";
 import "./Archive.css";
-import image1 from "../../assets/a3.jpeg";
-import image2 from "../../assets/98plastic.png";
-import image3 from "../../assets/sams46_promo.png";
-import image4 from "../../assets/sams46.png";
-import image5 from "../../assets/keychron_promo.jpg";
-import image6 from "../../assets/keychron2.jpeg";
+import image1 from "../../assets/a3.webp";
+import image2 from "../../assets/98plastic.webp";
+import image3 from "../../assets/sams46_promo.webp";
+import image4 from "../../assets/sams46.webp";
+import image5 from "../../assets/keychron_promo.webp";
+import image6 from "../../assets/keychron2.webp";
 
 // Archive component representing the archive page
 const Archive: React.FC = () => {
@@ -51,7 +52,11 @@ const Archive: React.FC = () => {
         {items.map((item) => (
           <div key={item.id} className="archive-item">
             <div className="image-container">
-              <img src={item.image} alt={`Item ${item.id}`} />
+              <img
+                src={item.image}
+                alt={`Item ${item.id}`}
+                loading="lazy"
+              />
               {/* <div className="description-overlay">
                 <p>{item.description}</p>
               </div> */}

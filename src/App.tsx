@@ -1,3 +1,4 @@
+// Defines the app shell and top-level routes.
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,6 +12,7 @@ import LostPass from "./components/LoginSignupPassword/LostPass";
 import NewPass from "./components/LoginSignupPassword/NewPass";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import GlobalApiErrorToast from "./components/GlobalApiErrorToast";
 import Landing from "./components/Landing/Landing";
 // import About from "./components/About (save for later)/About";
 // import Blog from "./components/Blog (dev later)/Blog";
@@ -41,6 +43,7 @@ function AppLayout() {
 
   return (
     <>
+      <GlobalApiErrorToast />
       {/* Conditionally render Header and Footer based on the route */}
       {!hideHeaderFooter && <Header />}
       <Routes>

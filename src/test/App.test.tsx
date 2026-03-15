@@ -1,33 +1,37 @@
-import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import App from "../App";
+// Smoke tests for the main route shell and a few public pages.
+import { render, screen } from '@testing-library/react'
+import App from '../App'
 
-const renderWithRouter = (ui: React.ReactElement, { route = "/" } = {}) => {
-  window.history.pushState({}, "Test page", route);
-  return render(ui, { wrapper: BrowserRouter });
-};
+const renderAtRoute = (route = '/home') => {
+  window.history.pushState({}, 'Test page', route)
+  return render(<App />)
+}
 
-test("renders the landing page", () => {
-  renderWithRouter(<App />, { route: "/" });
-  expect(screen.getByText("GLE.WORK")).toBeInTheDocument();
-});
+test('renders the landing page', () => {
+  renderAtRoute('/home')
+  expect(
+    screen.getByRole('heading', {
+      name: 'Masterpiece comes with immaculate craftsmanship',
+    })
+  ).toBeInTheDocument()
+})
 
-test("renders the login page", () => {
-  renderWithRouter(<App />, { route: "/login" });
-  expect(screen.getByText("Login")).toBeInTheDocument();
-});
+test('renders the login page', () => {
+  renderAtRoute('/login')
+  expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument()
+})
 
-test("renders the signup page", () => {
-  renderWithRouter(<App />, { route: "/signup" });
-  expect(screen.getByText("Signup")).toBeInTheDocument();
-});
+test('renders the signup page', () => {
+  renderAtRoute('/signup')
+  expect(screen.getByRole('heading', { name: 'Sign Up' })).toBeInTheDocument()
+})
 
-test("renders the lost password page", () => {
-  renderWithRouter(<App />, { route: "/lost-password" });
-  expect(screen.getByText("Lost Password")).toBeInTheDocument();
-});
+test('renders the forgot password page', () => {
+  renderAtRoute('/lost-password')
+  expect(screen.getByRole('heading', { name: 'Forgot Password' })).toBeInTheDocument()
+})
 
-test("renders the not found page for unknown routes", () => {
-  renderWithRouter(<App />, { route: "/unknown" });
-  expect(screen.getByText("Page Not Found")).toBeInTheDocument();
-});
+test('renders the not found page for unknown routes', () => {
+  renderAtRoute('/unknown')
+  expect(screen.getByRole('heading', { name: '404 - Page Not Found' })).toBeInTheDocument()
+})

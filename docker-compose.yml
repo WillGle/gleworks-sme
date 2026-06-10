@@ -1,7 +1,21 @@
 services:
+  backend:
+    build: ./simpleBEDB
+    image: glework-backend:${TAG:-latest}
+    environment:
+      - PORT=3001
+    ports:
+      - "127.0.0.1:3001:3001" # localhost-only: /metrics + direct API checks
+    volumes:
+      - ./simpleBEDB/data:/app/data
+    restart: unless-stopped
+
   frontend:
     build: .
+    image: glework-frontend:${TAG:-latest}
     ports:
       - "8080:80"
-    environment:
-      - NODE_ENV=production
+    depends_on:
+      - backend
+    restart: unless-stopped
+

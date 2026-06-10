@@ -51,7 +51,7 @@ describe("Header Component", () => {
     // Mock window.location.href
     const originalLocation = window.location;
     delete (window as any).location;
-    window.location = { ...originalLocation, href: "" };
+    (window as any).location = { ...originalLocation, href: "" };
 
     renderHeader();
 
@@ -61,7 +61,7 @@ describe("Header Component", () => {
     expect(localStorage.getItem("user")).toBeNull();
     expect(window.location.href).toBe("/login");
 
-    window.location = originalLocation;
+    (window as any).location = originalLocation;
   });
 
   test("routes regular users to my-account", () => {

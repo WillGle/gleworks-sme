@@ -61,9 +61,10 @@ pipeline {
                 echo 'Building Docker image...'
                 script {
                     sh 'apk add --no-cache curl docker-cli'
-                    
+                    def buildDate = sh(script: "date -u +'%Y-%m-%dT%H:%M:%SZ'", returnStdout: true).trim()
                     sh """
                         docker build \
+                          --label "build-date=${buildDate}" \
                           -t ${IMAGE_NAME}:${IMAGE_TAG} \
                           -t ${IMAGE_NAME}:latest \
                           .

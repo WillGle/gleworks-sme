@@ -5,6 +5,7 @@ import express from "express";
 import { randomUUID } from "node:crypto";
 import { adminOnly, authRequired, signAuthToken } from "./auth.js";
 import { db, getDbFile, initDatabase } from "./db.js";
+import { metricsHandler, metricsMiddleware } from "./metrics.js";
 
 initDatabase();
 
@@ -18,6 +19,9 @@ app.use(
   })
 );
 app.use(express.json());
+
+// Record RED metrics for every request (see metrics.js); exposed at /metrics.
+app.use(metricsMiddleware);
 
 const mapUser = (user) => ({
   id: user.id,
@@ -157,6 +161,9 @@ app.get("/health", (_req, res) => {
     dbFile: getDbFile(),
   });
 });
+
+// Prometheus scrape endpoint: RED metrics (rate/errors/duration) + process metrics.
+app.get("/metrics", metricsHandler);
 
 app.post("/auth/login", (req, res) => {
   const { email, password } = req.body ?? {};

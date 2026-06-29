@@ -1,0 +1,15 @@
+# Caddy auto-provisions HTTPS (Let's Encrypt) for $DOMAIN.
+# A DNS A record for $DOMAIN must point to this VPS before first boot.
+{$DOMAIN} {
+	encode gzip zstd
+	reverse_proxy frontend:80
+}
+
+# Optional: public READ-ONLY Grafana at grafana.$DOMAIN.
+# To enable: add a DNS A record for grafana.$DOMAIN, set GRAFANA_ANON_ENABLED=true
+# in deploy/.env, and uncomment the block below.
+#
+# grafana.{$DOMAIN} {
+# 	encode gzip zstd
+# 	reverse_proxy grafana:3000
+# }

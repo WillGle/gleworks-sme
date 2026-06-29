@@ -6,3 +6,16 @@ node_modules
 /coverage/
 *.log
 .DS_Store
+
+# deploy secrets / local ansible inventory
+/deploy/.env
+/deploy/ansible/inventory.ini
+
+# LaTeX auxiliary/build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+*.out
+*.log

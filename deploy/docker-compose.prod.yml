@@ -1,0 +1,83 @@
+# Production topology for a public VPS.
+#
+#   internet --443--> caddy (auto-TLS) --> frontend (nginx: SPA + /api proxy) --> backend
+#   prometheus + grafana stay internal (reach prometheus via SSH tunnel;
+#   optionally expose grafana read-only at grafana.$DOMAIN).
+#
+# Run from the repo root:
+#   docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env up -d --build
+services:
+  backend:
+    build: ../simpleBEDB
+    image: ${BACKEND_IMAGE:-glework-backend:${TAG:-latest}}
+    environment:
+      - PORT=3001
+      - JWT_SECRET=${JWT_SECRET:?set JWT_SECRET in deploy/.env}
+    volumes:
+      - backend-data:/app/data
+    expose:
+      - "3001"
+    restart: unless-stopped
+
+  frontend:
+    build: ..
+    image: ${FRONTEND_IMAGE:-glework-frontend:${TAG:-latest}}
+    depends_on:
+      - backend
+    expose:
+      - "80"
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090" # admin-only; reach via: ssh -L 9090:127.0.0.1:9090 vps
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD in deploy/.env}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://grafana.${DOMAIN}
+      # Public read-only viewer (only takes effect if you also expose grafana in the Caddyfile):
+      - GF_AUTH_ANONYMOUS_ENABLED=${GRAFANA_ANON_ENABLED:-false}
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - ../grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    expose:
+      - "3000"
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:?set DOMAIN in deploy/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  backend-data:
+  prometheus-data:
+  grafana-data:
+  caddy-data:
+  caddy-config:

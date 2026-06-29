@@ -16,6 +16,21 @@
         
         # Node.js version for consistency
         nodejs = pkgs.nodejs_20;
+
+        # Custom TeX Live setup for PDF/LaTeX generation
+        texlive-combined = pkgs.texlive.combine {
+          inherit (pkgs.texlive)
+            scheme-medium
+            titlesec
+            enumitem
+            fontawesome5
+            bookmark
+            lastpage
+            changepage
+            paracol
+            needspace
+            charter;
+        };
         
       in {
         # Development shell
@@ -40,6 +55,12 @@
             # Git
             git
             
+            # PDF / LaTeX tooling
+            texlive-combined
+            
+            # Nix tooling
+            nixd
+            
             # Utilities
             jq
             curl
@@ -53,6 +74,7 @@
             echo "  Node.js:    $(node --version)"
             echo "  npm:        $(npm --version)"
             echo "  TypeScript: $(tsc --version)"
+            echo "  LaTeX:      $(latexmk --version | head -n 1)"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo ""
             echo "  Available Commands:"

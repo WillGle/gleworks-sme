@@ -1,0 +1,79 @@
+# SLO / error-budget rules for the GleWorks API.
+#
+# SLIs are derived from the RED metrics exposed by simpleBEDB (src/metrics.js):
+#   - http_requests_total{method,route,status_code}
+#   - http_request_duration_seconds_bucket{method,route,status_code,le}
+#
+# SLOs:
+#   - Availability: 99% of requests succeed (non-5xx)  -> 1% error budget
+#   - Latency:      p95 request duration < 500ms
+groups:
+  - name: gleworks-sli
+    rules:
+      - record: job:http_requests:rate5m
+        expr: sum(rate(http_requests_total[5m]))
+
+      - record: job:http_requests_5xx:rate5m
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+
+      - record: job:http_error_ratio:ratio_rate5m
+        expr: |
+          sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+            /
+          clamp_min(sum(rate(http_requests_total[5m])), 1e-9)
+
+      - record: job:http_latency_seconds:p95_5m
+        expr: histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))
+
+  - name: gleworks-slo-alerts
+    rules:
+      # Multi-window, multi-burn-rate alerting on the 99% availability SLO
+      # (Google SRE Workbook style): page only when a short AND a long window
+      # both confirm the budget is burning, to avoid flapping on blips.
+      - alert: GleWorksErrorBudgetBurnFast
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+              / clamp_min(sum(rate(http_requests_total[5m])), 1e-9) > 14.4 * 0.01
+          )
+          and
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[1h]))
+              / clamp_min(sum(rate(http_requests_total[1h])), 1e-9) > 14.4 * 0.01
+          )
+        for: 2m
+        labels:
+          severity: page
+          slo: availability
+        annotations:
+          summary: "GleWorks burning error budget fast (14.4x)"
+          description: "5xx ratio over both 5m and 1h is burning the 99% availability budget 14.4x too fast."
+
+      - alert: GleWorksErrorBudgetBurnSlow
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[30m]))
+              / clamp_min(sum(rate(http_requests_total[30m])), 1e-9) > 6 * 0.01
+          )
+          and
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[6h]))
+              / clamp_min(sum(rate(http_requests_total[6h])), 1e-9) > 6 * 0.01
+          )
+        for: 15m
+        labels:
+          severity: ticket
+          slo: availability
+        annotations:
+          summary: "GleWorks burning error budget (6x)"
+          description: "5xx ratio over both 30m and 6h is burning the 99% availability budget 6x too fast."
+
+      - alert: GleWorksHighLatencyP95
+        expr: histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m]))) > 0.5
+        for: 10m
+        labels:
+          severity: ticket
+          slo: latency
+        annotations:
+          summary: "GleWorks p95 latency above the 500ms SLO"
+          description: "API p95 latency has exceeded the 500ms target for 10 minutes."

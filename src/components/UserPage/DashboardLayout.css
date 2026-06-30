@@ -1,0 +1,15 @@
+/* Shared layout for the admin and user dashboards */
+.dashboard-layout {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* Prevent overflow issues */
+}
+
+/* Main content area */
+.dashboard-content {
+  flex: 1; /* Fill remaining space */
+  padding: 40px;
+  overflow-y: auto; /* Scroll if content exceeds height */
+  background: #ffffff;
+}

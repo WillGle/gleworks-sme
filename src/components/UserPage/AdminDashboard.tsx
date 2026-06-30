@@ -51,7 +51,7 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   const handleCardClick = (status: string) => {
-    navigate(`/admin/my-orders?status=${status}`);
+    navigate(`/admin/orders?status=${status}`);
   };
 
   return (

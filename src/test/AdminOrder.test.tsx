@@ -43,7 +43,7 @@ test('applies the dashboard status query to the order list', async () => {
   ])
 
   render(
-    <MemoryRouter initialEntries={['/admin/my-orders?status=Pending']}>
+    <MemoryRouter initialEntries={['/admin/orders?status=Pending']}>
       <AdminOrder />
     </MemoryRouter>
   )

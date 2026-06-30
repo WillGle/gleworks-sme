@@ -31,8 +31,8 @@ services:
   prometheus:
     image: prom/prometheus:latest
     volumes:
-      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ../prometheus/rules:/etc/prometheus/rules:ro
+      - ../monitor/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../monitor/prometheus/rules:/etc/prometheus/rules:ro
       - prometheus-data:/prometheus
     ports:
       - "127.0.0.1:9090:9090" # admin-only; reach via: ssh -L 9090:127.0.0.1:9090 vps
@@ -51,8 +51,8 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=${GRAFANA_ANON_ENABLED:-false}
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
     volumes:
-      - ../grafana/provisioning:/etc/grafana/provisioning:ro
-      - ../grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ../monitor/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../monitor/grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafana-data:/var/lib/grafana
     expose:
       - "3000"

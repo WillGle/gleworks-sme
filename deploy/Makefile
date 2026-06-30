@@ -26,7 +26,7 @@ config: ## Render the merged, resolved compose config
 	$(COMPOSE) config
 
 validate: ## Validate Prometheus rules + Caddyfile (no daemon changes)
-	docker run --rm --entrypoint promtool -v $(CURDIR)/../prometheus:/p prom/prometheus:latest \
+	docker run --rm --entrypoint promtool -v $(CURDIR)/../monitor/prometheus:/p prom/prometheus:latest \
 	  check rules /p/rules/slo.yml
 	docker run --rm -e DOMAIN=example.com -v $(CURDIR)/Caddyfile:/etc/caddy/Caddyfile:ro \
 	  caddy:2-alpine caddy validate --adapter caddyfile --config /etc/caddy/Caddyfile

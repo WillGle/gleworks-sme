@@ -7,8 +7,8 @@ with automatic HTTPS and observability. This is the IaC that backs the CV claims
 |---|---|
 | Containerized; shipped via CI/CD | `Dockerfile`, `simpleBEDB/Dockerfile`, `Jenkinsfile` |
 | Reverse proxy, same-origin `/api`, TLS | `nginx.conf` (SPA + `/api`), `deploy/Caddyfile` (auto-HTTPS) |
-| Prometheus + Grafana, RED metrics | `simpleBEDB/src/metrics.js`, `prometheus/`, `grafana/` |
-| **SLO / error-budget alerting** | `prometheus/rules/slo.yml` |
+| Prometheus + Grafana, RED metrics | `simpleBEDB/src/metrics.js`, `monitor/prometheus/`, `monitor/grafana/` |
+| **SLO / error-budget alerting** | `monitor/prometheus/rules/slo.yml` |
 | **Provisions infrastructure as code** | `deploy/ansible/playbook.yml`, `deploy/docker-compose.prod.yml` |
 
 ## Architecture
@@ -102,7 +102,7 @@ docker compose down
 - Secrets (`deploy/.env`) are git-ignored; in production prefer Ansible Vault or
   the VPS provider's secret store over plaintext `-e` vars.
 - Alerts currently evaluate in Prometheus. To deliver notifications, add
-  Alertmanager + a receiver (Slack/email) — the rules in `prometheus/rules/slo.yml`
+  Alertmanager + a receiver (Slack/email) — the rules in `monitor/prometheus/rules/slo.yml`
   already emit the alerts.
 - To show the live SLO dashboard publicly, uncomment the `grafana.{$DOMAIN}` block
   in `Caddyfile`, set `GRAFANA_ANON_ENABLED=true`, and add the subdomain's DNS record.

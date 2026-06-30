@@ -10,22 +10,45 @@
     width: 250px;
     background-color: #eaeaea;
     padding: 20px;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
   }
-  
+
   .policies-sidebar ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
-  
+
   .policies-sidebar li {
     margin-bottom: 15px;
   }
-  
-  .policies-sidebar span {
+
+  .policies-sidebar a {
+    display: block;
     font-size: 18px;
     font-weight: bold;
+    color: #333;
+    text-decoration: none;
     cursor: pointer;
+    padding: 6px 10px;
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .policies-sidebar a:hover {
+    background-color: #dcdcdc;
+  }
+
+  .policies-sidebar a.active {
+    color: #000;
+    background-color: #ffffff;
+    border-left-color: #333;
   }
   
   .policies-sidebar ul ul {
@@ -45,13 +68,32 @@
     padding: 30px;
     background-color: #ffffff;
     overflow-y: auto;
+    scroll-behavior: smooth;
   }
-  
+
+  /* Each policy starts a little below the panel top so anchor jumps breathe. */
+  .policy-section {
+    scroll-margin-top: 20px;
+  }
+
+  .policy-section + .policy-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #eaeaea;
+  }
+
   .policies-content h1 {
     font-size: 24px;
     margin-bottom: 20px;
   }
-  
+
+  .policies-content h3 {
+    font-size: 18px;
+    margin-top: 16px;
+    margin-bottom: 10px;
+    color: #222;
+  }
+
   .policies-content p {
     font-size: 16px;
     margin-bottom: 20px;

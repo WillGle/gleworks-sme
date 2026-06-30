@@ -1,4 +1,5 @@
 // Defines the app shell and top-level routes.
+import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,28 +7,32 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import Login from "./components/LoginSignupPassword/Login";
-import Signup from "./components/LoginSignupPassword/Signup";
-import LostPass from "./components/LoginSignupPassword/LostPass";
-import NewPass from "./components/LoginSignupPassword/NewPass";
+// Eager: part of the shell, or the first route users land on. Loaded upfront.
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import GlobalApiErrorToast from "./components/GlobalApiErrorToast";
 import Landing from "./components/Landing/Landing";
-// import About from "./components/About (save for later)/About";
-// import Blog from "./components/Blog (dev later)/Blog";
-import Archive from "./components/Archive/Archive";
-import Service from "./components/Service/ServiceSelect";
-import Switch from "./components/Service/Switch";
-import Build from "./components/Service/Build";
-import CheckoutBuild from "./components/Service/CheckoutBuild";
-import CheckoutSwitch from "./components/Service/CheckoutSwitch";
-import UserPageLayout from "./components/UserPage/UserPageLayout";
-import AdminPageLayout from "./components/UserPage/AdminPageLayout";
-import Policies from "./components/Policies/PrivacyPolicy";
-import NotFound from "./components/NotFound";
-import NotAuth from "./components/NotAuthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+// Lazy: each route is split into its own chunk and fetched on navigation.
+// Ordered high → low by how much weight they keep off the initial load.
+const AdminPageLayout = lazy(() => import("./components/UserPage/AdminPageLayout"));
+const UserPageLayout = lazy(() => import("./components/UserPage/UserPageLayout"));
+const CheckoutBuild = lazy(() => import("./components/Service/CheckoutBuild"));
+const CheckoutSwitch = lazy(() => import("./components/Service/CheckoutSwitch"));
+const Service = lazy(() => import("./components/Service/ServiceSelect"));
+const Switch = lazy(() => import("./components/Service/Switch"));
+const Build = lazy(() => import("./components/Service/Build"));
+const Archive = lazy(() => import("./components/Archive/Archive"));
+const Policies = lazy(() => import("./components/Policies/Policies"));
+const Login = lazy(() => import("./components/LoginSignupPassword/Login"));
+const Signup = lazy(() => import("./components/LoginSignupPassword/Signup"));
+const LostPass = lazy(() => import("./components/LoginSignupPassword/LostPass"));
+const NewPass = lazy(() => import("./components/LoginSignupPassword/NewPass"));
+const NotFound = lazy(() => import("./components/NotFound"));
+const NotAuth = lazy(() => import("./components/NotAuthorized"));
+// const About = lazy(() => import("./components/About (save for later)/About"));
+// const Blog = lazy(() => import("./components/Blog (dev later)/Blog"));
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
 function AppLayout() {
@@ -47,8 +52,10 @@ function AppLayout() {
       <GlobalApiErrorToast />
       {/* Conditionally render Header and Footer based on the route */}
       {!hideHeaderFooter && <Header />}
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
+      {/* Suspense catches lazily-loaded routes while their chunk is fetched */}
+      <Suspense fallback={<div className="route-loading">Loading…</div>}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Landing />} />
         {/* <Route path="/about" element={<About />} /> */}
         {/* <Route path="/blog" element={<Blog />} /> */}
@@ -111,7 +118,8 @@ function AppLayout() {
         <Route path="/policies/" element={<Policies />} />
         <Route path="/not-authorized" element={<NotAuth />} />
         <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
-      </Routes>
+        </Routes>
+      </Suspense>
       {!hideHeaderFooter && <Footer />}
     </>
   );

@@ -12,3 +12,13 @@ body {
     margin: 0;
     background-color: #f5f5f7;
 }
+
+/* Shown briefly while a lazily-loaded route chunk is being fetched. */
+.route-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    font-size: 18px;
+    color: #555;
+}

@@ -1,10 +1,17 @@
 # Convenience targets for the production stack. Run from the deploy/ directory.
-COMPOSE = docker compose -f docker-compose.prod.yml --env-file .env
+COMPOSE_FILE ?= docker-compose.prod.yml
+COMPOSE = docker compose -f $(COMPOSE_FILE) --env-file .env
 
-.PHONY: up down logs ps config pull validate
+.PHONY: up down logs ps config pull deploy validate
 
 up: ## Build images and start the stack
 	$(COMPOSE) up -d --build
+
+deploy: pull ## Pull latest images and start the stack without building
+	$(COMPOSE) up -d
+
+pull: ## Pull latest images from the registry
+	$(COMPOSE) pull
 
 down: ## Stop and remove the stack
 	$(COMPOSE) down

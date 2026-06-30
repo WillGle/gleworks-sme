@@ -43,11 +43,20 @@ is idempotent (it updates the repo and re-applies the stack).
 
 ## Deploy manually
 
+### Full Stack (with Prometheus + Grafana)
 ```bash
 # on the VPS, after installing Docker + the compose plugin:
 git clone https://github.com/WillGle/GleWorks.git && cd GleWorks/deploy
 cp .env.example .env && $EDITOR .env          # set DOMAIN, JWT_SECRET, GRAFANA_ADMIN_PASSWORD
 make up                                        # or: docker compose -f docker-compose.prod.yml --env-file .env up -d --build
+```
+
+### Lightweight Fallback Stack (No Prometheus/Grafana — recommended for 2 GB RAM VPS)
+```bash
+# on the VPS:
+git clone https://github.com/WillGle/GleWorks.git && cd GleWorks/deploy
+cp .env.example .env && $EDITOR .env          # set DOMAIN, JWT_SECRET (GRAFANA_ADMIN_PASSWORD can be ignored)
+docker compose -f docker-compose.fallback.yml --env-file .env up -d --build
 ```
 
 Visit `https://$DOMAIN` — Caddy obtains a certificate automatically on first request.

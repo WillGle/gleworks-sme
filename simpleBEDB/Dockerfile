@@ -13,4 +13,4 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY src ./src
 EXPOSE 3001
-CMD ["node", "src/server.js"]
+CMD ["node", "--max-old-space-size=128", "src/server.js"]

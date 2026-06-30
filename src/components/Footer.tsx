@@ -1,7 +1,7 @@
 // Shared footer shown on public pages.
 import React from "react";
 import "./Footer.css";
-import { FaArrowRight, FaFacebook, FaInstagram } from "react-icons/fa";
+import { FaArrowRight, FaInstagram } from "react-icons/fa";
 
 // Footer component representing the bottom section of the application
 const Footer: React.FC = () => {
@@ -26,8 +26,9 @@ const Footer: React.FC = () => {
           <p>Ho Chi Minh, Vietnam</p>
           <p>support@gleworks.io.vn</p>
           <div className="social-icons">
-            <FaFacebook />
-            <FaInstagram />
+            <a href="https://www.instagram.com/gleworks/" target="_blank" rel="noopener noreferrer">
+              <FaInstagram />
+            </a>
           </div>
         </div>
 

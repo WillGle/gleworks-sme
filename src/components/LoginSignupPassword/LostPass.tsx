@@ -1,12 +1,10 @@
 // Forgot-password form that triggers the reset flow.
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DotLottie } from "@lottiefiles/dotlottie-web"; // Import DotLottie
 import { forgotPassword } from "@api";
 import "./LoginSignUpLostPassNewPass.css";
 
 const LostPass: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null); // Reference to the canvas
   const [email, setEmail] = useState<string>(""); // State for email input
   const [errorMessage, setErrorMessage] = useState<string>(""); // State for error messages
   const [successMessage, setSuccessMessage] = useState<string>(""); // State for success messages
@@ -47,32 +45,13 @@ const LostPass: React.FC = () => {
     }
   };
 
-  // Initialize DotLottie animation
-  useEffect(() => {
-    if (isLoading && canvasRef.current) {
-      const dotLottie = new DotLottie({
-        autoplay: true,
-        loop: true,
-        canvas: canvasRef.current,
-        src: "https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie",
-      });
-
-      return () => {
-        dotLottie.destroy(); // Clean up when component unmounts
-      };
-    }
-  }, [isLoading]);
-
   return (
     <div className="style-bg">
       <div className="same-style-container">
-        {/* Loading animation */}
+        {/* Loading overlay shown while the request is in flight */}
         {isLoading && (
           <div id="loading">
-            <canvas
-              ref={canvasRef}
-              style={{ width: "300px", height: "300px" }}
-            ></canvas>
+            <div className="spinner"></div>
           </div>
         )}
 

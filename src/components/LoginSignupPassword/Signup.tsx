@@ -1,5 +1,5 @@
 // Signup form for creating a new user account.
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -7,7 +7,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { register } from "@api";
 import "./LoginSignUpLostPassNewPass.css";
-import { DotLottie } from "@lottiefiles/dotlottie-web"; // Import DotLottie
 
 const Signup: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -20,8 +19,6 @@ const Signup: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const canvasRef = useRef<HTMLCanvasElement>(null); // Thêm ref cho canvas
 
   const validateEmail = (email: string): boolean => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -85,23 +82,6 @@ const Signup: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  // useEffect to handle loading animation
-  useEffect(() => {
-    if (isLoading && canvasRef.current) {
-      const dotLottie = new DotLottie({
-        autoplay: true,
-        loop: true,
-        canvas: canvasRef.current,
-        src: "https://lottie.host/d558d016-47eb-4dee-841d-4c414066909e/neo2e3YEP5.lottie",
-        speed: 2.5,
-      });
-
-      return () => {
-        dotLottie.destroy(); // Dọn dẹp khi component unmount
-      };
-    }
-  }, [isLoading]);
 
   return (
     <div className="style-bg">
@@ -195,21 +175,10 @@ const Signup: React.FC = () => {
           </div>
         </div>
 
-        {/* Hiện hình ảnh loading khi đang gửi yêu cầu */}
+        {/* Loading overlay shown while the request is in flight */}
         {isLoading && (
-          <div
-            id="loading"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <canvas
-              ref={canvasRef}
-              id="dotlottie-canvas"
-              style={{ width: "300px", height: "300px" }}
-            ></canvas>
+          <div id="loading">
+            <div className="spinner"></div>
           </div>
         )}
       </div>

@@ -19,7 +19,6 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@lottiefiles/dotlottie-web": "^0.36.1",
     "@sendgrid/mail": "^8.1.4",
     "@types/react-router-dom": "^5.3.3",
     "@vercel/speed-insights": "^1.1.0",

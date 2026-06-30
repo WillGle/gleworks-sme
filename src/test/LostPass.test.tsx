@@ -4,20 +4,13 @@ import { MemoryRouter } from 'react-router-dom'
 import { vi } from 'vitest'
 import LostPass from '@components/LoginSignupPassword/LostPass'
 
-const { mockForgotPassword, mockNavigate, mockDotLottieDestroy } = vi.hoisted(() => ({
+const { mockForgotPassword, mockNavigate } = vi.hoisted(() => ({
   mockForgotPassword: vi.fn(),
   mockNavigate: vi.fn(),
-  mockDotLottieDestroy: vi.fn(),
 }))
 
 vi.mock('../api', () => ({
   forgotPassword: mockForgotPassword,
-}))
-
-vi.mock('@lottiefiles/dotlottie-web', () => ({
-  DotLottie: class {
-    destroy = mockDotLottieDestroy
-  },
 }))
 
 vi.mock('react-router-dom', async () => {

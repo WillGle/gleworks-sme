@@ -123,9 +123,9 @@ const Switch: React.FC = () => {
       if (name === "amount") {
         // Kiểm tra xem giá trị nhập vào có phải là số không
         const numericValue = parseInt(value);
-        // Chỉ hiển thị thông báo nếu giá trị không phải là số và không phải là chuỗi rỗng
-        if (value !== "" && (isNaN(numericValue) || numericValue < 0)) {
-          alert("Amount must be a positive number."); // Thông báo nếu không phải số hoặc số âm
+        // Chỉ hiển thị thông báo nếu giá trị không phải là số và không phải là số bé hơn hoặc bằng 0
+        if (value !== "" && (isNaN(numericValue) || numericValue <= 0)) {
+          alert("Amount must be a positive number."); // Thông báo nếu không phải số hoặc số <= 0
           return; // Không cập nhật state nếu giá trị không hợp lệ
         }
       }
@@ -199,6 +199,8 @@ const Switch: React.FC = () => {
             onChange={handleInputChange}
             className="input-field"
             placeholder="Enter the amount"
+            min="1"
+            step="1"
             required
           />
         </div>

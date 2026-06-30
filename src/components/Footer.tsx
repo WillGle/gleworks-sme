@@ -22,9 +22,9 @@ const Footer: React.FC = () => {
 
         {/* Company Information Section */}
         <div className="footer-section">
-          <div className="logo">GLE.WORK</div>
+          <div className="logo">GLEWORKS</div>
           <p>Ho Chi Minh, Vietnam</p>
-          <p>glework.sp@gmail.com</p>
+          <p>support@gleworks.io.vn</p>
           <div className="social-icons">
             <FaFacebook />
             <FaInstagram />

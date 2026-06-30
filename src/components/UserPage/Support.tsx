@@ -8,9 +8,9 @@ const Support: React.FC = () => {
       <header className="support-header">
         <div className="support-info">
           <h1>Support</h1>
-          <h2>GLE.WORK</h2>
+          <h2>GLEWORKS</h2>
           <p>Tel: 0907193123</p>
-          <p>Email: glework.sp@gmail.com</p>
+          <p>Email: support@gleworks.io.vn</p>
         </div>
       </header>
       <hr className="divider" />

@@ -18,7 +18,7 @@ const ReturnPolicy: React.FC = () => {
       </p>
       <h3>How to Request a Return</h3>
       <p>
-        To start a return, contact us at glework.sp@gmail.com with your order
+        To start a return, contact us at support@gleworks.io.vn with your order
         number and a short description of the issue. Our team will guide you
         through the next steps.
       </p>

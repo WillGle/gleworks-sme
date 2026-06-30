@@ -23,7 +23,7 @@ const Header: React.FC = () => {
       <div className="header-main">
         {/* Logo Section */}
         <div className="logo">
-          <Link to="/">GLE.WORK</Link>
+          <Link to="/">GLEWORKS</Link>
         </div>
 
         {/* Navigation Links */}

@@ -7,7 +7,7 @@ const PrivacyPolicy: React.FC = () => {
       <h1>Privacy Policy</h1>
       <p>
         Your privacy matters to us. This policy explains what information we
-        collect and how we use it when you visit GLE.WORK or place an order.
+        collect and how we use it when you visit GLEWORKS or place an order.
       </p>
       <h3>Information We Collect</h3>
       <p>
@@ -25,7 +25,7 @@ const PrivacyPolicy: React.FC = () => {
       <h3>Contact</h3>
       <p>
         If you have any questions about how we handle your data, please reach
-        out to us at glework.sp@gmail.com.
+        out to us at support@gleworks.io.vn.
       </p>
     </section>
   );

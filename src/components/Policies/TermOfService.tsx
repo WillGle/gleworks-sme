@@ -7,7 +7,7 @@ const TermOfService: React.FC = () => {
       <h1>Term of Service</h1>
       <p>
         Please read these terms carefully before using this website. By
-        accessing this site or placing an order with GLE.WORK, you confirm your
+        accessing this site or placing an order with GLEWORKS, you confirm your
         acceptance of the terms below. If you do not agree with them, please do
         not use this website.
       </p>
@@ -21,7 +21,7 @@ const TermOfService: React.FC = () => {
       <h3>Site Contents</h3>
       <p>
         Unless otherwise stated, all materials on this site — including images,
-        designs, logos, and text — belong to GLE.WORK and are intended for your
+        designs, logos, and text — belong to GLEWORKS and are intended for your
         personal, non-commercial use. You may not copy, reproduce, or
         redistribute any part of the site without our written permission.
       </p>

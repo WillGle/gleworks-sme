@@ -43,7 +43,7 @@ React + TypeScript + Vite frontend for the Gleammy Workshop service booking and 
   Optional manual-only Express + SQLite backend for local integration testing
 - `docker/entrypoint.sh`
   Helper script for generating `config.js` at container startup
-- `devops/*.md`
+- `doc/*.md`
   Planning documents, not current implementation truth
 
 ## Architecture Overview
@@ -356,4 +356,4 @@ For local development, `simpleBEDB` implements this contract directly.
 
 ## Documentation Notes
 - `README.md` is the source of truth for the current implemented repo state.
-- `devops/LEARNING_PLAN.md` and `devops/IMPLEMENTATION_PLAN.md` remain planning documents.
+- `doc/IMPLEMENTATION_PLAN.md` and other files under `doc/` remain planning documents.

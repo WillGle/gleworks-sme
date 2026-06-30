@@ -119,14 +119,14 @@ const Switch: React.FC = () => {
         springPreference: value as string,
       }));
     } else {
-      // Kiểm tra nếu trường là "amount"
+      // Validate the "amount" field
       if (name === "amount") {
-        // Kiểm tra xem giá trị nhập vào có phải là số không
+        // Check whether the entered value is a number
         const numericValue = parseInt(value);
-        // Chỉ hiển thị thông báo nếu giá trị không phải là số và không phải là số bé hơn hoặc bằng 0
+        // Warn only when the value is non-empty and not a positive number
         if (value !== "" && (isNaN(numericValue) || numericValue <= 0)) {
-          alert("Amount must be a positive number."); // Thông báo nếu không phải số hoặc số <= 0
-          return; // Không cập nhật state nếu giá trị không hợp lệ
+          alert("Amount must be a positive number.");
+          return; // Don't update state for an invalid value
         }
       }
       setFormData((prev) => ({

@@ -1,13 +1,13 @@
-/* Thêm ảnh nền cho trang login */
+/* Background image for the login page */
 .style-bg {
-    background-image: url('/src/assets/account.webp'); /* Đường dẫn ảnh */
-    background-repeat: no-repeat; /* Không lặp ảnh */
-    background-size: cover; /* Ảnh phủ toàn màn hình */
-    background-position: center; /* Căn giữa ảnh */
-    min-height: 100vh; /* Đảm bảo chiều cao tối thiểu */
-    display: flex; /* Căn giữa nội dung */
-    justify-content: center; /* Căn giữa ngang */
-    align-items: center; /* Căn giữa dọc */
+    background-image: url('/src/assets/account.webp'); /* Image path */
+    background-repeat: no-repeat; /* Don't repeat the image */
+    background-size: cover; /* Cover the whole screen */
+    background-position: center; /* Center the image */
+    min-height: 100vh; /* Ensure a minimum height */
+    display: flex; /* Center the content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
 /* General container styles for responsiveness */
@@ -94,27 +94,6 @@
     border-color: #1e57d2;
     box-shadow: 0 0 5px rgba(30, 87, 210, 0.5);
 }
-
-/* .phone-input-container {
-    width: 480px;
-    margin: auto;
-}
-
-.phone-input input[type="tel"] {
-    height: 40px;
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    font-size: 16px;
-    color: #333;
-}
-
-.phone-input input[type="tel"]:focus {
-    border-color: #1e57d2;
-    box-shadow: 0 0 5px rgba(30, 87, 210, 0.5);
-} */
 
 .toggle-action,
 .forgot-password {
@@ -234,8 +213,13 @@
 
 /* Responsive media queries */
 @media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
     .same-style-container {
         margin-top: 20px;
+        width: 100%;
         padding: 15px;
     }
 
@@ -262,6 +246,10 @@
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
     .same-style-container {
         margin-top: 10px;
         padding: 10px;
@@ -288,26 +276,5 @@
 
     .error-message {
         font-size: 10px;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 20px; /* Thêm khoảng trống cho màn hình nhỏ */
-    }
-
-    .same-style-container {
-        width: 100%; /* Thẻ sẽ rộng tối đa 100% */
-        padding: 15px; /* Giảm padding để phù hợp hơn */
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 10px; /* Thêm padding nhỏ hơn */
-    }
-
-    .same-style-container {
-        padding: 10px;
     }
 }

@@ -49,9 +49,9 @@ describe("MyAccount Component", () => {
     render(<MemoryRouter><MyAccount /></MemoryRouter>);
     const input = await screen.findByPlaceholderText(/Your First Name/i);
     fireEvent.change(input, { target: { value: "Updated" } });
-    fireEvent.click(screen.getByRole("button", { name: /Xác nhận/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Confirm/i }));
 
-    expect(await screen.findByText(/Thông tin đã được cập nhật thành công!/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Information updated successfully!/i)).toBeInTheDocument();
   });
 
   it("redirects to login if not authenticated", async () => {
@@ -63,6 +63,6 @@ describe("MyAccount Component", () => {
   it("handles API error during profile fetch", async () => {
     (api.getUser as any).mockRejectedValue(new Error("Fail"));
     render(<MemoryRouter><MyAccount /></MemoryRouter>);
-    expect(await screen.findByText(/Không thể lấy thông tin người dùng/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Could not load user information/i)).toBeInTheDocument();
   });
 });

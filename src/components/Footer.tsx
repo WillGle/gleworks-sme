@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
           <div className="email-signup">
             <input type="email" placeholder="Email" />
             <button>
-              <FaArrowRight /> {/*Xử lý gửi mail */}
+              <FaArrowRight /> {/* Handle mail send */}
             </button>
           </div>
         </div>

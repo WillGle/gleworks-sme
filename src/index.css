@@ -6,9 +6,7 @@ body, html {
 }
 
 body {
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    min-height: 100vh; /* Chiều cao toàn màn hình */
+    min-height: 100vh; /* Full viewport height */
     margin: 0;
     background-color: #f5f5f7;
 }

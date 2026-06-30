@@ -46,7 +46,7 @@ const MyAccount: React.FC = () => {
         setFormData(savedUser);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setMessage("Không thể lấy thông tin người dùng.");
+        setMessage("Could not load user information.");
       }
     };
 
@@ -72,11 +72,11 @@ const MyAccount: React.FC = () => {
 
       const updatedUser = await updateUser(formData.id, payload);
       setFormData(updatedUser);
-      setMessage("Thông tin đã được cập nhật thành công!");
+      setMessage("Information updated successfully!");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       console.error("Error updating information:", error);
-      setMessage("Có lỗi xảy ra. Vui lòng thử lại!");
+      setMessage("Something went wrong. Please try again!");
     }
   };
 
@@ -157,7 +157,7 @@ const MyAccount: React.FC = () => {
           />
         </div>
         <button onClick={handleSubmit} className="submit-btn">
-          Xác nhận
+          Confirm
         </button>
         {message && <p className="message">{message}</p>}
       </div>

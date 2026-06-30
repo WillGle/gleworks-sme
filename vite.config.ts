@@ -47,7 +47,7 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'icons': ['react-icons'],
-          'utils': ['axios', 'date-fns', 'jwt-decode'],
+          'utils': ['axios'],
         },
       }
     },

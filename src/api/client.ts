@@ -7,6 +7,8 @@ import { getToken } from "./session";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
+  // Bound every request so a hung backend can't leave spinners stuck forever.
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
   },

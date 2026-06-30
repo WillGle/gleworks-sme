@@ -17,9 +17,6 @@ const Landing: React.FC = () => {
             and every mechanical keyboard transcends mere functionality to
             become a work of art.
           </p>
-          {/* <Link to="/about" className="learn-more-button">
-            Learn More
-          </Link> */}
         </div>
         <img
           src={image1}

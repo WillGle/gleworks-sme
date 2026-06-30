@@ -31,8 +31,6 @@ const LostPass = lazy(() => import("./components/LoginSignupPassword/LostPass"))
 const NewPass = lazy(() => import("./components/LoginSignupPassword/NewPass"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const NotAuth = lazy(() => import("./components/NotAuthorized"));
-// const About = lazy(() => import("./components/About (save for later)/About"));
-// const Blog = lazy(() => import("./components/Blog (dev later)/Blog"));
 
 // Component responsible for rendering the layout with Header, Footer, and routing logic
 function AppLayout() {
@@ -57,8 +55,6 @@ function AppLayout() {
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Landing />} />
-        {/* <Route path="/about" element={<About />} /> */}
-        {/* <Route path="/blog" element={<Blog />} /> */}
         <Route path="/archive" element={<Archive />} />
         <Route path="/service/*" element={<Service />} />
         <Route path="/service/switch-modding" element={<Switch />} />

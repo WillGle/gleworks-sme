@@ -1,0 +1,143 @@
+<mxfile host="Electron" modified="2026-07-04T00:00:00.000Z" agent="GleWorks-docgen" etag="gleworks-observability" version="24.7.17" type="device">
+  <diagram id="gleworks-observability" name="04 - Observability SLO">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1450" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="n_title" value="GleWorks — Observability &amp; SLO Pipeline" style="text;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="16" width="900" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n_subtitle" value="How backend RED metrics become Grafana dashboards and SLO burn-rate alerts." style="text;html=1;fontSize=12;fontStyle=2;align=left;verticalAlign=middle;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="48" width="1000" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="n_slobanner" value="SLOs: 99% availability (1% error budget, multi-window burn-rate) · p95 latency below 500ms" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=2;align=left;verticalAlign=middle;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="1380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_backend" value="backend (simpleBEDB)&lt;br&gt;Express + prom-client&lt;br&gt;— see 02-backend-simplebedb.drawio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_metricsjsgroup" value="metrics.js — exposed series" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="300" y="120" width="280" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="n_defaultmetrics" value="gleworks_* default metrics&lt;br&gt;(CPU, memory, event loop, GC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="320" y="160" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n_redmetrics" value="http_requests_total&lt;br&gt;http_request_duration_seconds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="320" y="210" width="240" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_metricsendpoint" value="GET /metrics&lt;br&gt;(text exposition)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="620" y="160" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Prometheus group -->
+        <mxCell id="n_prometheusgroup" value="prometheus (monitor/prometheus/)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=14;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="820" y="110" width="320" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="n_scrapeconfig" value="scrape_configs&lt;br&gt;job gleworks-backend → backend:3001&lt;br&gt;job prometheus → self :9090&lt;br&gt;global scrape_interval: 15s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="840" y="150" width="280" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_recordingrulesgroup" value="recording rules (gleworks-sli)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontSize=12;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="840" y="235" width="280" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="n_rate5m" value="job:http_requests:rate5m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="265" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n_5xxrate" value="job:http_requests_5xx:rate5m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="300" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n_errorratio" value="job:http_error_ratio:ratio_rate5m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="335" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n_p95" value="job:http_latency_seconds:p95_5m" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="370" width="250" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_alertrulesgroup" value="alert rules (gleworks-slo-alerts)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontSize=12;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="840" y="420" width="280" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="n_burnfast" value="GleWorksErrorBudgetBurnFast&lt;br&gt;14.4× over 5m and 1h · for 2m&lt;br&gt;severity=page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="450" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="n_burnslow" value="GleWorksErrorBudgetBurnSlow&lt;br&gt;6× over 30m and 6h · for 15m&lt;br&gt;severity=ticket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="500" width="250" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="n_highlatency" value="GleWorksHighLatencyP95&lt;br&gt;p95 above 500ms for 10m&lt;br&gt;severity=ticket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="855" y="550" width="250" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_alertmanagergap" value="Alertmanager&lt;br&gt;NOT deployed — alerts fire but&lt;br&gt;have nowhere to route (no Slack /&lt;br&gt;email receiver). Planned next step." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b85450;fontSize=12;dashed=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="460" width="240" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Grafana group -->
+        <mxCell id="n_grafanagroup" value="grafana (monitor/grafana/)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=14;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="820" y="670" width="520" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="n_datasource" value="datasource: Prometheus&lt;br&gt;url http://prometheus:9090&lt;br&gt;access=proxy, isDefault=true" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="840" y="710" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dashboardprovisioning" value="dashboard provider&lt;br&gt;folder 'GleWorks', file-based&lt;br&gt;path /var/lib/grafana/dashboards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="840" y="780" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_dashboardpanels" value="dashboard: GleWorks API&lt;br&gt;(uid gleworks-api, refresh 10s)&lt;br&gt;• Request rate (reqps)&lt;br&gt;• 5xx error ratio&lt;br&gt;• p95 latency&lt;br&gt;• Backend memory (RSS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="710" width="220" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_operator" value="Operator&lt;br&gt;SSH tunnel → :9090 (admin)&lt;br&gt;or internal :3000 (Grafana)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="750" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_publicviewer" value="Public read-only viewer&lt;br&gt;(opt-in: grafana.$DOMAIN,&lt;br&gt;GRAFANA_ANON_ENABLED=true)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="860" width="220" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_legend" value="Legend&lt;br&gt;🟩 Backend (external ref)&lt;br&gt;🟪 Observability pipeline&lt;br&gt;(metrics.js → prometheus → grafana)&lt;br&gt;⬜ Operators / access paths&lt;br&gt;🟥 red border = known gap&lt;br&gt;(Alertmanager not deployed)&lt;br&gt;- - → dashed = scrape / optional /&lt;br&gt;missing component" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="300" y="780" width="240" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" value="prom-client instruments&lt;br&gt;the process" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_backend" target="n_metricsjsgroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="register.metrics()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_metricsjsgroup" target="n_metricsendpoint">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="GET /metrics&lt;br&gt;every 15s" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_scrapeconfig" target="n_metricsendpoint">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="raw series feed&lt;br&gt;recording rules" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_scrapeconfig" target="n_recordingrulesgroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="recording rules feed&lt;br&gt;alert thresholds" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_recordingrulesgroup" target="n_alertrulesgroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="would route via&lt;br&gt;Alertmanager (missing)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;strokeColor=#b85450;fontColor=#b85450;" edge="1" parent="1" source="n_alertrulesgroup" target="n_alertmanagergap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="PromQL queries&lt;br&gt;http://prometheus:9090" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_datasource" target="n_prometheusgroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="loads from&lt;br&gt;/var/lib/grafana/dashboards" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_dashboardprovisioning" target="n_dashboardpanels">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="backs panel queries" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_datasource" target="n_dashboardpanels">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="ssh -L 9090:127.0.0.1:9090" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_operator" target="n_prometheusgroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="internal :3000" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_operator" target="n_grafanagroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="optional, read-only&lt;br&gt;(Viewer role)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_publicviewer" target="n_grafanagroup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

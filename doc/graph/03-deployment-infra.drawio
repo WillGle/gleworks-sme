@@ -1,0 +1,164 @@
+<mxfile host="Electron" modified="2026-07-04T00:00:00.000Z" agent="GleWorks-docgen" etag="gleworks-deploy" version="24.7.17" type="device">
+  <diagram id="gleworks-deploy" name="03 - Deployment Infra">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="n_title" value="GleWorks — Deployment &amp; Infrastructure" style="text;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=middle;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="16" width="900" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n_subtitle" value="Three docker-compose topologies, built from the same two Dockerfiles, brought up by Ansible, a Makefile, or CI/CD." style="text;html=1;fontSize=12;fontStyle=2;align=left;verticalAlign=middle;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="48" width="1000" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Column A: local dev/smoke -->
+        <mxCell id="n_colA" value="docker-compose.yml (repo root)&lt;br&gt;local dev / pre-ship smoke test" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="380" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_a_backend" value="backend&lt;br&gt;127.0.0.1:3001 → :3001 (host-only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="340" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n_a_frontend" value="frontend&lt;br&gt;8080 → 80 (host-only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="225" width="340" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n_a_prometheus" value="prometheus&lt;br&gt;127.0.0.1:9090 → :9090" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="290" width="340" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n_a_grafana" value="grafana&lt;br&gt;127.0.0.1:3000 → :3000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="355" width="340" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n_a_note" value="No Caddy / no TLS. Run directly from&lt;br&gt;repo root: docker compose up -d --build&lt;br&gt;(not part of deploy/Makefile).&lt;br&gt;Smoke-tests the same images before shipping." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;fontStyle=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="60" y="420" width="340" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Column B: prod full stack -->
+        <mxCell id="n_colB" value="deploy/docker-compose.prod.yml&lt;br&gt;full stack (public VPS)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="440" y="110" width="440" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_b_caddy" value="caddy&lt;br&gt;80/443 → public (auto-TLS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="160" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n_b_frontend" value="frontend&lt;br&gt;expose 80 (internal only)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="220" width="400" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="n_b_backend" value="backend&lt;br&gt;expose 3001 (internal) · requires JWT_SECRET" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="275" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n_b_prometheus" value="prometheus&lt;br&gt;127.0.0.1:9090 (admin-only, SSH tunnel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="335" width="400" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="n_b_grafana" value="grafana&lt;br&gt;expose 3000 (internal) · optional public&lt;br&gt;read-only via GRAFANA_ANON_ENABLED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="390" width="400" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n_b_volumes" value="volumes: backend-data, prometheus-data,&lt;br&gt;grafana-data, caddy-data, caddy-config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="460" width="400" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Column C: fallback DR -->
+        <mxCell id="n_colC" value="deploy/docker-compose.fallback.yml&lt;br&gt;DR / 2 GB RAM VPS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=13;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="920" y="110" width="380" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="n_c_caddy" value="caddy&lt;br&gt;80/443 → public · mem limit 100M" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="940" y="160" width="340" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n_c_frontend" value="frontend&lt;br&gt;expose 80 · mem limit 100M" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="940" y="220" width="340" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="n_c_backend" value="backend&lt;br&gt;expose 3001 · mem limit 250M&lt;br&gt;requires JWT_SECRET" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="940" y="275" width="340" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n_c_note" value="No Prometheus / Grafana&lt;br&gt;(dropped to fit a 2 GB RAM VPS)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;fontStyle=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="335" width="340" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="n_c_volumes" value="volumes: backend-data,&lt;br&gt;caddy-data, caddy-config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="940" y="400" width="340" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="n_c_pgnote" value="commented-out: future Postgres env vars&lt;br&gt;— see doc/POSTGRES_MIGRATION_PLAN.md" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=11;fontStyle=2;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="940" y="455" width="340" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Dockerfiles -->
+        <mxCell id="n_frontenddockerfile" value="Dockerfile (root)&lt;br&gt;node:20-alpine build → nginx:alpine runtime&lt;br&gt;copies dist/ + nginx.conf" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="580" width="380" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n_backenddockerfile" value="simpleBEDB/Dockerfile&lt;br&gt;node:20 deps → node:20-slim runtime&lt;br&gt;node --max-old-space-size=128" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="580" width="440" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Provisioning / tooling -->
+        <mxCell id="n_ansible" value="Ansible playbook&lt;br&gt;installs Docker + compose plugin&lt;br&gt;clones repo → /opt/gleworks&lt;br&gt;renders deploy/.env (mode 0600)&lt;br&gt;compose pull + up -d&lt;br&gt;(default: docker-compose.prod.yml)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="680" width="380" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="n_makefile" value="deploy/Makefile&lt;br&gt;up (build+start) · deploy (pull+start)&lt;br&gt;pull · down · logs · ps · config&lt;br&gt;validate (promtool + caddy validate)&lt;br&gt;build-push (manual image build,&lt;br&gt;linux/amd64, for the low-RAM VPS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="680" width="440" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="n_buildpush" value="Manual build-push&lt;br&gt;dev box builds frontend + backend&lt;br&gt;(linux/amd64) → pushes to&lt;br&gt;NAMESPACE/glework-* (default 'gleammy')&lt;br&gt;VPS then pulls via deploy/.env overrides" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="920" y="680" width="380" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="n_cicdexternal" value="GitHub Actions → GHCR →&lt;br&gt;SSH deploy (fallback stack)&lt;br&gt;— see 05-cicd-pipeline.drawio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="680" width="260" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_envfile" value="deploy/.env&lt;br&gt;(git-ignored secrets)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="860" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n_inventory" value="ansible/inventory.ini&lt;br&gt;(git-ignored, VPS host/user)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="700" y="860" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n_legend" value="Legend&lt;br&gt;🟧 Caddy (edge / TLS)&lt;br&gt;🟩 App services + Dockerfiles&lt;br&gt;🟪 Observability&lt;br&gt;🟨 Config / secrets / volumes&lt;br&gt;⬜ Tooling (Ansible, Makefile)&lt;br&gt;🟥 CI/CD (external ref)&lt;br&gt;- - → dashed = manual / optional /&lt;br&gt;override path" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cccccc;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="860" width="380" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" value="build: ." style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_frontenddockerfile" target="n_a_frontend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_frontenddockerfile" target="n_b_frontend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_frontenddockerfile" target="n_c_frontend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="build: ./simpleBEDB" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_backenddockerfile" target="n_a_backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_backenddockerfile" target="n_b_backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_backenddockerfile" target="n_c_backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="provisions &amp; runs&lt;br&gt;(default compose_file)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_ansible" target="n_colB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="renders (mode 0600)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_ansible" target="n_envfile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="reads target host" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_ansible" target="n_inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="up / deploy / pull / down&lt;br&gt;(COMPOSE_FILE=prod, default)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_makefile" target="n_colB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="override:&lt;br&gt;COMPOSE_FILE=fallback.yml" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_makefile" target="n_colC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="--env-file .env" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;" edge="1" parent="1" source="n_makefile" target="n_envfile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="hands off image refs&lt;br&gt;for 'make deploy'" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_buildpush" target="n_makefile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="FRONTEND_IMAGE /&lt;br&gt;BACKEND_IMAGE overrides" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_buildpush" target="n_envfile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="primary automated path&lt;br&gt;(see 05-cicd-pipeline.drawio)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;elbow=vertical;fontSize=11;align=center;dashed=1;" edge="1" parent="1" source="n_cicdexternal" target="n_colC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
